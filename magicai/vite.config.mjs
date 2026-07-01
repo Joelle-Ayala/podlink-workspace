@@ -5,6 +5,8 @@ import fs from 'fs';
 import path, { resolve } from 'path';
 import { homedir } from 'os';
 import mkcert from 'vite-plugin-mkcert';
+import { fileURLToPath } from 'url';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const laravelInputs = [];
 const themeAppJsFiles = [];
