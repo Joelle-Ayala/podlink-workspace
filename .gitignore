@@ -1,0 +1,18 @@
+# Laravel
+magicai/.env
+magicai/storage/logs/
+magicai/storage/framework/cache/
+magicai/storage/framework/sessions/
+magicai/storage/framework/views/
+magicai/bootstrap/cache/
+magicai/vendor/
+magicai/node_modules/
+magicai/public/hot
+
+# Secrets
+*.env
+.env.podlink-template
+
+# macOS
+.DS_Store
+._*
