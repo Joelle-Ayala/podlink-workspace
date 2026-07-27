@@ -34,4 +34,13 @@ else
   echo "[entrypoint] WARN: APP_KEY not set — skipping config:cache (set all env vars in Railway)"
 fi
 
+# ---- Enforce single Apache MPM at RUNTIME (Railway platform quirk) ----------
+# Railway can surface a second MPM (mpm_event) at container start even when the
+# image ships only mpm_prefork -> "AH00534: More than one MPM loaded" crash
+# loop. Known issue, see station.railway.com "More than one MPM loaded error on
+# php:8.2-apache image". Build-time a2dismod is NOT sufficient; do it at boot.
+a2dismod -f mpm_event mpm_worker 2>/dev/null || true
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 exec "$@"
