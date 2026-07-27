@@ -26,13 +26,17 @@ if [ "${AUTO_MIGRATE:-false}" = "true" ]; then
   php artisan migrate --force
 fi
 
-# ---- Cache config/views from the live env (never baked into the image) ------
-if [ -n "${APP_KEY:-}" ]; then
-  php artisan config:cache || echo "[entrypoint] WARN: config:cache failed (continuing)"
-  php artisan view:cache   || echo "[entrypoint] WARN: view:cache failed (continuing)"
-else
-  echo "[entrypoint] WARN: APP_KEY not set — skipping config:cache (set all env vars in Railway)"
-fi
+# ---- DO NOT config:cache (2026-07-27) ----------------------------------------
+# MagicAI's theme engine (igaster/laravel-theme) prepends the active theme's
+# path to view.paths AT RUNTIME. Running `config:cache` bakes that mutated
+# array into the cached config; on the next boot the theme scanner then looks
+# in resources/views/default/default (missing), theme.json never loads,
+# Theme::url() returns null and head.blade.php crashes with
+# "htmlspecialchars(): Argument #1 must be string, UrlGenerator given".
+# Symptom chain verified on Railway 2026-07-27. config:cache and view:cache
+# must stay OFF for this app. Clear any stale caches instead:
+php artisan config:clear >/dev/null 2>&1 || true
+php artisan view:clear   >/dev/null 2>&1 || true
 
 # ---- Enforce single Apache MPM at RUNTIME (Railway platform quirk) ----------
 # Railway can surface a second MPM (mpm_event) at container start even when the
