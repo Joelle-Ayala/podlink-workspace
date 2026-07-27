@@ -1,23 +1,22 @@
 <?php
-// Podlink temp diagnostic v2 (REMOVE AFTER FIX)
+// Podlink temp diagnostic v3 (REMOVE AFTER FIX) - theme engine probe
 require __DIR__.'/../vendor/autoload.php';
 $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Igaster\LaravelTheme\Facades\Theme;
 
-echo '[dbg2] cached database_tables count=', count(Cache::get('database_tables') ?? []), "\n";
+echo '[dbg3] front_theme setting=', var_export(setting('front_theme'), true), ' dash=', var_export(setting('dash_theme'), true), "\n";
 try {
-    $fresh = Schema::getTableListing();
-    echo '[dbg2] FRESH getTableListing count=', count($fresh), "\n";
-} catch (Throwable $e) { echo '[dbg2] getTableListing EX: ', $e->getMessage(), "\n"; }
-try {
-    $show = DB::select('SHOW TABLES');
-    echo '[dbg2] SHOW TABLES count=', count($show), "\n";
-} catch (Throwable $e) { echo '[dbg2] SHOW TABLES EX: ', $e->getMessage(), "\n"; }
-
-Cache::forget('database_tables');
-echo '[dbg2] forgot database_tables; now cached=', var_export(Cache::get('database_tables'), true), "\n";
-echo "[dbg2] done - reload /login to test\n";
+    echo '[dbg3] Theme::exists(default)=', var_export(Theme::exists('default'), true), "\n";
+    Theme::set('default');
+    echo '[dbg3] Theme::get()=', var_export(Theme::get(), true), "\n";
+    $cur = Theme::current();
+    echo '[dbg3] current name=', $cur->name, ' viewsPath=', var_export($cur->viewsPath, true), ' assetPath=', var_export($cur->assetPath, true), "\n";
+    echo '[dbg3] Theme::url(assets)=', var_export(Theme::url('assets'), true), "\n";
+    echo '[dbg3] theme_url(assets)=', var_export(theme_url('assets'), true), "\n";
+    echo '[dbg3] custom_theme_url(assets)=', var_export(custom_theme_url('assets'), true), "\n";
+} catch (Throwable $e) {
+    echo '[dbg3] EX: ', get_class($e), ': ', $e->getMessage(), ' @ ', basename($e->getFile()), ':', $e->getLine(), "\n";
+}
+echo "[dbg3] done\n";
