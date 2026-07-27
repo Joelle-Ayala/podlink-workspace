@@ -64,11 +64,11 @@
 
 					<!-- Update Available Card -->
 					<div
-						class="card mb-12 hidden bg-[#F3E2FD] shadow-sm"
+						class="card mb-12 hidden bg-[#fdf1e2] shadow-sm"
 						id="update_card"
 					>
 						<svg
-							class="absolute end-7 top-7 text-[#330582] dark:text-white"
+							class="absolute end-7 top-7 text-[#FF8C00] dark:text-white"
 							width="41"
 							height="41"
 							viewBox="0 0 41 41"
@@ -215,7 +215,7 @@
 					<small>Current Version: ${response.current_version}</small>`
 						);
 						$("#update_btn").html('Upgrade to ' + response.version_format + ' now!');
-						let badgeHtml = '<span class="lqd-nav-link-badge text-xs rounded-full flex ms-auto justify-center items-center bg-[#F3E2FD] text-black !h-5 !w-5">1</span>';
+						let badgeHtml = '<span class="lqd-nav-link-badge text-xs rounded-full flex ms-auto justify-center items-center bg-[#fdf1e2] text-black !h-5 !w-5">1</span>';
 						localStorage.setItem("magicai_update_badge", badgeHtml);
 						$('#update_available').show();
 						$('#update_card').show();

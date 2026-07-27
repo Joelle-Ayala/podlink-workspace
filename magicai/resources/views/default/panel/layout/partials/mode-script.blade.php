@@ -3,8 +3,9 @@
         const lqdDarkMode = localStorage.getItem("lqdDarkMode");
         const navbarIsShrinked = localStorage.getItem("lqdNavbarShrinked");
 
-        document.body.classList.toggle("theme-dark", lqdDarkMode == "true");
-        document.body.classList.toggle("theme-light", lqdDarkMode != "true");
+        {{-- Podlink: dark theme is the default; users can still switch to light. --}}
+        document.body.classList.toggle("theme-dark", lqdDarkMode !== "false");
+        document.body.classList.toggle("theme-light", lqdDarkMode === "false");
 
         if (navbarIsShrinked === "true") {
             document.body.classList.add("navbar-shrinked");

@@ -1,0 +1,15 @@
+# Keep secrets and junk out of the image build context.
+# vendor/ and public/build/ MUST stay in context (zero-build deploy).
+.git
+.env
+.env.*
+!.env.example
+.env.podlink-template
+auth.json
+node_modules
+storage/logs/*
+storage/debugbar/*
+.DS_Store
+._*
+Dockerfile
+.dockerignore

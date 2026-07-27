@@ -1,0 +1,146 @@
+/*
+ * Podlink brand overrides — podlink.fm (Biolink main site + user dashboard)
+ *
+ * Loaded AFTER the bootstrap theme file and custom.min.css in:
+ *   - themes/altum/views/app_wrapper.php   (user dashboard)
+ *   - themes/altum/views/basic_wrapper.php (marketing/index, login, register, pages)
+ *
+ * Deliberately NOT loaded in themes/altum/views/l/biolink_wrapper.php:
+ * public bio pages are styled by per-page biolink themes (DB records via
+ * /admin/biolinks-themes) and must not be globally overridden.
+ *
+ * Brand: primary #FF8C00, background #0f0f12, text #f0ede6, Poppins, mono-color.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+/* ---- Typography: Poppins everywhere ---- */
+:root {
+    --font-family-sans-serif: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body,
+.btn,
+.form-control,
+input,
+button,
+select,
+textarea,
+.tooltip,
+.popover {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* ---- Mono-color: kill purple / indigo / teal / cyan accents in both modes ---- */
+body {
+    --purple: #FF8C00;
+    --indigo: #FF8C00;
+    --pink: #FF8C00;
+    --teal: #FF8C00;
+    --cyan: #FFA94D;
+    --blue: #FF8C00;
+    --info: #FFA94D;
+}
+
+/* ---- Light mode: orange primary scale ---- */
+body[data-theme-style="light"] {
+    --primary: #FF8C00;
+    --primary-50: #FFF8EF;
+    --primary-100: #FFEFDB;
+    --primary-200: #FFE0B8;
+    --primary-300: #FFC078;
+    --primary-400: #FFA94D;
+    --primary-600: #E67E00;
+    --primary-700: #CC7000;
+    --primary-800: #A35A00;
+    --primary-900: #7A4300;
+}
+
+/* ---- Dark mode: Podlink brand surface + orange primary scale ----
+ * The stock dark theme uses an inverted primary scale (50 = darkest),
+ * so ours does too. Background/text per brand spec.
+ */
+body[data-theme-style="dark"] {
+    --primary: #FF8C00;
+    --primary-50: #1F1509;
+    --primary-100: #4A3204;
+    --primary-200: #6E4A02;
+    --primary-300: #995F00;
+    --primary-400: #CC7000;
+    --primary-600: #FFA94D;
+    --primary-700: #FFC078;
+    --primary-800: #FFD8A8;
+    --primary-900: #FFEFDB;
+
+    --body-bg: #0f0f12;
+    --body-color: #f0ede6;
+    --white: #17171c;       /* card / sidebar surface in dark mode */
+    --footer-bg: #141418;
+    --black: #f0ede6;
+    --gray-50: #0f0f12;
+    --gray-100: #1a1a20;
+    --gray-200: #26262e;
+    --gray-900: #f0ede6;
+
+    background-color: #0f0f12;
+    color: #f0ede6;
+}
+
+/* Dashboard shell background (custom.css hardcodes these) */
+body[data-theme-style="dark"].app,
+[data-theme-style="dark"].app {
+    background: #0f0f12;
+}
+
+body[data-theme-style="dark"] .app-sidebar,
+body[data-theme-style="dark"] .card,
+body[data-theme-style="dark"] .modal-content,
+body[data-theme-style="dark"] .dropdown-menu {
+    background-color: #17171c;
+}
+
+/* Links & primary components pick up --primary automatically via var(),
+ * but a few compiled rules hardcode the old hsl() primary. Belt & braces: */
+a {
+    color: var(--primary);
+}
+
+.btn-primary {
+    background-color: #FF8C00 !important;
+    border-color: #FF8C00 !important;
+    color: #0f0f12 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #E67E00 !important;
+    border-color: #E67E00 !important;
+    color: #0f0f12 !important;
+}
+
+.btn-outline-primary {
+    color: #FF8C00 !important;
+    border-color: #FF8C00 !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+    background-color: #FF8C00 !important;
+    border-color: #FF8C00 !important;
+    color: #0f0f12 !important;
+}
+
+.text-primary {
+    color: #FF8C00 !important;
+}
+
+.bg-primary,
+.badge-primary {
+    background-color: #FF8C00 !important;
+    color: #0f0f12 !important;
+}
+
+.border-primary {
+    border-color: #FF8C00 !important;
+}

@@ -1,0 +1,47 @@
+# Podlink MagicAI — repo ignore rules (PRIVATE repo only)
+#
+# DELIBERATE DEVIATIONS from the Laravel default .gitignore — this is a
+# production server build deployed with ZERO build step on Railway:
+#   * /vendor        -> COMMITTED (Laravel default ignores it; no composer install on Railway)
+#   * /public/build  -> COMMITTED (Laravel default ignores it; prebuilt Vite assets, no npm on Railway)
+#   * magicai.sql    -> COMMITTED, but allowed ONLY while the repo is PRIVATE
+#                       (DEPLOY-DAY-RUNBOOK Phase 1). Never in a public repo/history.
+# Do NOT add /vendor or /public/build to this file.
+
+# ---- Secrets — never commit -------------------------------------------------
+.env
+.env.*
+!.env.example
+.env.podlink-template
+auth.json
+
+# ---- Local-only dependency/build inputs -------------------------------------
+/node_modules
+/public/hot
+/public/storage
+
+# ---- Laravel runtime artifacts ----------------------------------------------
+/storage/logs/*
+/storage/debugbar/*
+/storage/api-docs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/app/public/*
+/storage/*.key
+/bootstrap/cache/*.php
+.phpunit.result.cache
+!**/.gitignore
+!**/.gitkeep
+
+# ---- macOS junk (SSD workspace) ----------------------------------------------
+.DS_Store
+._*
+
+# ---- IDE ----------------------------------------------------------------------
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed

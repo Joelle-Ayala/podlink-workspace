@@ -67,6 +67,14 @@ return [
         'key'    => env('RECAPTCHA_SITE_KEY'),
         'secret' => env('RECAPTCHA_SECRET_KEY'),
     ],
+    'biolink' => [
+        'base_url'      => env('BIOLINK_BASE_URL', 'https://podlink.fm'),
+        'admin_api_key' => env('BIOLINK_ADMIN_API_KEY'),
+    ],
+    'op3' => [
+        'base_url'  => env('OP3_BASE_URL', 'https://op3.dev/api/1'),
+        'api_token' => env('OP3_API_TOKEN'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -128,17 +136,5 @@ return [
 
     'midtrans' => [
         'class' => MidtransService::class,
-    ],
-
-    // Podlink — Biolink SSO + Admin API
-    'biolink' => [
-        'base_url'      => env('BIOLINK_BASE_URL', 'https://podlink.fm'),
-        'admin_api_key' => env('BIOLINK_ADMIN_API_KEY'),
-    ],
-
-    // Podlink — OP3 podcast analytics
-    'op3' => [
-        'api_token' => env('OP3_API_TOKEN'),
-        'base_url'  => 'https://op3.dev/api/1',
     ],
 ];

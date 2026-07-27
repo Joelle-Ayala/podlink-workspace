@@ -21,12 +21,7 @@
 		"supportedColorSchemes": "all",
 		"sidebarEnabledPages": [],
 		"googleFonts": {
-			"Inter": [
-				"400",
-				"500",
-				"600"
-			],
-			"Golos+Text": [
+			"Poppins": [
 				"400",
 				"500",
 				"600",
@@ -36,15 +31,10 @@
 	},
 	"landingPage": {
 		"googleFonts": {
-			"Golos+Text": [
+			"Poppins": [
 				"400",
 				"500",
 				"600",
-				"700"
-			],
-			"Onest": [
-				"400",
-				"500",
 				"700"
 			]
 		}

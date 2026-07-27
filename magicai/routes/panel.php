@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Dashboard\PodlinkController;
 use App\Http\Controllers\Admin\Config\AiToolsController;
 use App\Http\Controllers\Admin\Config\BrandingController;
 use App\Http\Controllers\Admin\Config\FinanceController;
@@ -40,9 +39,11 @@ use App\Http\Controllers\Common\CommonController;
 use App\Http\Controllers\Common\HealthController;
 use App\Http\Controllers\Common\Settings\FalAISettingController as CommonFalAISettingController;
 use App\Http\Controllers\Dashboard\AdminController;
+use App\Http\Controllers\Dashboard\AnalyticsController;
 use App\Http\Controllers\Dashboard\BrandController;
 use App\Http\Controllers\Dashboard\DebugController;
 use App\Http\Controllers\Dashboard\NotificationController;
+use App\Http\Controllers\Dashboard\PodlinkController;
 use App\Http\Controllers\Dashboard\SearchController;
 use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Controllers\Dashboard\SupportController;
@@ -113,17 +114,6 @@ Route::middleware(['auth', 'updateUserActivity'])
                 // dash_notify_seen
                 Route::post('/dash_notify_seen', [UserController::class, 'markDashNotifySeen'])->name('dash_notify_seen');
 
-                // Podlink SSO — sends logged-in MagicAI user to their Biolink page editor
-                Route::get('podlink', [PodlinkController::class, 'redirect'])->name('podlink.redirect');
-
-                // Podlink Analytics — OP3 setup and download data
-                Route::prefix('podlink/analytics')->name('podlink.analytics.')->group(function () {
-                    Route::get('op3', [\App\Http\Controllers\Dashboard\PodlinkAnalyticsController::class, 'op3Onboarding'])->name('op3.onboarding');
-                    Route::post('op3/setup', [\App\Http\Controllers\Dashboard\PodlinkAnalyticsController::class, 'op3Setup'])->name('op3.setup');
-                    Route::post('op3/verify', [\App\Http\Controllers\Dashboard\PodlinkAnalyticsController::class, 'op3Verify'])->name('op3.verify');
-                    Route::get('op3/downloads', [\App\Http\Controllers\Dashboard\PodlinkAnalyticsController::class, 'op3Downloads'])->name('op3.downloads');
-                });
-
                 // premium support
                 Route::get('premium-support', PremiumSupportController::class)->name('premium-support');
 
@@ -134,6 +124,13 @@ Route::middleware(['auth', 'updateUserActivity'])
                 // Video Studio — centralized hub for outputs from AI video extensions
                 Route::get('video-studio', VideoStudioController::class)->name('video-studio.index');
                 Route::get('video-studio/outputs', [VideoStudioController::class, 'outputs'])->name('video-studio.outputs');
+
+                // Podlink SSO — sends logged-in user to their Podlink page editor (Biolink)
+                Route::get('podlink', [PodlinkController::class, 'redirect'])->name('podlink');
+
+                // Podcast Analytics — OP3 (op3.dev) download stats for the user's show
+                Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+                Route::post('analytics/connect', [AnalyticsController::class, 'connect'])->name('analytics.connect');
 
                 Route::controller(UserController::class)
                     ->prefix('api-keys')

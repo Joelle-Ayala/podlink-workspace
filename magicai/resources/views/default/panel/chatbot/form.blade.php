@@ -68,7 +68,7 @@
                                     id="title"
                                     type="text"
                                     name="title"
-                                    value="{{ $chatbotData != null ? $chatbotData->title : 'MagicAI Bot' }}"
+                                    value="{{ $chatbotData != null ? $chatbotData->title : config('app.name') . ' Bot' }}"
                                     placeholder="{{ __('MagicAI Bot') }}"
                             >
                         </div>

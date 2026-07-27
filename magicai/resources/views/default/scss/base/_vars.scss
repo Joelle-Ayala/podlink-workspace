@@ -2,8 +2,8 @@
 
 	// BC
 	:root {
-		--tblr-primary: #330582;
-		--tblr-primary-rgb: 51, 5, 130;
+		--tblr-primary: #FF8C00;
+		--tblr-primary-rgb: 255, 140, 0;
 		--tblr-green: #1ca685;
 		--tblr-green-rgb: 28, 166, 133;
 		--tblr-red: #a13d55;
@@ -39,7 +39,7 @@
 
 		--tblr-dark-mode-border-color: rgb(255 255 255 / 4%);
 
-		--lqd-pink: #f3e2fd;
+		--lqd-pink: #fdf1e2;
 		--lqd-gray: #2e333b;
 		--lqd-header-search-bg: #f2f2f4;
 		--lqd-header-search-color: rgba(37, 44, 50, 0.5);
@@ -55,10 +55,10 @@
 	}
 
 	.theme-dark {
-		--tblr-primary: #9a34cd;
-		--tblr-primary-rgb: 154, 52, 205;
-		--tblr-body-bg: #1a1d23;
-		--tblr-body-bg-rgb: 26, 29, 35;
+		--tblr-primary: #FF8C00;
+		--tblr-primary-rgb: 255, 140, 0;
+		--tblr-body-bg: #0f0f12;
+		--tblr-body-bg-rgb: 15, 15, 18;
 		--tblr-bg-surface: transparent;
 		--tblr-navbar-bg: transparent;
 
@@ -85,17 +85,17 @@
 		--scrollbar-thumb: 0 0% 53%;
 		--scrollbar-thumb-hover: 0 0% 33%;
 
-		--primary: 262 93% 26%;
+		--primary: 33 100% 50%;
 		--primary-foreground: 0 0% 100%;
-		--secondary: 278 87% 94%;
+		--secondary: 33 87% 94%;
 		--secondary-foreground: 0 0% 0%;
-		--accent: 280 60% 50%;
+		--accent: 33 100% 50%;
 		--accent-foreground: 0 0% 100%;
 		--background: 0 0% 100%;
 		--foreground: 222 14% 29%;
-		--gradient-from: 189 84% 73%;
-		--gradient-via: 240 73% 74%;
-		--gradient-to: 233 64% 64%;
+		--gradient-from: 45 95% 65%;
+		--gradient-via: 33 100% 55%;
+		--gradient-to: 20 90% 55%;
 		--border: 200 12% 95%;
 		--shadow: 0 4px 7px theme('colors.black/4%');
 		--heading-background: 0 0% 100%;
@@ -123,8 +123,8 @@
 		--surface-background: var(--background);
 		--clay: 240 8% 95%;
 
-		--font-body: 'Inter';
-		--font-heading: 'Golos Text';
+		--font-body: 'Poppins';
+		--font-heading: 'Poppins';
 
 		--headings-font-family: theme('fontFamily.heading');
 		--headings-line-height: 1.25rem;
@@ -220,12 +220,12 @@
 	}
 
 	.theme-dark {
-		--primary: 280 60% 50%;
+		--primary: 33 100% 50%;
 		--primary-foreground: 0 0% 100%;
-		--secondary: 278 29% 85%;
+		--secondary: 33 29% 85%;
 		--secondary-foreground: 0 0% 0%;
-		--background: 216 19% 11%;
-		--foreground: 210 40% 98%;
+		--background: 240 9% 6%;
+		--foreground: 42 25% 92%;
 		--border: 223 9% 15%;
 		--heading-background: 220 8% 15%;
 		--heading-foreground: 0 0% 100%;

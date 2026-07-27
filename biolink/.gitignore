@@ -1,0 +1,30 @@
+# Podlink Biolink — repo ignore rules (PRIVATE repo only)
+#
+# config.php IS COMMITTED on purpose: it is the blank vendor template (all
+# DATABASE_* / SITE_URL defines empty — verified 2026-07-09). Real values are
+# injected at container boot from Railway env vars (see docker-entrypoint.sh
+# + RAILWAY-NOTES.md). If you ever fill real credentials into config.php
+# locally, do NOT commit that change.
+
+# Local credential/config variants
+config.local.php
+config.php.bak
+*.env
+.env
+.env.*
+
+# Local docker overrides
+docker-compose.override.yml
+
+# Runtime junk
+uploads/cache/*.tmp
+error_log
+*.log
+
+# macOS junk (SSD workspace)
+.DS_Store
+._*
+
+# IDE
+/.idea
+/.vscode

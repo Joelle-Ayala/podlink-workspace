@@ -175,7 +175,7 @@ document.addEventListener( 'alpine:init', () => {
 
 	// light/dark mode
 	Alpine.store( 'darkMode', {
-		on: persist( !!darkMode ).as( 'lqdDarkMode' ),
+		on: persist( darkMode !== 'false' ).as( 'lqdDarkMode' ),
 		toggle() {
 			this.on = !this.on;
 			document.body.classList.toggle( 'theme-dark', this.on );
@@ -1949,7 +1949,7 @@ document.addEventListener( 'alpine:init', () => {
 		},
 
 		checkDarkMode() {
-			const darkMode = localStorage.getItem( 'lqdDarkMode' ) == 'true';
+			const darkMode = localStorage.getItem( 'lqdDarkMode' ) !== 'false';
 
 			document.documentElement.setAttribute( 'data-cp-theme', darkMode ? 'dark' : 'light' );
 			document.documentElement.setAttribute( 'data-bs-theme', darkMode ? 'dark' : 'light' );
