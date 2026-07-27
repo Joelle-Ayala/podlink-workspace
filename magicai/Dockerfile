@@ -59,7 +59,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ---- Apache: docroot = public/, allow .htaccess, hide server tokens --------
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN a2enmod rewrite headers expires \
+# mod_php needs prefork; the apt-get upgrade above can re-enable mpm_event,
+# leaving TWO MPMs enabled -> "AH00534: More than one MPM loaded" crash loop
+# (hit on Railway 2026-07-26). Force exactly one MPM before enabling modules.
+RUN a2dismod -f mpm_event mpm_worker 2>/dev/null; a2enmod mpm_prefork \
+ && a2enmod rewrite headers expires \
  && sed -ri 's!/var/www/html!/var/www/html/public!g' \
       /etc/apache2/sites-available/000-default.conf \
  && printf '<Directory /var/www/html/public>\nAllowOverride All\nRequire all granted\n</Directory>\n' \
