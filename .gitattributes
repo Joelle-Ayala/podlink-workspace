@@ -1,0 +1,1 @@
+magicai/vendor/** -filter -diff -merge

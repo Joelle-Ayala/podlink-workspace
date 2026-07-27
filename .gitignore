@@ -1,18 +1,14 @@
-# Laravel
-magicai/.env
-magicai/storage/logs/
-magicai/storage/framework/cache/
-magicai/storage/framework/sessions/
-magicai/storage/framework/views/
-magicai/bootstrap/cache/
-magicai/vendor/
-magicai/node_modules/
-magicai/public/hot
+# Root ignore — OS junk + secrets only. Per-tree .gitignore files carry the
+# real rules. vendor/ and public/build are DELIBERATELY COMMITTED (zero-build
+# Railway deploy) — do NOT re-add magicai/vendor/ here (2026-07-26 fix: that
+# line broke the container: vendor/autoload.php missing at runtime).
 
 # Secrets
 *.env
 .env.podlink-template
 
-# macOS
+# macOS / Windows junk
 .DS_Store
 ._*
+Thumbs.db
+magicai/vendor/srmklive/paypal/tests/Mocks/samples/
