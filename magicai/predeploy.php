@@ -7,7 +7,8 @@
 $steps = [
     'php import-seed-once.php',
     'php create-biolink-db.php',
-    'php reset-admin-once.php',   // REMOVE this line after founder login + password change
+    // reset-admin-once removed 2026-07-28 after founder login (it would
+    // clobber the founder's password on every deploy)
     'php artisan migrate --force',
 ];
 foreach ($steps as $cmd) {
