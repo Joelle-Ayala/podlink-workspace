@@ -35,4 +35,12 @@ if [ -n "${DATABASE_SERVER:-}" ]; then
   '
 fi
 
+# ---- Enforce single Apache MPM at RUNTIME (Railway platform quirk) ----------
+# Same issue hit on the MagicAI service 2026-07-27: Railway can surface a
+# second MPM at container start even when the image ships only one ->
+# "AH00534: More than one MPM loaded" crash loop. Fix at boot, not build.
+a2dismod -f mpm_event mpm_worker 2>/dev/null || true
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 exec "$@"
