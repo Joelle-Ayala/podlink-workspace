@@ -17,6 +17,17 @@ mkdir -p storage/framework/cache/data storage/framework/sessions \
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
 
+# ---- Extensions dir must exist and be writable (UI marketplace installs) ----
+# (2026-08-07) Marketplace install failed: "Unable to create a directory at
+# /var/www/html/app/Extensions" - app/ is root-owned, Apache runs as www-data.
+# A Railway volume is mounted at app/Extensions so UI-installed extensions
+# survive redeploys (container FS is ephemeral). Worker-parity caveat: the
+# volume is web-service-only; if an extension ever needs worker-side code
+# (e.g. social scheduling jobs), commit its files into the repo at that point.
+mkdir -p app/Extensions
+chown -R www-data:www-data app/Extensions 2>/dev/null || true
+chmod -R ug+rwX app/Extensions 2>/dev/null || true
+
 # ---- public/storage symlink (idempotent) ------------------------------------
 php artisan storage:link >/dev/null 2>&1 || true
 
