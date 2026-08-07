@@ -24,9 +24,17 @@ chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
 # survive redeploys (container FS is ephemeral). Worker-parity caveat: the
 # volume is web-service-only; if an extension ever needs worker-side code
 # (e.g. social scheduling jobs), commit its files into the repo at that point.
-mkdir -p app/Extensions
-chown -R www-data:www-data app/Extensions 2>/dev/null || true
-chmod -R ug+rwX app/Extensions 2>/dev/null || true
+mkdir -p app/Extensions routes/extroutes resources/extensions
+# (2026-08-07 follow-up) The LEGACY extension installer (extensions without an
+# extension_folder: introductions, newsletter, checkout-registration, etc.)
+# writes into resources/extensions, routes/extroutes, app/Http/Controllers and
+# public/ - MagicAI assumes classic-hosting full-tree writability. Grant it for
+# the app tree (vendor/ excluded - never written at runtime, and huge).
+# NOTE: legacy-installed extension FILES live outside the app/Extensions volume
+# and are LOST on redeploy - DB rows persist, so re-install after each deploy
+# (one POST per slug) until extension files are committed into the repo.
+chown -R www-data:www-data app resources routes public database app/Extensions 2>/dev/null || true
+chmod -R ug+rwX app resources routes public database 2>/dev/null || true
 
 # ---- public/storage symlink (idempotent) ------------------------------------
 php artisan storage:link >/dev/null 2>&1 || true
