@@ -35,7 +35,8 @@ class PodlinkController extends Controller
         }
 
         try {
-            $response = Http::withToken($biolinkApiKey)
+            $response = Http::asForm() // Biolink (Altum) reads $_POST only - JSON bodies arrive empty and trigger its 401 empty-fields error (root-caused 2026-08-08)
+                ->withToken($biolinkApiKey)
                 ->timeout(10)
                 ->post($biolinkBaseUrl . '/admin-api/sso/login', [
                     'email'    => $user->email,
