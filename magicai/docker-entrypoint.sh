@@ -36,6 +36,19 @@ mkdir -p app/Extensions routes/extroutes resources/extensions
 chown -R www-data:www-data app resources routes public database app/Extensions 2>/dev/null || true
 chmod -R ug+rwX app resources routes public database 2>/dev/null || true
 
+# ---- .env stub on the volume (extensions write settings into .env) ----------
+# (2026-08-07) Settings->Cloudflare R2 'Save' crashed:
+#   file_get_contents(/var/www/html/.env): Failed to open stream
+# This deployment is env-var-driven and ships no .env; the R2 extension (and
+# possibly others) persist admin-form settings by rewriting .env. Provide one,
+# stored on the app/Extensions Railway volume so UI-written values survive
+# redeploys, symlinked to the expected path. SAFE: Dotenv never overrides
+# variables already present in the real environment, so Railway vars win.
+touch app/Extensions/.env
+ln -sfn /var/www/html/app/Extensions/.env /var/www/html/.env
+chown www-data:www-data app/Extensions/.env 2>/dev/null || true
+chmod ug+rw app/Extensions/.env 2>/dev/null || true
+
 # ---- public/storage symlink (idempotent) ------------------------------------
 php artisan storage:link >/dev/null 2>&1 || true
 
