@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="PodLink mark">
+  <!-- PodLink standalone mark — light background version.
+       Colors: pill #FF8C00, bars #f0ede6. Safe at 30x30. -->
+  <rect x="6" y="30" width="108" height="60" rx="30" fill="#FF8C00"/>
+  <g fill="#f0ede6">
+    <rect x="24" y="50" width="8" height="20" rx="4"/>
+    <rect x="40" y="44" width="8" height="32" rx="4"/>
+    <rect x="56" y="38" width="8" height="44" rx="4"/>
+    <rect x="72" y="44" width="8" height="32" rx="4"/>
+    <rect x="88" y="50" width="8" height="20" rx="4"/>
+  </g>
+</svg>
