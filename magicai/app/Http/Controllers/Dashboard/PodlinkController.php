@@ -40,6 +40,7 @@ class PodlinkController extends Controller
                 ->post($biolinkBaseUrl . '/admin-api/sso/login', [
                     'email'    => $user->email,
                     'name'     => trim($user->fullName()),
+                    'password' => \Illuminate\Support\Str::random(40), // Biolink create-branch requires it (AdminApiSSO.php, verified 2026-08-08); user logs in via magic links only
                     'redirect' => 'dashboard',
                 ]);
 
