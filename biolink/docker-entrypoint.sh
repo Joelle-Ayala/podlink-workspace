@@ -41,6 +41,12 @@ fi
 chown www-data:www-data /var/www/html/config.php 2>/dev/null || true
 chmod ug+rw /var/www/html/config.php 2>/dev/null || true
 
+# ---- installed marker (2026-08-08): DB install succeeded but the installer
+# could not write install/installed (dir was root-owned). Create the marker at
+# every boot: (a) survives ephemeral-FS resets, (b) keeps /install locked.
+touch /var/www/html/install/installed 2>/dev/null || true
+chown -R www-data:www-data /var/www/html/install 2>/dev/null || true
+
 # ---- Enforce single Apache MPM at RUNTIME (Railway platform quirk) ----------
 # Same issue hit on the MagicAI service 2026-07-27: Railway can surface a
 # second MPM at container start even when the image ships only one ->
