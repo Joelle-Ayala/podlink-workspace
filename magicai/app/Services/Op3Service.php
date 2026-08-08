@@ -104,20 +104,19 @@ class Op3Service
     {
         // ASSUMPTION (carried from the earlier build): GET /shows?feedUrl=…
         // returns { "shows": [{ showUuid, title, podcastGuid }, …] }.
-        $json = $this->get('/shows', ['feedUrl' => $feedUrl]);
+        // VERIFIED 2026-08-08 vs op3 swagger: the show endpoint accepts a
+        // urlsafe-base64 feed URL directly in the PATH and returns a single
+        // ViewShowResponse { showUuid, title, podcastGuid, ... }. The old
+        // /shows?feedUrl= query form does not exist and 404s.
+        $feedUrlBase64 = rtrim(strtr(base64_encode($feedUrl), '+/', '-_'), '=');
+
+        $json = $this->get('/shows/' . $feedUrlBase64);
 
         if (! is_array($json)) {
             return null;
         }
 
-        $rows = $json['shows'] ?? null;
-        $row = is_array($rows) ? ($rows[0] ?? null) : $json;
-
-        if (! is_array($row)) {
-            return null;
-        }
-
-        $showUuid = $row['showUuid'] ?? $row['uuid'] ?? null;
+        $showUuid = $json['showUuid'] ?? $json['uuid'] ?? null;
 
         if (blank($showUuid)) {
             return null;
@@ -125,8 +124,8 @@ class Op3Service
 
         return [
             'show_uuid'    => (string) $showUuid,
-            'title'        => isset($row['title']) ? (string) $row['title'] : null,
-            'podcast_guid' => isset($row['podcastGuid']) ? (string) $row['podcastGuid'] : null,
+            'title'        => isset($json['title']) ? (string) $json['title'] : null,
+            'podcast_guid' => isset($json['podcastGuid']) ? (string) $json['podcastGuid'] : null,
         ];
     }
 
@@ -173,46 +172,61 @@ class Op3Service
     }
 
     /**
-     * Share of downloads per listening app for a show.
+     * Downloads per listening app for a show (last 3 months), with each
+     * app's percentage share of the total computed for the UI bars.
      *
-     * @return list<array{app: string, share: float}>|null
+     * @return list<array{app: string, downloads: int, share: float}>|null
      */
     public function topAppsForShow(string $showUuid): ?array
     {
         // ASSUMPTION: GET /queries/top-apps-for-show?showUuid=… returns
         // { "appShares": { "Apple Podcasts": 43.1, … } } (percentages).
+        // VERIFIED 2026-08-08 vs op3 swagger: response is
+        // { showUuid, appDownloads: { "App Name": number }, queryTime } where
+        // appDownloads are ABSOLUTE download counts over the last 3 calendar
+        // months, sorted most-to-fewest (NOT percentages). Convert to % share
+        // here so the existing 'share' contract holds, and also expose the raw
+        // download count.
         $json = $this->get('/queries/top-apps-for-show', ['showUuid' => $showUuid]);
 
         if (! is_array($json)) {
             return null;
         }
 
-        $shares = $json['appShares'] ?? $json['topApps'] ?? null;
+        $appDownloads = $json['appDownloads'] ?? $json['appShares'] ?? $json['topApps'] ?? null;
 
-        if (! is_array($shares) || $shares === []) {
+        if (! is_array($appDownloads) || $appDownloads === []) {
             return null;
+        }
+
+        $total = 0.0;
+        foreach ($appDownloads as $value) {
+            if (is_numeric($value)) {
+                $total += (float) $value;
+            }
         }
 
         $apps = [];
 
-        foreach ($shares as $key => $value) {
+        foreach ($appDownloads as $key => $value) {
             if (is_array($value)) {
-                // List-of-objects shape: [{ app|name, share|pct|value }, …]
+                // Defensive: list-of-objects shape [{ app|name, downloads|count|value }, …]
                 $name = $value['app'] ?? $value['name'] ?? null;
-                $share = $value['share'] ?? $value['pct'] ?? $value['value'] ?? null;
+                $count = $value['downloads'] ?? $value['count'] ?? $value['value'] ?? null;
             } else {
-                // Map shape: { "App Name": share }
+                // Documented shape: { "App Name": downloadCount }
                 $name = $key;
-                $share = $value;
+                $count = $value;
             }
 
-            if (blank($name) || ! is_numeric($share)) {
+            if (blank($name) || ! is_numeric($count)) {
                 continue;
             }
 
             $apps[] = [
-                'app'   => (string) $name,
-                'share' => round((float) $share, 1),
+                'app'       => (string) $name,
+                'downloads' => (int) $count,
+                'share'     => $total > 0 ? round(((float) $count / $total) * 100, 1) : 0.0,
             ];
         }
 
