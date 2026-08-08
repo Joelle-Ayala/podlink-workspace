@@ -45,8 +45,8 @@ class PodlinkController extends Controller
                     'redirect' => 'dashboard',
                 ]);
 
-            if ($response->successful() && filled($response->json('url'))) {
-                return redirect()->away($response->json('url'));
+            if ($response->successful() && filled($response->json('data.url'))) {
+                return redirect()->away($response->json('data.url'));
             }
 
             Log::error('Biolink SSO failed', [
