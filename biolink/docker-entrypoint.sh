@@ -35,6 +35,12 @@ if [ -n "${DATABASE_SERVER:-}" ]; then
   '
 fi
 
+# ---- config.php must be writable by Apache (installer + license writes) -----
+# (2026-08-08) 66biolinks /install requires writing /config.php; image ships it
+# root-owned. Env repopulation at boot still wins for DATABASE_*/SITE_URL.
+chown www-data:www-data /var/www/html/config.php 2>/dev/null || true
+chmod ug+rw /var/www/html/config.php 2>/dev/null || true
+
 # ---- Enforce single Apache MPM at RUNTIME (Railway platform quirk) ----------
 # Same issue hit on the MagicAI service 2026-07-27: Railway can surface a
 # second MPM at container start even when the image ships only one ->
