@@ -1041,7 +1041,13 @@ class AdminController extends Controller
             $plan->trial_days = $request->trial_days;
             $plan->type = $request->type;
             $plan->is_team_plan = (bool) $request->is_team_plan;
-            $plan->price_tax_included = $request->price_tax_included;
+            // The blade has no #price_tax_included field, so finance.js's
+            // $("#price_tax_included").val() is undefined and FormData sends the
+            // literal string "undefined", which 500s on the integer column
+            // (found 2026-08-16). Default to not-included (0) when unset/invalid.
+            $plan->price_tax_included = in_array($request->price_tax_included, [null, '', 'undefined', 'null'], true)
+                ? 0
+                : (int) $request->price_tax_included;
             $plan->plan_allow_seat = (int) $request->plan_allow_seat;
             $plan->open_ai_items = $request->openaiItems;
             $plan->currency = currency()->code ?: 'USD';
@@ -1059,7 +1065,13 @@ class AdminController extends Controller
             $plan->features = $request->features;
             $plan->type = $request->type;
             $plan->is_team_plan = (bool) $request->is_team_plan;
-            $plan->price_tax_included = $request->price_tax_included;
+            // The blade has no #price_tax_included field, so finance.js's
+            // $("#price_tax_included").val() is undefined and FormData sends the
+            // literal string "undefined", which 500s on the integer column
+            // (found 2026-08-16). Default to not-included (0) when unset/invalid.
+            $plan->price_tax_included = in_array($request->price_tax_included, [null, '', 'undefined', 'null'], true)
+                ? 0
+                : (int) $request->price_tax_included;
             $plan->plan_allow_seat = (int) $request->plan_allow_seat;
             $plan->open_ai_items = $request->openaiItems;
             $plan->currency = currency()->code ?: 'USD';
