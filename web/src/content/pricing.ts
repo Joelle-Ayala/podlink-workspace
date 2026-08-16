@@ -10,6 +10,13 @@
  *     never the paywall. OP3 measures the downloads, not us, and charging for a
  *     free open source is not a business model.
  *
+ * Per M4-STRIPE-HANDOFF.md (founder-locked 2026-08-08): basic OP3 download
+ * analytics and the podlink.fm page itself stay free on every tier per the
+ * rule above — what Pro actually adds is (a) the *combined* downloads+clicks
+ * view and (b) removing the Podlink badge from the podlink.fm page. Branding
+ * removal is a Creator→Pro line, not a Free→Creator one; do not mark it
+ * "Removed" below Pro.
+ *
  * *** EVERY LIMIT BELOW IS STILL UNDECIDED. ***
  * The page structure is final; the numbers are not. Every line that asserts a
  * quantity or a tier split carries `TODO(pricing): unverified limit`. Grep that
@@ -67,6 +74,8 @@ export const TIERS: PricingTier[] = [
     badge: null,
     features: [
       "Everything in Creator",
+      "Downloads and podlink.fm page clicks in one combined analytics view",
+      "Removes the Podlink badge from your podlink.fm page",
       "Around twelve episodes a month", // TODO(pricing): unverified limit
       "Sponsor read scripts in 15, 30 and 60-second cuts", // TODO(pricing): unverified limit
       "Multilingual output", // TODO(pricing): unverified limit
@@ -126,6 +135,10 @@ export const COMPARISON: ComparisonSection[] = [
       {
         label: "Search across the transcript archive",
         values: { free: true, creator: true, pro: true },
+      },
+      {
+        label: "Downloads and page clicks combined in one view",
+        values: { free: false, creator: false, pro: true },
       },
     ],
   },
@@ -191,7 +204,7 @@ export const COMPARISON: ComparisonSection[] = [
       },
       {
         label: "Podlink badge on your page",
-        values: { free: "Yes", creator: "Removed", pro: "Removed" }, // TODO(pricing): unverified limit
+        values: { free: "Yes", creator: "Yes", pro: "Removed" },
       },
     ],
   },
