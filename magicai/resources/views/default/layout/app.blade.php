@@ -33,9 +33,12 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     />
+    {{-- Podlink: $metaDescription lets a controller-driven page (the marketing
+         pages — see App\Http\Controllers\Marketing\MarketingController) supply
+         its own description. Every other view falls back to the global setting. --}}
     <meta
         name="description"
-        content="{{ getMetaDesc($setting, $settings_two) }}"
+        content="{{ $metaDescription ?? getMetaDesc($setting, $settings_two) }}"
     >
     @if (isset($setting->meta_keywords))
         <meta
@@ -47,7 +50,13 @@
         rel="icon"
         href="{{ custom_theme_url($setting->favicon_path ?? 'assets/favicon.ico') }}"
     >
-    <title>{{ getMetaTitle($setting, $settings_two) }}</title>
+    {{-- Podlink: $metaTitle = per-page <title> override (marketing pages). --}}
+    <title>{{ $metaTitle ?? getMetaTitle($setting, $settings_two) }}</title>
+
+    {{-- Podlink: per-page <head> extras (canonical, Open Graph, JSON-LD).
+         Push to this stack from the TOP LEVEL of a view — a @push inside a
+         @section runs too late to land in <head>. --}}
+    @stack('head')
 
     @if (filled($google_fonts_string = \App\Helpers\Classes\ThemeHelper::googleFontsString()))
         <link
@@ -78,6 +87,16 @@
         $link = 'resources/views/' . get_theme() . '/scss/landing-page.scss';
     @endphp
     @vite($link)
+
+    {{-- Podlink brand tokens. MUST sit AFTER @vite (so it wins equal-specificity
+         :root ties against the stock template's compiled custom properties) and
+         BEFORE @stack('css') (so per-page sheets such as podlink-marketing.css
+         can consume and override these tokens). Hand-written CSS served from
+         public/ — the Railway container runs no asset build. --}}
+    <link
+        rel="stylesheet"
+        href="{{ custom_theme_url('assets/css/frontend/podlink-tokens.css') }}?v={{ config('marketing.asset_version', '1') }}"
+    />
 
     @if ($setting->frontend_custom_css != null)
         <link

@@ -1,0 +1,15 @@
+<!-- PodLink standalone mark. ONE universal version: the orange pill is its
+     own background, so ink bars sit at 8.20:1 regardless of what is behind
+     the mark. Do not make a "light" variant with cream bars - cream on
+     #FF8C00 is 1.99:1 and the waveform disappears. Safe down to 24px. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="PodLink">
+  <title>PodLink</title>
+  <rect x="6" y="30" width="108" height="60" rx="30" fill="#FF8C00"/>
+  <g fill="#0F0F12">
+    <rect x="24" y="50" width="8" height="20" rx="4"/>
+    <rect x="40" y="44" width="8" height="32" rx="4"/>
+    <rect x="56" y="37" width="8" height="46" rx="4"/>
+    <rect x="72" y="44" width="8" height="32" rx="4"/>
+    <rect x="88" y="50" width="8" height="20" rx="4"/>
+  </g>
+</svg>

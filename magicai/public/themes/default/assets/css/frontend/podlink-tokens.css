@@ -1,0 +1,719 @@
+/* =========================================================================
+   Podlink — global design tokens
+   podlink.ai · built by Minting House · "Grow your show. Not your workload."
+   =========================================================================
+
+   WHY THIS IS PLAIN, HAND-WRITTEN CSS
+   -----------------------------------
+   The Railway container runs ZERO asset build (Dockerfile / docker-entrypoint.sh:
+   vendor/ and public/build/ ship committed; `npm run build` never runs on
+   deploy). Any Tailwind utility not already present in the committed
+   public/build/assets/*.css does not exist at runtime. Therefore: literal CSS,
+   served straight out of public/ by Apache. No build, no manifest, no hash.
+
+   HOW TO LOAD IT
+   --------------
+   resources/views/default/layout/app.blade.php — immediately AFTER the
+   @vite($link) line for landing-page.scss and BEFORE @stack('css'):
+
+       <link rel="stylesheet" href="{{ custom_theme_url('assets/css/frontend/podlink-tokens.css') }}">
+
+   That position matters: the Vite bundle defines the stock template's :root
+   custom properties, so this file must come after it to win equal-specificity
+   ties, and before @stack('css') so per-page sheets (podlink-marketing.css)
+   can consume and override these tokens.
+
+   COLOR FORMAT — READ THIS BEFORE USING A TOKEN
+   ---------------------------------------------
+   Every colour token is a BARE HSL TRIPLET, not a colour value. This matches
+   the house convention already used in resources/views/default/scss/base/
+   _vars.scss and in podlink-marketing.css. Consume them like this:
+
+       color: hsl(var(--pl-text-primary));
+       background: hsl(var(--pl-accent) / 12%);      <- free alpha, no extra token
+       border-color: hsl(var(--pl-border));
+
+   NOT like this:  color: var(--pl-accent);   /* renders nothing */
+
+   Non-colour tokens (space, radius, shadow, duration) ARE literal values and
+   are used directly: padding: var(--pl-space-6);
+
+   FALLBACKS
+   ---------
+   Downstream sheets should reference tokens with a literal fallback so the
+   page still renders if this file 404s:
+       --pl-brand: var(--pl-orange-500, 33 100% 50%);
+
+   PROVENANCE
+   ----------
+   Values are derived from what already shipped, not invented:
+     _vars.scss:88   --primary 33 100% 50%  (#FF8C00)  -> --pl-orange-500
+     _vars.scss:94-96 gradient from/via/to             -> --pl-gradient-*
+     _vars.scss:66   --tblr-body-bg #0f0f12            -> --pl-neutral-900
+     _vars.scss:45   --lqd-gray #2e333b                -> --pl-neutral-700
+     _vars.scss:100  --heading-foreground 213 13% 14%  -> --pl-neutral-800
+     _vars.scss:98   --foreground 222 14% 29%          -> --pl-neutral-600
+     _vars.scss:101  --border 200 12% 95%              -> --pl-neutral-100
+     theme.json      Poppins 400/500/600/700           -> --pl-weight-*
+     tailwind.landing-page.config.js screens/shadows   -> --pl-bp-* / --pl-shadow-*
+
+   ACCESSIBILITY — THE ORANGE TRAP (measured, WCAG 2.1 relative luminance)
+   -----------------------------------------------------------------------
+     #FF8C00 on #FFFFFF ............ 2.33:1  FAIL AA text, FAIL AA UI (3:1)
+     #FFFFFF on #FF8C00 ............ 2.33:1  FAIL — never white text on orange
+     #FF8C00 on #0f0f12 ............ 8.20:1  PASS AAA
+     #0f0f12 on #FF8C00 ............ 8.20:1  PASS AAA — ink on orange is the
+                                             ONLY compliant filled-button pair
+   So --pl-accent (#FF8C00) is a SURFACE/FILL colour, never a text colour on
+   light backgrounds. For orange TEXT or orange icons on light backgrounds use
+   --pl-accent-text-safe (--pl-orange-700, #B85600, 4.81:1 on white). In dark
+   mode --pl-accent-text-safe flips to --pl-orange-400 (#FFA538, 9.74:1 on ink).
+   ========================================================================= */
+
+:root {
+
+	/* =====================================================================
+	   1. COLOR — RAW RAMPS
+	   Bare HSL triplets. hsl(var(--token)) / hsl(var(--token) / 12%)
+	   ===================================================================== */
+
+	/* ---- Brand orange ---------------------------------------------------
+	   500 is the untouched shipped brand value (#FF8C00). Steps below 500
+	   drift hue slightly warm-to-red as lightness drops, which is what keeps
+	   a dark orange reading as "burnt orange" instead of "mud".
+
+	   step  hex      on #fff  on #0f0f12   use
+	   50    #FFF7EB   1.06     18.00       tinted section band
+	   100   #FFECD1   1.16     16.56       badge / pill background
+	   200   #FFD7A3   1.35     14.13       chart fill, disabled accent
+	   300   #FFBF6B   1.63     11.77       dark-mode hover surface
+	   400   #FFA538   1.96      9.74       DARK-MODE accent text  (AAA on ink)
+	   500   #FF8C00   2.33      8.20       BRAND. Fills only on light bg.
+	   600   #DB6E00   3.36      5.69       accent hover; AA-large / UI 3:1 OK
+	   700   #B85600   4.81      3.68       LIGHT-MODE accent text (AA normal)
+	   800   #893A06   7.86      2.43       accent text on tinted bands
+	   900   #5E2508  12.04      1.59       deep accent, rare
+	   ------------------------------------------------------------------- */
+	--pl-orange-50: 36 100% 96%;
+	--pl-orange-100: 35 100% 91%;
+	--pl-orange-200: 34 100% 82%;
+	--pl-orange-300: 34 100% 71%;
+	--pl-orange-400: 33 100% 61%;
+	--pl-orange-500: 33 100% 50%;
+	--pl-orange-600: 30 100% 43%;
+	--pl-orange-700: 28 100% 36%;
+	--pl-orange-800: 24 92% 28%;
+	--pl-orange-900: 20 85% 20%;
+
+	/* ---- Neutrals -------------------------------------------------------
+	   Cool grey, hue drifting 210 -> 240 as it darkens so the darkest step
+	   lands exactly on the shipped near-black. Four steps are the EXISTING
+	   theme tokens, re-homed onto the ramp rather than replaced:
+	     600 = --foreground 222 14% 29%
+	     700 = --lqd-gray  #2e333b
+	     800 = --heading-foreground 213 13% 14%
+	     900 = --tblr-body-bg #0f0f12
+
+	   step  hex      on #fff   use
+	   0     #FFFFFF   1.00     page surface (light)
+	   50    #F9FAFB   1.05     alternating section band
+	   100   #F3F5F6   1.09     inset / hairline fill
+	   200   #E8EBEE   1.21     BORDER (light). The shipped --border 200 12% 95%
+	                            is 1.11:1 and effectively invisible; bumped.
+	   300   #D5DAE0   1.44     divider on tinted bands, disabled border
+	   400   #98A1AD   2.57     placeholder text, decorative icon
+	   500   #606B7B   5.40     MUTED TEXT (AA normal on white and on 50)
+	   600   #404654   9.45     BODY TEXT
+	   700   #2F343D  12.50     strong body, dark section fill
+	   800   #1F242A  15.60     HEADINGS
+	   900   #0F0F12  19.14     ink / dark section + dark-mode surface
+	   ------------------------------------------------------------------- */
+	--pl-neutral-0: 0 0% 100%;
+	--pl-neutral-50: 210 20% 98%;
+	--pl-neutral-100: 210 16% 96%;
+	--pl-neutral-200: 210 13% 92%;
+	--pl-neutral-300: 212 13% 86%;
+	--pl-neutral-400: 214 12% 64%;
+	--pl-neutral-500: 217 12% 43%;
+	--pl-neutral-600: 222 14% 29%;
+	--pl-neutral-700: 216 13% 21%;
+	--pl-neutral-800: 213 13% 14%;
+	--pl-neutral-900: 240 9% 6%;
+
+	/* ---- Status ---------------------------------------------------------
+	   Lifted from the shipped tabler values (--tblr-green #1ca685,
+	   --tblr-red #a13d55) and completed with a matching amber/blue.
+	   *-text steps are the AA-on-white variants; the base steps are fills.
+	   ------------------------------------------------------------------- */
+	--pl-success: 167 71% 38%;
+	--pl-success-text: 167 78% 26%;
+	--pl-success-bg: 167 55% 94%;
+	--pl-danger: 344 45% 44%;
+	--pl-danger-text: 344 52% 36%;
+	--pl-danger-bg: 344 60% 96%;
+	--pl-warning: 38 92% 50%;
+	--pl-warning-text: 30 95% 32%;
+	--pl-warning-bg: 40 90% 95%;
+	--pl-info: 205 75% 45%;
+	--pl-info-text: 208 78% 33%;
+	--pl-info-bg: 205 70% 95%;
+
+	/* ---- Brand gradient -------------------------------------------------
+	   Shipped stops, UNCHANGED (_vars.scss:94-96). These are DECORATIVE ONLY.
+	     from #FBD051  1.47:1 on white   via #FF981A 2.15:1   to #F46A25 3.03:1
+	   None of them is legible as text on white. Never put text in this
+	   gradient on a light background; on ink (#0f0f12) all three clear 6:1.
+	   ------------------------------------------------------------------- */
+	--pl-gradient-from: 45 95% 65%;
+	--pl-gradient-via: 33 100% 55%;
+	--pl-gradient-to: 20 90% 55%;
+	--pl-gradient-brand: linear-gradient(135deg,
+			hsl(var(--pl-gradient-from)) 0%,
+			hsl(var(--pl-gradient-via)) 52%,
+			hsl(var(--pl-gradient-to)) 100%);
+	/* Ambient glow used behind heroes and CTA bands on ink. */
+	--pl-gradient-glow: radial-gradient(120% 140% at 85% 10%,
+			hsl(var(--pl-orange-500) / 38%) 0%,
+			transparent 55%);
+
+	/* =====================================================================
+	   2. COLOR — SEMANTIC TOKENS  (light mode)
+	   Components must reference THESE, not the ramps. The ramps exist so a
+	   future re-skin edits ten lines, not two hundred.
+	   ===================================================================== */
+
+	--pl-surface: var(--pl-neutral-0);
+	/* page background */
+	--pl-surface-alt: var(--pl-neutral-50);
+	/* alternating section band */
+	--pl-surface-raised: var(--pl-neutral-0);
+	/* card sitting on surface */
+	--pl-surface-sunken: var(--pl-neutral-100);
+	/* inset well, code block */
+	--pl-surface-ink: var(--pl-neutral-900);
+	/* dark band inside a light page */
+	--pl-surface-accent: var(--pl-orange-50);
+	/* warm tinted band */
+
+	--pl-text-primary: var(--pl-neutral-800);
+	/* headings           15.60:1 */
+	--pl-text-body: var(--pl-neutral-600);
+	/* paragraphs          9.45:1 */
+	--pl-text-muted: var(--pl-neutral-500);
+	/* captions, labels    5.40:1 */
+	--pl-text-faint: var(--pl-neutral-400);
+	/* placeholder only — 2.57:1, NOT for real content */
+	--pl-text-on-accent: var(--pl-neutral-900);
+	/* ink on orange       8.20:1 */
+	--pl-text-on-ink: var(--pl-neutral-0);
+	/* white on ink       19.14:1 */
+	--pl-text-inverted: var(--pl-neutral-0);
+
+	--pl-border: var(--pl-neutral-200);
+	--pl-border-strong: var(--pl-neutral-300);
+	--pl-border-accent: var(--pl-orange-500);
+	--pl-divider: var(--pl-neutral-200);
+
+	--pl-accent: var(--pl-orange-500);
+	/* fill / surface only on light */
+	--pl-accent-hover: var(--pl-orange-600);
+	--pl-accent-active: var(--pl-orange-700);
+	--pl-accent-subtle: var(--pl-orange-100);
+	/* badge + icon-chip background */
+	--pl-accent-text-safe: var(--pl-orange-700);
+	/* AA orange TEXT on light */
+	--pl-accent-ui-safe: var(--pl-orange-600);
+	/* 3:1 non-text UI on light */
+
+	--pl-focus-ring: var(--pl-orange-600);
+	--pl-focus-ring-width: 2px;
+	--pl-focus-ring-offset: 3px;
+
+	/* Alpha helpers — for hairlines over photography / on ink bands. */
+	--pl-alpha-on-ink-border: 255 255 255;
+	--pl-alpha-on-light-border: 15 15 18;
+
+	/* =====================================================================
+	   3. TYPOGRAPHY
+	   Poppins is ALREADY loaded by the theme (resources/views/default/
+	   theme.json -> landingPage.googleFonts.Poppins) and injected by
+	   layout/app.blade.php. DO NOT add a webfont request here.
+
+	   WEIGHTS ACTUALLY LOADED: 400, 500, 600, 700. Nothing else exists.
+	   Using 300 or 800 gets a synthesised faux weight — never reference them.
+	   ===================================================================== */
+
+	--pl-font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system,
+		'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--pl-font-heading: var(--pl-font-sans);
+	--pl-font-body: var(--pl-font-sans);
+	--pl-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+		'Liberation Mono', monospace;
+
+	--pl-weight-regular: 400;
+	--pl-weight-medium: 500;
+	--pl-weight-semibold: 600;
+	--pl-weight-bold: 700;
+
+	/* ---- Modular scale --------------------------------------------------
+	   Base 16px, ratio 1.200 (minor third) for the text steps. The three
+	   display steps go fluid so a 4rem hero headline does not overflow a
+	   360px phone. clamp() min values are the mobile sizes.
+	   ------------------------------------------------------------------- */
+	--pl-text-2xs: 0.6875rem;
+	/* 11px  legal, tiny meta            */
+	--pl-text-xs: 0.75rem;
+	/* 12px  eyebrow, table meta         */
+	--pl-text-sm: 0.8125rem;
+	/* 13px  badge, caption              */
+	--pl-text-base: 0.9375rem;
+	/* 15px  UI default, card body       */
+	--pl-text-md: 1rem;
+	/* 16px  long-form body              */
+	--pl-text-lg: 1.125rem;
+	/* 18px  lead paragraph              */
+	--pl-text-xl: 1.3125rem;
+	/* 21px  large lead, big stat label  */
+	--pl-text-2xl: clamp(1.35rem, 2.1vw, 1.75rem);
+	/* h3    */
+	--pl-text-3xl: clamp(1.75rem, 2.8vw, 2.25rem);
+	/* h2-sm */
+	--pl-text-4xl: clamp(1.9rem, 3.4vw, 2.85rem);
+	/* h2    */
+	--pl-text-5xl: clamp(2.4rem, 5.2vw, 4rem);
+	/* h1 / hero */
+	--pl-text-6xl: clamp(3rem, 7vw, 5rem);
+	/* display / stat hero */
+
+	/* ---- Line heights ---------------------------------------------------
+	   Tight for display (big type needs less air), loose for reading.
+	   ------------------------------------------------------------------- */
+	--pl-leading-none: 1;
+	--pl-leading-display: 1.08;
+	--pl-leading-heading: 1.2;
+	--pl-leading-snug: 1.35;
+	--pl-leading-normal: 1.5;
+	--pl-leading-body: 1.6;
+	--pl-leading-relaxed: 1.7;
+
+	/* ---- Tracking -------------------------------------------------------
+	   Poppins is wide; big sizes need negative tracking or they look loose.
+	   ------------------------------------------------------------------- */
+	--pl-tracking-display: -0.04em;
+	--pl-tracking-heading: -0.03em;
+	--pl-tracking-tight: -0.01em;
+	--pl-tracking-normal: 0;
+	--pl-tracking-wide: 0.02em;
+	--pl-tracking-caps: 0.08em;
+	/* pair with text-transform: uppercase */
+
+	/* Measure — cap line length for readability. */
+	--pl-measure: 46rem;
+	--pl-measure-narrow: 34rem;
+	--pl-measure-wide: 60rem;
+
+	/* =====================================================================
+	   4. SPACING — 4px base, t-shirt named
+	   ===================================================================== */
+
+	--pl-space-0: 0;
+	--pl-space-px: 1px;
+	--pl-space-1: 0.25rem;
+	/*  4px */
+	--pl-space-2: 0.5rem;
+	/*  8px */
+	--pl-space-3: 0.75rem;
+	/* 12px */
+	--pl-space-4: 1rem;
+	/* 16px */
+	--pl-space-5: 1.25rem;
+	/* 20px — gutter */
+	--pl-space-6: 1.5rem;
+	/* 24px — grid gap */
+	--pl-space-8: 2rem;
+	/* 32px — card padding */
+	--pl-space-10: 2.5rem;
+	/* 40px */
+	--pl-space-12: 3rem;
+	/* 48px */
+	--pl-space-14: 3.5rem;
+	/* 56px — section-head margin */
+	--pl-space-16: 4rem;
+	/* 64px — feature column gap */
+	--pl-space-20: 5rem;
+	/* 80px */
+	--pl-space-24: 6rem;
+	/* 96px */
+	--pl-space-28: 7rem;
+	/* 112px — desktop section padding */
+	--pl-space-32: 8rem;
+	/* 128px */
+
+	/* Vertical rhythm for full-width bands. Overridden at <=991px below. */
+	--pl-section-py: var(--pl-space-28);
+	--pl-section-py-tight: var(--pl-space-16);
+	--pl-section-gap: var(--pl-space-14);
+
+	/* =====================================================================
+	   5. RADII
+	   The template ships three competing radii (--tblr-border-radius 13px,
+	   --card-rounded xl = 12px, --button-rounded full). Podlink resolves to:
+	   pill buttons, 20px cards, 32px hero/media frames.
+	   ===================================================================== */
+
+	--pl-radius-none: 0;
+	--pl-radius-xs: 0.375rem;
+	/*  6px  swatch, tiny chip           */
+	--pl-radius-sm: 0.5rem;
+	/*  8px  input inner, tag            */
+	--pl-radius-md: 0.75rem;
+	/* 12px  icon chip, small card       */
+	--pl-radius-lg: 1.25rem;
+	/* 20px  CARD, panel                 */
+	--pl-radius-xl: 2rem;
+	/* 32px  media frame, CTA band       */
+	--pl-radius-2xl: 2.5rem;
+	/* 40px  hero art frame              */
+	--pl-radius-pill: 999px;
+	/* buttons, badges, avatars          */
+	--pl-radius-circle: 50%;
+
+	--pl-radius-card: var(--pl-radius-lg);
+	--pl-radius-button: var(--pl-radius-pill);
+	--pl-radius-input: var(--pl-radius-md);
+	--pl-radius-media: var(--pl-radius-xl);
+
+	/* =====================================================================
+	   6. ELEVATION
+	   One light source, top-down. Shadows are near-neutral (a touch of the
+	   ink hue, not pure black) so they read as depth rather than dirt.
+	   -brand is the ONLY coloured shadow — reserved for the primary button.
+	   ===================================================================== */
+
+	--pl-shadow-color: 220 20% 8%;
+
+	--pl-shadow-none: none;
+	--pl-shadow-xs: 0 1px 2px hsl(var(--pl-shadow-color) / 5%);
+	--pl-shadow-sm: 0 2px 6px hsl(var(--pl-shadow-color) / 6%);
+	--pl-shadow-md: 0 8px 20px hsl(var(--pl-shadow-color) / 7%);
+	--pl-shadow-lg: 0 15px 33px hsl(var(--pl-shadow-color) / 8%);
+	--pl-shadow-xl: 0 24px 60px hsl(var(--pl-shadow-color) / 12%);
+	--pl-shadow-2xl: 0 40px 90px hsl(var(--pl-shadow-color) / 18%);
+	--pl-shadow-inset: inset 0 1px 0 hsl(var(--pl-neutral-0) / 60%);
+
+	--pl-shadow-brand: 0 10px 26px hsl(var(--pl-orange-500) / 30%);
+	--pl-shadow-brand-hover: 0 16px 34px hsl(var(--pl-orange-500) / 38%);
+
+	/* Product-visual frame — see BRAND.md "Screenshot treatment". */
+	--pl-shadow-media: 0 24px 60px hsl(var(--pl-shadow-color) / 12%),
+		0 2px 6px hsl(var(--pl-shadow-color) / 6%);
+
+	/* Semantic elevation aliases. These exist so a downstream sheet that
+	   redeclares --pl-shadow-lg locally (podlink-marketing.css does) can still
+	   reach the intended global value without resolving against its own
+	   override — a custom property with a var() reference is substituted using
+	   the values on the element it is DECLARED on. */
+	--pl-shadow-card: var(--pl-shadow-lg);
+	--pl-shadow-panel: var(--pl-shadow-xl);
+
+	/* =====================================================================
+	   7. LAYOUT
+	   Container widths mirror tailwind.landing-page.config.js screens so the
+	   hand-written marketing pages line up with the stock landing page.
+	   ===================================================================== */
+
+	--pl-container: 1170px;
+	/* site standard — matches xl screen  */
+	--pl-container-narrow: 960px;
+	--pl-container-wide: 1320px;
+	--pl-container-prose: 46rem;
+	--pl-gutter: var(--pl-space-5);
+	--pl-gutter-lg: var(--pl-space-8);
+
+	/* Chrome heights, from _vars.scss:157 / :44 */
+	--pl-header-height: 4.8125rem;
+	--pl-header-height-mobile: 65px;
+	--pl-scroll-offset: 6rem;
+	/* scroll-margin-top under fixed nav */
+
+	/* ---- Breakpoints ----------------------------------------------------
+	   REFERENCE ONLY. Custom properties are NOT valid inside @media queries;
+	   you must hardcode the px value. These exist so everyone hardcodes the
+	   SAME px value. Source: tailwind.landing-page.config.js:29-35.
+	     sm  576px   md  768px   lg  992px   xl 1170px
+	   Podlink marketing CSS uses max-width queries at 575 / 767 / 991.
+	   ------------------------------------------------------------------- */
+	--pl-bp-sm: 576px;
+	--pl-bp-md: 768px;
+	--pl-bp-lg: 992px;
+	--pl-bp-xl: 1170px;
+
+	--pl-z-base: 1;
+	--pl-z-raised: 10;
+	--pl-z-sticky: 50;
+	--pl-z-dropdown: 60;
+	--pl-z-overlay: 80;
+	--pl-z-modal: 90;
+	--pl-z-toast: 99;
+
+	/* =====================================================================
+	   8. MOTION
+	   Podlink motion is short and confident: nothing longer than 560ms,
+	   nothing that moves further than 8px on hover.
+	   ===================================================================== */
+
+	--pl-duration-instant: 80ms;
+	--pl-duration-fast: 120ms;
+	/* colour / opacity swaps       */
+	--pl-duration-base: 200ms;
+	/* button + link states         */
+	--pl-duration-slow: 320ms;
+	/* card lift, accordion         */
+	--pl-duration-slower: 560ms;
+	/* scroll reveal                */
+	--pl-duration-ambient: 700ms;
+	/* section fade-in              */
+
+	--pl-ease-linear: linear;
+	--pl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+	/* default: enter+exit  */
+	--pl-ease-out: cubic-bezier(0, 0, 0.2, 1);
+	/* things arriving      */
+	--pl-ease-in: cubic-bezier(0.4, 0, 1, 1);
+	/* things leaving       */
+	--pl-ease-emphasis: cubic-bezier(0.2, 0, 0, 1.2);
+	/* slight overshoot     */
+
+	--pl-transition-colors:
+		color var(--pl-duration-base) var(--pl-ease-standard),
+		background-color var(--pl-duration-base) var(--pl-ease-standard),
+		border-color var(--pl-duration-base) var(--pl-ease-standard),
+		box-shadow var(--pl-duration-base) var(--pl-ease-standard);
+	--pl-transition-transform: transform var(--pl-duration-slow) var(--pl-ease-standard);
+	--pl-transition-all:
+		var(--pl-transition-colors),
+		transform var(--pl-duration-slow) var(--pl-ease-standard);
+
+	--pl-lift-sm: -2px;
+	/* button hover translateY */
+	--pl-lift-md: -4px;
+	/* card hover translateY   */
+}
+
+
+/* =========================================================================
+   DARK MODE
+   =========================================================================
+   CONVENTION CHECK — the app does NOT use `.dark` or `[data-theme="dark"]`.
+   tailwind.config.js:13 declares:  darkMode: [ 'class', '.theme-dark' ]
+   and the class is applied to <body> (see resources/views/default/panel/**,
+   components/navbar/navbar-logo.blade.php, and the `:root:has(body.theme-dark)`
+   rule in scss/base/_vars.scss). So `.theme-dark` is authoritative.
+
+   `.dark` and `[data-theme="dark"]` are included as forward-compatible
+   aliases only — nothing in the app sets them today. If a future refactor
+   switches conventions this file keeps working; delete the aliases then.
+
+   `:root:has(body.theme-dark)` is included because tokens live on :root and
+   :root is an ANCESTOR of body — inheritance alone would not flip anything
+   set directly on :root and read outside <body> (e.g. scrollbar styling).
+   ========================================================================= */
+
+.theme-dark,
+.dark,
+[data-theme='dark'],
+:root:has(body.theme-dark) {
+
+	/* ---- Surfaces -------------------------------------------------------
+	   Do NOT lighten dark surfaces with white overlays alone; each step is a
+	   real value so borders and shadows stay predictable.
+	     surface        #0F0F12   white on it 19.14:1
+	     surface-raised #16161B   white on it 18.03:1
+	     surface-sunken #0A0A0C
+	     hairline       #232329   white on it 15.63:1
+	   ------------------------------------------------------------------- */
+	--pl-surface: var(--pl-neutral-900);
+	--pl-surface-alt: 240 8% 8%;
+	--pl-surface-raised: 240 8% 10%;
+	--pl-surface-sunken: 240 10% 4%;
+	--pl-surface-ink: var(--pl-neutral-900);
+	--pl-surface-accent: 28 45% 10%;
+
+	/* ---- Text -----------------------------------------------------------
+	     primary  #FFFFFF  19.14:1 on surface
+	     body     #C9CFD8   12.06:1
+	     muted    #A7B1BE    8.82:1
+	     faint    #6E7684    3.29:1  (decorative / disabled only)
+	   ------------------------------------------------------------------- */
+	--pl-text-primary: var(--pl-neutral-0);
+	--pl-text-body: 214 14% 82%;
+	--pl-text-muted: 215 15% 70%;
+	--pl-text-faint: 217 8% 47%;
+	--pl-text-on-accent: var(--pl-neutral-900);
+	/* still ink on orange */
+	--pl-text-on-ink: var(--pl-neutral-0);
+	--pl-text-inverted: var(--pl-neutral-900);
+
+	/* ---- Lines ---------------------------------------------------------- */
+	--pl-border: 240 6% 18%;
+	--pl-border-strong: 240 6% 26%;
+	--pl-divider: 240 6% 16%;
+
+	/* ---- Accent ---------------------------------------------------------
+	   The brand orange is at its BEST on ink (8.20:1), so accent stays 500.
+	   Only the text-safe token flips: on a dark surface you want a LIGHTER
+	   orange, not a darker one. --pl-orange-700 (#B85600) would be 3.68:1
+	   on ink and would fail; --pl-orange-400 (#FFA538) is 9.74:1.
+	   ------------------------------------------------------------------- */
+	--pl-accent: var(--pl-orange-500);
+	--pl-accent-hover: var(--pl-orange-400);
+	--pl-accent-active: var(--pl-orange-300);
+	--pl-accent-subtle: 28 60% 14%;
+	--pl-accent-text-safe: var(--pl-orange-400);
+	--pl-accent-ui-safe: var(--pl-orange-500);
+	--pl-border-accent: var(--pl-orange-500);
+
+	--pl-focus-ring: var(--pl-orange-400);
+
+	/* ---- Status (lightened so they clear 4.5:1 on #0F0F12) -------------- */
+	--pl-success-text: 167 60% 55%;
+	--pl-success-bg: 167 45% 12%;
+	--pl-danger-text: 344 65% 68%;
+	--pl-danger-bg: 344 40% 14%;
+	--pl-warning-text: 38 95% 62%;
+	--pl-warning-bg: 38 50% 12%;
+	--pl-info-text: 205 75% 65%;
+	--pl-info-bg: 205 50% 13%;
+
+	/* ---- Elevation ------------------------------------------------------
+	   Drop shadows barely read on near-black. Depth in dark mode comes from
+	   the raised surface value plus a 1px light hairline, so the shadow
+	   scale is deliberately flattened and a top highlight is added.
+	   ------------------------------------------------------------------- */
+	--pl-shadow-color: 240 30% 2%;
+	--pl-shadow-xs: 0 1px 2px hsl(var(--pl-shadow-color) / 40%);
+	--pl-shadow-sm: 0 2px 6px hsl(var(--pl-shadow-color) / 45%);
+	--pl-shadow-md: 0 8px 20px hsl(var(--pl-shadow-color) / 50%);
+	--pl-shadow-lg: 0 15px 33px hsl(var(--pl-shadow-color) / 55%);
+	--pl-shadow-xl: 0 24px 60px hsl(var(--pl-shadow-color) / 60%);
+	--pl-shadow-2xl: 0 40px 90px hsl(var(--pl-shadow-color) / 70%);
+	--pl-shadow-inset: inset 0 1px 0 hsl(var(--pl-neutral-0) / 8%);
+	--pl-shadow-media: 0 24px 60px hsl(var(--pl-shadow-color) / 60%),
+		0 0 0 1px hsl(var(--pl-neutral-0) / 8%);
+	--pl-shadow-card: var(--pl-shadow-lg);
+	--pl-shadow-panel: var(--pl-shadow-xl);
+}
+
+
+/* =========================================================================
+   RESPONSIVE TOKEN OVERRIDES
+   Only rhythm changes with viewport; colour and type scale are already fluid.
+   Breakpoint literal 991px = one below --pl-bp-lg (992px).
+   ========================================================================= */
+
+@media (max-width: 991px) {
+
+	:root {
+		--pl-section-py: var(--pl-space-16);
+		/* 112px -> 64px  */
+		--pl-section-py-tight: var(--pl-space-12);
+		--pl-section-gap: var(--pl-space-10);
+		--pl-header-height: var(--pl-header-height-mobile);
+		--pl-scroll-offset: 5rem;
+	}
+}
+
+@media (max-width: 575px) {
+
+	:root {
+		--pl-section-py: var(--pl-space-12);
+		/* -> 48px */
+		--pl-gutter: var(--pl-space-4);
+	}
+}
+
+
+/* =========================================================================
+   REDUCED MOTION
+   =========================================================================
+   Collapse the duration tokens to ~0 rather than blanket-killing animation
+   with `* { animation: none }`. Anything built on the tokens becomes instant
+   automatically; anything genuinely functional (a loading indicator) can
+   opt back in by using a literal duration.
+
+   NOTE: 0.01ms, not 0 — a zero-length transition never fires transitionend,
+   which breaks JS that waits on it (frontend-animations.js, Alpine x-transition).
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+	:root {
+		--pl-duration-instant: 0.01ms;
+		--pl-duration-fast: 0.01ms;
+		--pl-duration-base: 0.01ms;
+		--pl-duration-slow: 0.01ms;
+		--pl-duration-slower: 0.01ms;
+		--pl-duration-ambient: 0.01ms;
+
+		--pl-ease-standard: linear;
+		--pl-ease-out: linear;
+		--pl-ease-in: linear;
+		--pl-ease-emphasis: linear;
+
+		/* Kill the hover displacement, keep the colour change. */
+		--pl-lift-sm: 0px;
+		--pl-lift-md: 0px;
+	}
+}
+
+
+/* =========================================================================
+   FORCED COLORS / HIGH CONTRAST
+   Windows high-contrast mode replaces colours wholesale. Make sure the
+   focus ring survives, since orange is one of the first things it discards.
+   ========================================================================= */
+
+@media (forced-colors: active) {
+
+	:root {
+		--pl-focus-ring-width: 3px;
+	}
+}
+
+
+/* =========================================================================
+   BASE APPLICATION — deliberately minimal
+   =========================================================================
+   This file is a TOKEN file. It sets no component styles and touches no
+   element the stock template owns, because it loads globally (dashboard,
+   panel, blog, landing page) and must not regress the purchased theme.
+   The only global concessions are below; both are additive.
+   ========================================================================= */
+
+/* Smooth in-page anchors, honouring the reduced-motion preference. */
+@media (prefers-reduced-motion: no-preference) {
+
+	html:focus-within {
+		scroll-behavior: smooth;
+	}
+}
+
+/* A single reusable focus ring. Opt in with class="pl-focusable" or by
+   referencing the tokens directly; nothing is applied globally. */
+.pl-focusable:focus-visible {
+	outline: var(--pl-focus-ring-width) solid hsl(var(--pl-focus-ring, 30 100% 43%));
+	outline-offset: var(--pl-focus-ring-offset);
+}
+
+/* Screen-reader-only, available everywhere. */
+.pl-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

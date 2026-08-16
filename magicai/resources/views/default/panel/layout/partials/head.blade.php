@@ -103,6 +103,17 @@
 
     @vite(\App\Helpers\Classes\ThemeHelper::dashboardScssPath())
 
+    {{-- Podlink brand tokens — same file the marketing site loads, so the app
+         and the marketing pages share one source of truth. It declares only
+         :root custom properties plus two opt-in utility classes
+         (.pl-focusable, .pl-visually-hidden); it sets no element styles and
+         cannot regress the purchased dashboard theme. Sits after @vite so it
+         wins equal-specificity :root ties. --}}
+    <link
+        rel="stylesheet"
+        href="{{ custom_theme_url('assets/css/frontend/podlink-tokens.css') }}?v={{ config('marketing.asset_version', '1') }}"
+    />
+
     @if ($setting->dashboard_code_before_head != null)
         {!! $setting->dashboard_code_before_head !!}
     @endif

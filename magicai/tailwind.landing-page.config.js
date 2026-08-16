@@ -6,6 +6,12 @@ export default {
 		'./resources/views/**/layout/*.blade.php',
 		'./resources/views/**/components/**/*.blade.php',
 		'./resources/views/**/landing-page/**/*.blade.php',
+		// Podlink marketing pages (/features and, later, /pricing + feature
+		// detail pages). Those views deliberately ship hand-written CSS
+		// instead of Tailwind, because the Railway container runs NO asset
+		// build. This glob exists so that IF anyone ever runs `npm run build`
+		// and commits public/build, Tailwind classes added there compile.
+		'./resources/views/**/marketing/**/*.blade.php',
 		'./resources/views/**/index.blade.php',
 		'./resources/views/**/vendor/**/*.blade.php',
 		'./resources/views/**/blog/**/*.blade.php',

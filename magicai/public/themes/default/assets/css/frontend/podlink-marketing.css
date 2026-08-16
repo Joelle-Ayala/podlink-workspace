@@ -1,0 +1,1749 @@
+/* =========================================================================
+   Podlink — marketing pages stylesheet
+   =========================================================================
+   WHY THIS IS PLAIN, HAND-WRITTEN CSS (and not Tailwind classes):
+   the Railway container runs ZERO build steps (see Dockerfile "App code
+   (vendor/ + public/build/ ship in the repo — zero-build)" and
+   docker-entrypoint.sh). `npm run build` never runs on deploy, so any
+   Tailwind utility class that is not ALREADY present in the committed
+   public/build/assets/landing-page-*.css simply does not exist at runtime.
+   Everything below is therefore literal CSS, served straight from
+   public/ by Apache. No build, no manifest, no hash.
+
+   Loaded by resources/views/default/marketing/layout.blade.php via
+   @push('css') -> custom_theme_url('assets/css/frontend/podlink-marketing.css')
+
+   SCOPING: every rule is scoped under .pl-page so nothing here can leak
+   into the existing landing page, the blog, the dashboard or the panel.
+
+   COLOUR SOURCE OF TRUTH — CHANGED 2026-08: this file no longer owns any
+   brand value. The single source of truth is now the global token layer:
+
+       public/themes/default/assets/css/frontend/podlink-tokens.css
+
+   loaded from resources/views/default/layout/app.blade.php for every page.
+   The .pl-page block below is a thin ALIAS layer: page-local names mapped
+   onto global tokens, each with a literal fallback so this stylesheet still
+   renders correctly if podlink-tokens.css 404s.
+
+   WHY THE ALIASES SOURCE FROM DIFFERENTLY-NAMED GLOBALS
+   A custom property that references itself (--pl-border: var(--pl-border))
+   is a dependency CYCLE: per CSS Variables spec every property in the cycle
+   becomes invalid at computed-value time and the var() fallback is NOT
+   consulted. So each alias below points at a global with a DIFFERENT name
+   (--pl-border -> --pl-neutral-200, --pl-radius-lg -> --pl-radius-xl, ...).
+   Do not "tidy" these into matching names.
+
+   Original provenance, still accurate, now recorded in podlink-tokens.css:
+     scss/base/_vars.scss:88  --primary 33 100% 50% (#FF8C00)
+     scss/base/_vars.scss:94-96 gradient from/via/to
+     scss/base/_vars.scss:66  --tblr-body-bg #0f0f12
+     scss/base/_vars.scss:45  --lqd-gray #2e333b
+   ========================================================================= */
+
+.pl-page {
+	/* ---- brand ----------------------------------------------------------
+	   ACCESSIBILITY, MEASURED (WCAG 2.1):
+	     #FF8C00 on white ......... 2.33:1  -> fill only, never text
+	     #0f0f12 on #FF8C00 ....... 8.20:1  -> the compliant button pair
+	     #FFFFFF on #FF8C00 ....... 2.33:1  -> BANNED
+	   --pl-brand-foreground was white and produced a 2.33:1 primary button.
+	   It is now ink. --pl-brand-deep was 20 90% 55% (#F46A25) and produced
+	   2.73:1 eyebrow text on the tinted badge; it is now orange-700
+	   (#B85600) = 4.33:1 on the badge, 4.81:1 on white.
+	   -------------------------------------------------------------------- */
+	--pl-brand: var(--pl-orange-500, 33 100% 50%);
+	/* #FF8C00 — fills, borders, glows */
+	--pl-brand-hover: var(--pl-orange-400, 33 100% 61%);
+	/* #FFA538 — primary button hover; BRIGHTENS, so ink text stays 9.74:1 */
+	--pl-brand-deep: var(--pl-orange-700, 28 100% 36%);
+	/* #B85600 — the only orange allowed as TEXT on a light background */
+	--pl-brand-deeper: var(--pl-orange-800, 24 92% 28%);
+	/* #893A06 — link hover */
+	--pl-brand-light: var(--pl-orange-300, 34 100% 71%);
+	/* #FFBF6B — orange text on ink bands, 11.77:1 */
+	--pl-brand-foreground: var(--pl-neutral-900, 240 9% 6%);
+	/* ink on orange */
+	--pl-focus: var(--pl-orange-600, 30 100% 43%);
+	/* #DB6E00 — 3.36:1 on white AND 5.69:1 on ink, so one ring works on
+	   both light and dark sections. Brand orange fails 3:1 on white. */
+
+	/* ---- neutrals ------------------------------------------------------- */
+	--pl-ink: var(--pl-neutral-900, 240 9% 6%);
+	/* #0f0f12 near-black */
+	--pl-ink-soft: var(--pl-neutral-700, 216 13% 21%);
+	/* #2e333b */
+	--pl-heading: var(--pl-neutral-800, 213 13% 14%);
+	--pl-body: var(--pl-neutral-600, 222 14% 29%);
+	--pl-muted-fg: var(--pl-neutral-500, 217 12% 43%);
+	/* #606B7B 5.40:1 — replaces the old opacity:.72 dimming, which
+	   computed to 4.31:1 and failed AA */
+	--pl-border: var(--pl-neutral-200, 210 13% 92%);
+	--pl-surface: var(--pl-neutral-0, 0 0% 100%);
+	--pl-surface-alt: var(--pl-neutral-50, 210 20% 98%);
+	/* was 240 25% 98% — a faintly violet tint left over from the purple
+	   stock template. Now a true cool neutral. */
+
+	/* ---- rhythm ---------------------------------------------------------
+	   Local names kept (this file uses a 3-step radius scale); they map onto
+	   the global 7-step scale, which is why the names appear to shift by one.
+	   -------------------------------------------------------------------- */
+	--pl-section-py: var(--pl-space-28, 7rem);
+	--pl-radius-sm: var(--pl-radius-input, 0.75rem);
+	--pl-radius: var(--pl-radius-card, 1.25rem);
+	--pl-radius-lg: var(--pl-radius-media, 2rem);
+	--pl-shadow: var(--pl-shadow-card, 0 15px 33px rgb(0 0 0 / 6%));
+	--pl-shadow-lg: var(--pl-shadow-panel, 0 24px 60px rgb(0 0 0 / 10%));
+	--pl-maxw: var(--pl-container, 1170px);
+	/* NOTE: these deliberately source from the SEMANTIC global aliases
+	   (--pl-radius-card/-media/-input, --pl-shadow-card/-panel) rather than
+	   from --pl-radius-lg / --pl-shadow-lg directly. .pl-page redeclares
+	   --pl-radius-lg (2rem) and --pl-shadow-lg for its own 3-step scale, and a
+	   var() inside a custom property is substituted using the values on the
+	   element it is DECLARED on — so var(--pl-radius-lg) here would resolve to
+	   this block's own 2rem, not the global 1.25rem. */
+
+	background-color: hsl(var(--pl-surface));
+	color: hsl(var(--pl-body));
+	font-size: 1rem;
+	line-height: 1.6;
+	overflow-x: clip;
+}
+
+@media (max-width: 991px) {
+
+	.pl-page {
+		--pl-section-py: var(--pl-space-16, 4rem);
+	}
+}
+
+/* -------------------------------------------------------------------------
+   Layout primitives
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-wrap {
+	width: 100%;
+	max-width: var(--pl-maxw);
+	margin-inline: auto;
+	padding-inline: 1.25rem;
+}
+
+.pl-page .pl-section {
+	position: relative;
+	padding-block: var(--pl-section-py);
+}
+
+.pl-page .pl-section--tight {
+	padding-block: calc(var(--pl-section-py) * 0.6);
+}
+
+.pl-page .pl-section--alt {
+	background-color: hsl(var(--pl-surface-alt));
+}
+
+/* The site header goes fixed once you scroll; keep in-page anchor targets
+   clear of it. */
+.pl-page section[id] {
+	scroll-margin-top: 6rem;
+}
+
+.pl-page .pl-section--ink {
+	background-color: hsl(var(--pl-ink));
+	color: rgb(255 255 255 / 72%);
+}
+
+/* Scroll reveal. .site-section gets .lqd-is-in-view from the already-shipped
+   public/themes/default/assets/js/frontend/frontend-animations.js:20 */
+.pl-page .site-section {
+	transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+@media (min-width: 992px) {
+
+	.pl-page .site-section:not(.pl-hero) {
+		opacity: 0;
+		transform: translateY(2rem);
+	}
+
+	.pl-page .site-section.lqd-is-in-view {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.pl-page .site-section,
+	.pl-page .site-section:not(.pl-hero) {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+}
+
+/* -------------------------------------------------------------------------
+   Typography
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 1.25rem;
+	padding: 0.35rem 0.85rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 12%);
+	color: hsl(var(--pl-brand-deep));
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	line-height: 1.4;
+}
+
+.pl-page .pl-section--ink .pl-eyebrow {
+	background-color: hsl(var(--pl-brand) / 18%);
+	color: hsl(var(--pl-brand-light));
+}
+
+.pl-page .pl-h1,
+.pl-page .pl-h2,
+.pl-page .pl-h3,
+.pl-page .pl-h4 {
+	margin: 0 0 0.65em;
+	color: hsl(var(--pl-heading));
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.08;
+	text-wrap: balance;
+}
+
+.pl-page .pl-h1 {
+	font-size: clamp(2.4rem, 5.2vw, 4rem);
+	letter-spacing: -0.04em;
+}
+
+.pl-page .pl-h2 {
+	font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+}
+
+.pl-page .pl-h3 {
+	font-size: clamp(1.35rem, 2.1vw, 1.75rem);
+	line-height: 1.15;
+}
+
+.pl-page .pl-h4 {
+	font-size: 1.0625rem;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+}
+
+.pl-page .pl-section--ink .pl-h1,
+.pl-page .pl-section--ink .pl-h2,
+.pl-page .pl-section--ink .pl-h3,
+.pl-page .pl-section--ink .pl-h4 {
+	color: #fff;
+}
+
+.pl-page .pl-lead {
+	margin: 0 0 1.5rem;
+	font-size: 1.125rem;
+	line-height: 1.6;
+}
+
+.pl-page .pl-text {
+	margin: 0 0 1rem;
+}
+
+.pl-page .pl-text:last-child,
+.pl-page .pl-lead:last-child {
+	margin-bottom: 0;
+}
+
+/* Was opacity:.72 — which computed body text to #757A84 = 4.31:1 on white
+   and failed AA. A real muted colour token instead, plus a lighter value on
+   ink bands (62% white on #0f0f12 = 7.68:1). */
+.pl-page .pl-muted {
+	color: hsl(var(--pl-muted-fg));
+}
+
+.pl-page .pl-section--ink .pl-muted,
+.pl-page .pl-hero .pl-muted,
+.pl-page .pl-cta .pl-muted {
+	color: rgb(255 255 255 / 62%);
+}
+
+.pl-page .pl-section-head {
+	max-width: 46rem;
+	margin-bottom: 3.5rem;
+}
+
+.pl-page .pl-section-head--center {
+	margin-inline: auto;
+	text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.9rem 1.6rem;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pl-page .pl-btn:hover {
+	transform: translateY(-2px);
+	text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------
+   FOCUS RINGS
+   -------------------------------------------------------------------------
+   One ring, every interactive element. Colour is --pl-focus (= the global
+   --pl-orange-600 / #DB6E00): 3.36:1 on white and 5.69:1 on ink, so a single
+   ring clears the 3:1 non-text contrast threshold on BOTH the light sections
+   and the ink hero / CTA bands. Brand orange (#FF8C00) is 2.33:1 on white and
+   must never be a focus ring — see podlink-tokens.css "THE ORANGE TRAP".
+
+   Width and offset now come from the global tokens, with literal fallbacks
+   equal to the values that were hardcoded here, so the forced-colors bump in
+   podlink-tokens.css (which widens the ring to 3px in Windows high-contrast
+   mode, where orange is one of the first colours discarded) actually reaches
+   these rules.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-btn:focus-visible {
+	outline: var(--pl-focus-ring-width, 2px) solid hsl(var(--pl-focus));
+	outline-offset: var(--pl-focus-ring-offset, 3px);
+}
+
+/* Whole-card links — three-up cards and the price cards. The card has no
+   clipping ancestor, so the ring sits outside the border like the button's. */
+.pl-page a.pl-card:focus-visible,
+.pl-page .pl-card--interactive:focus-visible {
+	outline: var(--pl-focus-ring-width, 2px) solid hsl(var(--pl-focus));
+	outline-offset: var(--pl-focus-ring-offset, 3px);
+}
+
+/* <summary> in the FAQ accordion. INSET on purpose: .pl-faq is
+   overflow: hidden, so a positive outline-offset gets clipped on the first
+   and last items and the ring silently disappears exactly where it matters. */
+.pl-page .pl-faq__q:focus-visible {
+	outline: var(--pl-focus-ring-width, 2px) solid hsl(var(--pl-focus));
+	outline-offset: calc(var(--pl-focus-ring-width, 2px) * -1);
+}
+
+.pl-page .pl-btn--primary {
+	background-color: hsl(var(--pl-brand));
+	color: hsl(var(--pl-brand-foreground));
+	box-shadow: 0 10px 26px hsl(var(--pl-brand) / 30%);
+}
+
+.pl-page .pl-btn--primary:hover {
+	background-color: hsl(var(--pl-brand-hover));
+	color: hsl(var(--pl-brand-foreground));
+	box-shadow: 0 16px 34px hsl(var(--pl-brand) / 38%);
+}
+
+.pl-page .pl-btn--ghost {
+	border-color: rgb(255 255 255 / 25%);
+	color: #fff;
+}
+
+.pl-page .pl-btn--ghost:hover {
+	border-color: #fff;
+	background-color: #fff;
+	color: hsl(var(--pl-ink));
+}
+
+.pl-page .pl-btn--outline {
+	border-color: hsl(var(--pl-border));
+	color: hsl(var(--pl-heading));
+}
+
+.pl-page .pl-btn--outline:hover {
+	border-color: hsl(var(--pl-heading));
+	background-color: hsl(var(--pl-heading));
+	color: #fff;
+}
+
+.pl-page .pl-btn-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.85rem;
+	align-items: center;
+}
+
+.pl-page .pl-btn-row--center {
+	justify-content: center;
+}
+
+.pl-page .pl-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: hsl(var(--pl-brand-deep));
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.pl-page .pl-link:hover {
+	color: hsl(var(--pl-brand-deeper));
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+.pl-page .pl-link svg {
+	width: 0.7em;
+	height: auto;
+	transition: transform 0.25s ease;
+}
+
+.pl-page .pl-link:hover svg {
+	transform: translateX(3px);
+}
+
+/* -------------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-hero {
+	position: relative;
+	overflow: hidden;
+	padding-top: 11.5rem;
+	padding-bottom: 6.5rem;
+	background-color: hsl(var(--pl-ink));
+	color: rgb(255 255 255 / 70%);
+	text-align: center;
+}
+
+@media (max-width: 767px) {
+
+	.pl-page .pl-hero {
+		padding-top: 9rem;
+		padding-bottom: 4.5rem;
+	}
+}
+
+.pl-page .pl-hero::before {
+	content: '';
+	position: absolute;
+	inset: -40% 20% auto;
+	height: 70%;
+	background: radial-gradient(ellipse at 50% 50%,
+			hsl(var(--pl-brand) / 32%) 0%,
+			hsl(var(--pl-brand-deep) / 12%) 45%,
+			transparent 70%);
+	pointer-events: none;
+}
+
+.pl-page .pl-hero::after {
+	content: '';
+	position: absolute;
+	inset: auto 0 -1px;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, hsl(var(--pl-brand) / 45%), transparent);
+}
+
+.pl-page .pl-hero__inner {
+	position: relative;
+	max-width: 48rem;
+	margin-inline: auto;
+}
+
+.pl-page .pl-hero .pl-h1 {
+	color: #fff;
+}
+
+.pl-page .pl-hero .pl-lead {
+	font-size: 1.1875rem;
+	color: rgb(255 255 255 / 70%);
+}
+
+.pl-page .pl-hero__note {
+	margin-top: 1.25rem;
+	font-size: 0.875rem;
+	color: rgb(255 255 255 / 45%);
+}
+
+/* -------------------------------------------------------------------------
+   Stat / logo strip
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-strip {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 1px;
+	overflow: hidden;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius);
+	background-color: hsl(var(--pl-border));
+}
+
+.pl-page .pl-section--ink .pl-strip {
+	border-color: rgb(255 255 255 / 10%);
+	background-color: rgb(255 255 255 / 10%);
+}
+
+.pl-page .pl-strip__item {
+	padding: 2rem 1.5rem;
+	background-color: hsl(var(--pl-surface));
+	text-align: center;
+}
+
+.pl-page .pl-section--alt .pl-strip__item {
+	background-color: hsl(var(--pl-surface-alt));
+}
+
+.pl-page .pl-section--ink .pl-strip__item {
+	background-color: hsl(var(--pl-ink));
+}
+
+.pl-page .pl-strip__value {
+	display: block;
+	margin-bottom: 0.3rem;
+	color: hsl(var(--pl-heading));
+	font-size: 1.75rem;
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.1;
+}
+
+.pl-page .pl-section--ink .pl-strip__value {
+	color: #fff;
+}
+
+.pl-page .pl-strip__label {
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.875rem;
+	line-height: 1.45;
+}
+
+.pl-page .pl-section--ink .pl-strip__label {
+	color: rgb(255 255 255 / 62%);
+}
+
+.pl-page .pl-strip__logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.25rem;
+	color: hsl(var(--pl-heading));
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	opacity: 0.55;
+}
+
+.pl-page .pl-strip__logo img {
+	max-height: 2rem;
+	width: auto;
+}
+
+/* -------------------------------------------------------------------------
+   Three-up grid / cards
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-grid {
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pl-page .pl-grid--2 {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Explicit 3-up. Same value as the .pl-grid default, but three-up.blade.php
+   now emits the modifier so a grid's column count is legible in the markup.
+   IT MUST LIVE HERE, next to its siblings — appended at the end of the file
+   it would have equal specificity to the .pl-grid rule inside the media
+   queries below and, being later, would silently defeat the responsive
+   collapse on every three-up on the site. */
+.pl-page .pl-grid--3 {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pl-page .pl-grid--4 {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 991px) {
+
+	.pl-page .pl-grid,
+	.pl-page .pl-grid--3,
+	.pl-page .pl-grid--4 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 575px) {
+
+	.pl-page .pl-grid,
+	.pl-page .pl-grid--2,
+	.pl-page .pl-grid--3,
+	.pl-page .pl-grid--4 {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.pl-page .pl-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 2rem;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius);
+	background-color: hsl(var(--pl-surface));
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.pl-page a.pl-card,
+.pl-page .pl-card--interactive {
+	text-decoration: none;
+}
+
+.pl-page a.pl-card:hover,
+.pl-page .pl-card--interactive:hover {
+	transform: translateY(-4px);
+	border-color: hsl(var(--pl-brand) / 45%);
+	box-shadow: var(--pl-shadow);
+	text-decoration: none;
+}
+
+.pl-page .pl-section--ink .pl-card {
+	border-color: rgb(255 255 255 / 12%);
+	background-color: rgb(255 255 255 / 4%);
+}
+
+.pl-page .pl-card__icon {
+	display: inline-grid;
+	place-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin-bottom: 1.25rem;
+	border-radius: var(--pl-radius-sm);
+	background-color: hsl(var(--pl-brand) / 12%);
+	color: hsl(var(--pl-brand-deep));
+}
+
+.pl-page .pl-card__icon svg {
+	width: 1.375rem;
+	height: 1.375rem;
+	stroke-width: 1.6;
+}
+
+.pl-page .pl-card__title {
+	margin: 0 0 0.5rem;
+	color: hsl(var(--pl-heading));
+	font-size: 1.0625rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	line-height: 1.3;
+}
+
+.pl-page .pl-section--ink .pl-card__title {
+	color: #fff;
+}
+
+.pl-page .pl-card__body {
+	margin: 0;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+}
+
+.pl-page .pl-card__foot {
+	margin-top: auto;
+	padding-top: 1.25rem;
+	font-size: 0.875rem;
+}
+
+/* -------------------------------------------------------------------------
+   Feature detail block (alternating text / visual)
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-feature {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 4rem;
+	align-items: center;
+}
+
+.pl-page .pl-feature+.pl-feature {
+	margin-top: calc(var(--pl-section-py) * 0.85);
+}
+
+@media (max-width: 991px) {
+
+	.pl-page .pl-feature {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.25rem;
+	}
+}
+
+.pl-page .pl-feature--reverse .pl-feature__media {
+	order: -1;
+}
+
+@media (max-width: 991px) {
+
+	.pl-page .pl-feature--reverse .pl-feature__media {
+		order: 0;
+	}
+}
+
+.pl-page .pl-feature__body {
+	max-width: 32rem;
+}
+
+.pl-page .pl-feature__list {
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pl-page .pl-feature__list li {
+	position: relative;
+	margin-bottom: 0.75rem;
+	padding-inline-start: 1.9rem;
+	font-size: 0.9375rem;
+	line-height: 1.55;
+}
+
+.pl-page .pl-feature__list li::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: 0;
+	top: 0.28em;
+	width: 1.15rem;
+	height: 1.15rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 14%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B85600' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 0.7rem;
+}
+
+.pl-page .pl-feature__cta {
+	margin-top: 1.75rem;
+}
+
+/* Visual placeholder — a branded panel that looks deliberate until real
+   product screenshots land. Drop an <img> inside .pl-feature__media to
+   replace it. */
+.pl-page .pl-feature__media {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 19rem;
+	padding: 2rem;
+	overflow: hidden;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius-lg);
+	background:
+		radial-gradient(120% 90% at 15% 0%, hsl(var(--pl-brand) / 14%) 0%, transparent 55%),
+		linear-gradient(160deg, hsl(var(--pl-surface-alt)) 0%, hsl(var(--pl-surface)) 100%);
+	box-shadow: var(--pl-shadow);
+}
+
+.pl-page .pl-feature__media img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--pl-radius);
+}
+
+.pl-page .pl-mock {
+	width: 100%;
+	max-width: 24rem;
+	padding: 1.25rem;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius);
+	background-color: hsl(var(--pl-surface));
+	box-shadow: var(--pl-shadow-lg);
+	text-align: start;
+}
+
+.pl-page .pl-mock__bar {
+	display: flex;
+	gap: 0.35rem;
+	margin-bottom: 1rem;
+}
+
+.pl-page .pl-mock__bar span {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-border));
+}
+
+.pl-page .pl-mock__bar span:first-child {
+	background-color: hsl(var(--pl-brand));
+}
+
+.pl-page .pl-mock__label {
+	margin: 0 0 0.75rem;
+	color: hsl(var(--pl-heading));
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	opacity: 0.6;
+}
+
+.pl-page .pl-mock__line {
+	height: 0.55rem;
+	margin-bottom: 0.6rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-border));
+}
+
+.pl-page .pl-mock__line--accent {
+	background-color: hsl(var(--pl-brand) / 55%);
+}
+
+.pl-page .pl-mock__line--w80 {
+	width: 80%;
+}
+
+.pl-page .pl-mock__line--w60 {
+	width: 60%;
+}
+
+.pl-page .pl-mock__line--w45 {
+	width: 45%;
+}
+
+.pl-page .pl-mock__bars {
+	display: flex;
+	align-items: flex-end;
+	gap: 0.4rem;
+	height: 6rem;
+	margin-top: 1rem;
+}
+
+.pl-page .pl-mock__bars i {
+	flex: 1 1 auto;
+	border-radius: 0.25rem 0.25rem 0 0;
+	background-color: hsl(var(--pl-brand) / 30%);
+}
+
+.pl-page .pl-mock__bars i:nth-child(3n) {
+	background-color: hsl(var(--pl-brand) / 70%);
+}
+
+/* -------------------------------------------------------------------------
+   Feature group (used by /features)
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-group+.pl-group {
+	margin-top: calc(var(--pl-section-py) * 0.8);
+}
+
+.pl-page .pl-group__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 2.25rem;
+	padding-bottom: 1.25rem;
+	border-bottom: 1px solid hsl(var(--pl-border));
+}
+
+.pl-page .pl-group__head .pl-h3 {
+	margin: 0;
+}
+
+.pl-page .pl-group__intro {
+	max-width: 34rem;
+	margin: 0;
+	font-size: 0.9375rem;
+}
+
+.pl-page .pl-group__grid {
+	margin-top: 3.5rem;
+}
+
+/* -------------------------------------------------------------------------
+   FAQ accordion — native <details>, no JS dependency
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-faq {
+	max-width: 46rem;
+	margin-inline: auto;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius);
+	background-color: hsl(var(--pl-surface));
+	overflow: hidden;
+}
+
+.pl-page .pl-faq__item+.pl-faq__item {
+	border-top: 1px solid hsl(var(--pl-border));
+}
+
+.pl-page .pl-faq__q {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1.35rem 1.5rem;
+	color: hsl(var(--pl-heading));
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	line-height: 1.4;
+	list-style: none;
+	transition: color 0.2s ease;
+}
+
+.pl-page .pl-faq__q::-webkit-details-marker {
+	display: none;
+}
+
+.pl-page .pl-faq__q:hover {
+	color: hsl(var(--pl-brand-deep));
+}
+
+.pl-page .pl-faq__q::after {
+	content: '';
+	flex: 0 0 auto;
+	width: 0.65rem;
+	height: 0.65rem;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg) translate(-2px, -2px);
+	transition: transform 0.25s ease;
+	opacity: 0.5;
+}
+
+.pl-page .pl-faq__item[open] .pl-faq__q::after {
+	transform: rotate(-135deg) translate(-2px, -2px);
+	opacity: 1;
+}
+
+.pl-page .pl-faq__a {
+	padding: 0 1.5rem 1.5rem;
+	font-size: 0.9375rem;
+	line-height: 1.65;
+}
+
+.pl-page .pl-faq__a p {
+	margin: 0 0 0.75rem;
+}
+
+.pl-page .pl-faq__a p:last-child {
+	margin-bottom: 0;
+}
+
+/* -------------------------------------------------------------------------
+   CTA band
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-cta {
+	position: relative;
+	overflow: hidden;
+	padding: clamp(2.75rem, 6vw, 4.5rem);
+	border-radius: var(--pl-radius-lg);
+	background:
+		radial-gradient(120% 140% at 85% 10%, hsl(var(--pl-brand) / 38%) 0%, transparent 55%),
+		linear-gradient(135deg, hsl(var(--pl-ink)) 0%, hsl(var(--pl-ink-soft)) 100%);
+	color: rgb(255 255 255 / 72%);
+	text-align: center;
+}
+
+.pl-page .pl-cta__inner {
+	position: relative;
+	max-width: 42rem;
+	margin-inline: auto;
+}
+
+.pl-page .pl-cta .pl-h2 {
+	color: #fff;
+}
+
+.pl-page .pl-cta .pl-lead {
+	color: rgb(255 255 255 / 72%);
+}
+
+.pl-page .pl-cta__note {
+	margin-top: 1.25rem;
+	font-size: 0.8125rem;
+	color: rgb(255 255 255 / 45%);
+}
+
+/* -------------------------------------------------------------------------
+   Button sizes + secondary variant
+   Added with the brand system. The base .pl-btn is the md size; --sm and --lg
+   only change padding and font-size so every variant works at every size.
+   Minimum touch target: --sm is 36px tall, md 44px, lg 52px.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-btn--sm {
+	padding: 0.55rem 1.1rem;
+	font-size: 0.875rem;
+}
+
+.pl-page .pl-btn--lg {
+	padding: 1.1rem 2rem;
+	font-size: 1rem;
+}
+
+.pl-page .pl-btn--block {
+	width: 100%;
+}
+
+/* Secondary = filled neutral. Use when two buttons sit side by side and only
+   one may carry the orange. #0f0f12 fill, white text, 19.1:1. */
+.pl-page .pl-btn--secondary {
+	background-color: hsl(var(--pl-ink));
+	color: #fff;
+}
+
+.pl-page .pl-btn--secondary:hover {
+	background-color: hsl(var(--pl-ink-soft));
+	color: #fff;
+}
+
+/* Disabled: never fake it with opacity alone — opacity on an orange fill
+   lands around 1.6:1. Drop to a neutral so the label stays readable. */
+.pl-page .pl-btn[disabled],
+.pl-page .pl-btn[aria-disabled='true'],
+.pl-page .pl-btn--disabled {
+	border-color: transparent;
+	background-color: hsl(var(--pl-border));
+	color: hsl(var(--pl-muted-fg));
+	box-shadow: none;
+	cursor: not-allowed;
+	pointer-events: none;
+	transform: none;
+}
+
+/* -------------------------------------------------------------------------
+   Badges / pills
+   .pl-eyebrow is the section-label pill. .pl-badge is the inline data pill
+   (plan name, "New", a count). Same geometry, smaller.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.2rem 0.6rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 12%);
+	color: hsl(var(--pl-brand-deep));
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.pl-page .pl-badge--neutral {
+	background-color: hsl(var(--pl-border));
+	color: hsl(var(--pl-heading));
+}
+
+.pl-page .pl-badge--solid {
+	background-color: hsl(var(--pl-brand));
+	color: hsl(var(--pl-brand-foreground));
+}
+
+.pl-page .pl-section--ink .pl-badge {
+	background-color: hsl(var(--pl-brand) / 18%);
+	color: hsl(var(--pl-brand-light));
+}
+
+.pl-page .pl-section--ink .pl-badge--neutral {
+	background-color: rgb(255 255 255 / 10%);
+	color: #fff;
+}
+
+/* -------------------------------------------------------------------------
+   Forms
+   Marketing forms are one field + one button (email capture, RSS URL). The
+   input is NOT a pill — a pill input reads as a search box and hides the
+   text baseline. 12px radius, 44px tall, 2px focus ring.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	text-align: start;
+}
+
+.pl-page .pl-label {
+	color: hsl(var(--pl-heading));
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.pl-page .pl-input,
+.pl-page .pl-textarea,
+.pl-page .pl-select {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius-sm);
+	background-color: hsl(var(--pl-surface));
+	color: hsl(var(--pl-heading));
+	font-family: inherit;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	appearance: none;
+}
+
+.pl-page .pl-textarea {
+	min-height: 7rem;
+	resize: vertical;
+}
+
+.pl-page .pl-input::placeholder,
+.pl-page .pl-textarea::placeholder {
+	color: hsl(var(--pl-muted-fg));
+	opacity: 1;
+}
+
+.pl-page .pl-input:hover,
+.pl-page .pl-textarea:hover,
+.pl-page .pl-select:hover {
+	border-color: hsl(var(--pl-border));
+}
+
+.pl-page .pl-input:focus,
+.pl-page .pl-textarea:focus,
+.pl-page .pl-select:focus {
+	border-color: hsl(var(--pl-focus));
+	box-shadow: 0 0 0 3px hsl(var(--pl-brand) / 22%);
+	outline: none;
+}
+
+.pl-page .pl-input[aria-invalid='true'],
+.pl-page .pl-textarea[aria-invalid='true'] {
+	border-color: hsl(var(--pl-danger-text, 344 52% 36%));
+}
+
+.pl-page .pl-help {
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.8125rem;
+	line-height: 1.5;
+}
+
+.pl-page .pl-error {
+	color: hsl(var(--pl-danger-text, 344 52% 36%));
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+/* Inline form: field + button on one line, stacking on small screens. */
+.pl-page .pl-form-inline {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: flex-start;
+}
+
+.pl-page .pl-form-inline .pl-field {
+	flex: 1 1 16rem;
+}
+
+/* On ink bands the input has to invert or it burns a white hole in the band. */
+.pl-page .pl-section--ink .pl-label,
+.pl-page .pl-hero .pl-label,
+.pl-page .pl-cta .pl-label {
+	color: #fff;
+}
+
+.pl-page .pl-section--ink .pl-input,
+.pl-page .pl-hero .pl-input,
+.pl-page .pl-cta .pl-input {
+	border-color: rgb(255 255 255 / 20%);
+	background-color: rgb(255 255 255 / 6%);
+	color: #fff;
+}
+
+.pl-page .pl-section--ink .pl-input::placeholder,
+.pl-page .pl-hero .pl-input::placeholder,
+.pl-page .pl-cta .pl-input::placeholder {
+	color: rgb(255 255 255 / 62%);
+}
+
+.pl-page .pl-section--ink .pl-help,
+.pl-page .pl-hero .pl-help,
+.pl-page .pl-cta .pl-help {
+	color: rgb(255 255 255 / 62%);
+}
+
+/* -------------------------------------------------------------------------
+   Product visual / screenshot frame
+   =========================================================================
+   THE POINT OF THIS BLOCK: there are no real product screenshots yet. When
+   they arrive they will arrive at five different aspect ratios from three
+   different people. .pl-shot forces every one of them into the same frame,
+   so the page stays consistent no matter what lands in it.
+
+   RULES
+     1. A screenshot is ALWAYS in a .pl-shot. Never a bare <img>.
+     2. The frame supplies the radius, the border and the shadow. The image
+        inside must not have its own drop shadow or rounded corners baked in.
+     3. Export screenshots at 2x, at 1440px logical width, on the app's own
+        background — no browser chrome, no macOS window shadow, no desktop
+        wallpaper. .pl-shot__chrome draws the window bar if one is wanted.
+     4. On light sections use .pl-shot. On ink sections use .pl-shot--ink,
+        which swaps the 1px border for a light hairline so the frame does not
+        vanish into the band.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-shot {
+	position: relative;
+	overflow: hidden;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius-lg);
+	background-color: hsl(var(--pl-surface));
+	box-shadow: var(--pl-shadow-lg);
+}
+
+.pl-page .pl-shot img,
+.pl-page .pl-shot video {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 0;
+}
+
+/* Window bar. Purely decorative, so it is aria-hidden in markup. */
+.pl-page .pl-shot__chrome {
+	display: flex;
+	gap: 0.4rem;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid hsl(var(--pl-border));
+	background-color: hsl(var(--pl-surface-alt));
+}
+
+.pl-page .pl-shot__chrome span {
+	width: 0.55rem;
+	height: 0.55rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-border-strong, 212 13% 86%));
+}
+
+.pl-page .pl-shot__chrome span:first-child {
+	background-color: hsl(var(--pl-brand));
+}
+
+.pl-page .pl-shot--ink {
+	border-color: rgb(255 255 255 / 12%);
+	background-color: hsl(var(--pl-ink));
+	box-shadow: 0 24px 60px rgb(0 0 0 / 45%);
+}
+
+.pl-page .pl-shot--ink .pl-shot__chrome {
+	border-bottom-color: rgb(255 255 255 / 10%);
+	background-color: rgb(255 255 255 / 4%);
+}
+
+.pl-page .pl-shot--ink .pl-shot__chrome span {
+	background-color: rgb(255 255 255 / 18%);
+}
+
+/* Bleed variant: the shot runs off the right edge of a .pl-feature column,
+   which reads as "there is more app than fits". Desktop only. */
+@media (min-width: 992px) {
+
+	.pl-page .pl-shot--bleed {
+		width: calc(100% + 6rem);
+		max-width: none;
+	}
+
+	.pl-page .pl-feature:not(.pl-feature--reverse) .pl-shot--bleed {
+		margin-inline-start: 0;
+	}
+
+	.pl-page .pl-feature--reverse .pl-shot--bleed {
+		margin-inline-start: -6rem;
+	}
+}
+
+/* Caption sits OUTSIDE the frame, never overlaid on the screenshot. */
+.pl-page .pl-shot-caption {
+	margin-top: 0.75rem;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.pl-page .pl-section--ink .pl-shot-caption {
+	color: rgb(255 255 255 / 62%);
+}
+
+/* -------------------------------------------------------------------------
+   Utilities
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-mb-0 {
+	margin-bottom: 0;
+}
+
+.pl-page .pl-center {
+	text-align: center;
+}
+
+.pl-page .pl-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* =========================================================================
+   PRICING — price cards, billing toggle, comparison table
+   =========================================================================
+   Added for /pricing. Everything below consumes the aliases declared in the
+   .pl-page block at the top of this file, which themselves resolve to the
+   global tokens in podlink-tokens.css. No literal brand colour appears here.
+
+   ACCESSIBILITY NOTES THAT DRIVE THESE RULES
+     * Brand orange (#FF8C00, --pl-brand) is 2.33:1 on white: FILL ONLY.
+       Orange text on light uses --pl-brand-deep (#B85600, 4.81:1).
+     * The featured card is distinguished by an orange BORDER + tinted header,
+       never by orange body text.
+     * The billing toggle is radio inputs, so its focus ring is drawn on the
+       <label> — the input itself is visually hidden but still focusable.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   Full-width button (price card CTAs)
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-btn--block {
+	display: flex;
+	width: 100%;
+}
+
+/* -------------------------------------------------------------------------
+   Billing period toggle — CSS only, no JavaScript
+   -------------------------------------------------------------------------
+   Two radios sit first inside .pl-billing__fieldset; the switch and the card
+   grid are later siblings, so :checked ~ reaches both. Both prices are always
+   in the DOM (crawlers and no-JS users see real numbers); only visibility
+   changes.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-billing__fieldset {
+	/* A <fieldset> ships a border, padding and a min-width: min-content that
+	   would stop the grid inside it from shrinking. Reset all three. */
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.pl-page .pl-billing__input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	/* NOT display:none and NOT visibility:hidden — either would remove the
+	   radios from the tab order and from the accessibility tree. */
+}
+
+.pl-page .pl-billing__switch {
+	display: inline-flex;
+	gap: 0.25rem;
+	margin: 0 auto 2.75rem;
+	padding: 0.3rem;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: 999px;
+	background-color: hsl(var(--pl-surface-alt));
+}
+
+.pl-page .pl-billing {
+	text-align: center;
+}
+
+.pl-page .pl-billing__label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1.35rem;
+	border-radius: 999px;
+	color: hsl(var(--pl-muted-fg));
+	cursor: pointer;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.2;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pl-page .pl-billing__label:hover {
+	color: hsl(var(--pl-heading));
+}
+
+.pl-page #pl-billing-monthly:checked~.pl-billing__switch .pl-billing__label[for='pl-billing-monthly'],
+.pl-page #pl-billing-annual:checked~.pl-billing__switch .pl-billing__label[for='pl-billing-annual'] {
+	background-color: hsl(var(--pl-surface));
+	color: hsl(var(--pl-heading));
+	box-shadow: 0 1px 3px hsl(var(--pl-ink) / 8%);
+}
+
+/* The visually hidden input cannot show a ring, so mirror focus onto the
+   label it controls. Same token as every other focus ring in this sheet. */
+.pl-page #pl-billing-monthly:focus-visible~.pl-billing__switch .pl-billing__label[for='pl-billing-monthly'],
+.pl-page #pl-billing-annual:focus-visible~.pl-billing__switch .pl-billing__label[for='pl-billing-annual'] {
+	outline: var(--pl-focus-ring-width, 2px) solid hsl(var(--pl-focus));
+	outline-offset: var(--pl-focus-ring-offset, 3px);
+}
+
+.pl-page .pl-billing__save {
+	padding: 0.15rem 0.5rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 16%);
+	color: hsl(var(--pl-brand-deep));
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0;
+	white-space: nowrap;
+}
+
+/* ---- Price visibility, driven entirely by the radios -------------------- */
+
+.pl-page .pl-price__amount--annual,
+.pl-page .pl-price__billed--annual {
+	display: none;
+}
+
+.pl-page #pl-billing-annual:checked~.pl-price-grid .pl-price__amount--monthly,
+.pl-page #pl-billing-annual:checked~.pl-price-grid .pl-price__billed--monthly {
+	display: none;
+}
+
+.pl-page #pl-billing-annual:checked~.pl-price-grid .pl-price__amount--annual,
+.pl-page #pl-billing-annual:checked~.pl-price-grid .pl-price__billed--annual {
+	display: block;
+}
+
+/* -------------------------------------------------------------------------
+   Price cards
+   ------------------------------------------------------------------------- */
+
+/* Three tiers collapse straight to one column: a 2-column layout leaves an
+   orphan card and reads as if a plan is missing. Declared AFTER the generic
+   .pl-grid media queries so it wins on purpose. */
+@media (max-width: 991px) {
+
+	.pl-page .pl-price-grid {
+		grid-template-columns: minmax(0, 1fr);
+		max-width: 30rem;
+		margin-inline: auto;
+	}
+}
+
+.pl-page .pl-price {
+	position: relative;
+	text-align: start;
+}
+
+.pl-page .pl-price--featured {
+	border-color: hsl(var(--pl-brand));
+	box-shadow: var(--pl-shadow);
+}
+
+.pl-page .pl-price__badge {
+	display: inline-block;
+	align-self: flex-start;
+	margin-bottom: 0.85rem;
+	padding: 0.3rem 0.75rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 16%);
+	color: hsl(var(--pl-brand-deep));
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	line-height: 1.3;
+}
+
+.pl-page .pl-price__name {
+	margin: 0 0 0.35rem;
+	color: hsl(var(--pl-heading));
+	font-size: 1.125rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	line-height: 1.3;
+}
+
+.pl-page .pl-price__tagline {
+	margin: 0 0 1.5rem;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.pl-page .pl-price__amount {
+	display: block;
+	margin: 0;
+	color: hsl(var(--pl-heading));
+	line-height: 1;
+}
+
+.pl-page .pl-price__figure {
+	font-size: 2.75rem;
+	font-weight: 700;
+	letter-spacing: -0.04em;
+}
+
+.pl-page .pl-price__period {
+	margin-inline-start: 0.3rem;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+}
+
+.pl-page .pl-price__billed {
+	display: block;
+	margin: 0.5rem 0 0;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.8125rem;
+	line-height: 1.4;
+}
+
+.pl-page .pl-price__cta {
+	margin: 1.75rem 0 0;
+}
+
+.pl-page .pl-price__note {
+	margin: 1.5rem 0 0.75rem;
+	color: hsl(var(--pl-heading));
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+.pl-page .pl-price__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pl-page .pl-price__list li {
+	position: relative;
+	margin-bottom: 0.6rem;
+	padding-inline-start: 1.65rem;
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.pl-page .pl-price__list li:last-child {
+	margin-bottom: 0;
+}
+
+/* The tick is a data-URI SVG, so its stroke CANNOT be a custom property —
+   var() is not substituted inside url(). #B85600 is the literal value of
+   --pl-orange-700 / --pl-brand-deep and matches .pl-feature__list li::before
+   above. If the brand orange ramp ever moves, both literals move with it. */
+.pl-page .pl-price__list li::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: 0;
+	top: 0.3em;
+	width: 1rem;
+	height: 1rem;
+	border-radius: 999px;
+	background-color: hsl(var(--pl-brand) / 16%);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B85600' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 0.62rem;
+}
+
+/* -------------------------------------------------------------------------
+   Comparison table
+   -------------------------------------------------------------------------
+   The table stays a real table at every width; the viewport scrolls over it.
+   See the note in marketing/partials/comparison-table.blade.php for why this
+   beats a display:block stacked-card transform.
+   ------------------------------------------------------------------------- */
+
+.pl-page .pl-table-hint {
+	display: none;
+	margin: 0 0 0.85rem;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.8125rem;
+}
+
+/* Only advertise scrolling at widths where the table actually overflows. */
+@media (max-width: 767px) {
+
+	.pl-page .pl-table-hint {
+		display: block;
+	}
+}
+
+.pl-page .pl-table-scroll {
+	overflow-x: auto;
+	border: 1px solid hsl(var(--pl-border));
+	border-radius: var(--pl-radius);
+	background-color: hsl(var(--pl-surface));
+	/* Stop a vertical two-finger swipe from being stolen by the container. */
+	overscroll-behavior-x: contain;
+}
+
+.pl-page .pl-table-scroll:focus-visible {
+	outline: var(--pl-focus-ring-width, 2px) solid hsl(var(--pl-focus));
+	outline-offset: var(--pl-focus-ring-offset, 3px);
+}
+
+.pl-page .pl-table {
+	width: 100%;
+	/* Forces the overflow that the sticky first column exists to survive.
+	   Below this width the container scrolls instead of the cells crushing. */
+	min-width: 44rem;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+	text-align: start;
+}
+
+.pl-page .pl-table th,
+.pl-page .pl-table td {
+	padding: 0.9rem 1.15rem;
+	border-bottom: 1px solid hsl(var(--pl-border));
+	vertical-align: middle;
+}
+
+/* NOTE: no vertical `position: sticky` on thead. Setting overflow-x: auto on
+   .pl-table-scroll makes the computed overflow-y `auto` too, so the container
+   becomes the scroll container on BOTH axes — and it never scrolls vertically
+   (its height equals its content). A sticky thead there is dead code that only
+   buys a stacking context to trip over. The inline-axis sticky below is the
+   one that matters, because the inline axis is the one that actually scrolls. */
+.pl-page .pl-table thead th {
+	background-color: hsl(var(--pl-surface));
+	color: hsl(var(--pl-heading));
+	font-weight: 600;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.pl-page .pl-table__corner {
+	text-align: start;
+}
+
+/* Sticky feature-name column. inset-inline-start (not left) so the site's
+   RTL locales pin the correct edge. The background is opaque or the scrolling
+   cells show through underneath it. */
+.pl-page .pl-table__corner,
+.pl-page .pl-table__rowhead {
+	position: sticky;
+	inset-inline-start: 0;
+	z-index: 1;
+	min-width: 14rem;
+	background-color: hsl(var(--pl-surface));
+	color: hsl(var(--pl-heading));
+	font-weight: 500;
+	text-align: start;
+}
+
+/* A hairline on the sticky column's trailing edge, so it reads as pinned
+   rather than as cells overlapping while you scroll. */
+.pl-page .pl-table__corner::after,
+.pl-page .pl-table__rowhead::after {
+	content: '';
+	position: absolute;
+	inset-block: 0;
+	inset-inline-end: -1px;
+	width: 1px;
+	background-color: hsl(var(--pl-border));
+}
+
+/* Keep the three plan columns from crushing while the sticky feature column
+   holds its 14rem; without this the tier names wrap to three lines on the
+   narrowest scroll position. */
+.pl-page .pl-table__tier {
+	min-width: 9rem;
+}
+
+.pl-page .pl-table__tier-name {
+	display: block;
+	font-size: 1rem;
+	letter-spacing: -0.01em;
+}
+
+.pl-page .pl-table__tier-price {
+	display: block;
+	margin-top: 0.15rem;
+	color: hsl(var(--pl-muted-fg));
+	font-size: 0.8125rem;
+	font-weight: 500;
+}
+
+/* The featured column is marked with a tint, never with orange text. */
+.pl-page .pl-table__tier--featured,
+.pl-page .pl-table__cell--featured {
+	background-color: hsl(var(--pl-brand) / 6%);
+}
+
+.pl-page .pl-table__section th {
+	padding-top: 1.5rem;
+	padding-bottom: 0.6rem;
+	border-bottom: 1px solid hsl(var(--pl-border));
+	background-color: hsl(var(--pl-surface-alt));
+	color: hsl(var(--pl-heading));
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-align: start;
+	text-transform: uppercase;
+}
+
+.pl-page .pl-table__group:last-child tr:last-child th,
+.pl-page .pl-table__group:last-child tr:last-child td {
+	border-bottom: 0;
+}
+
+.pl-page .pl-table__cell {
+	color: hsl(var(--pl-body));
+	text-align: center;
+}
+
+.pl-page .pl-table__yes {
+	display: inline-block;
+	width: 1.05rem;
+	height: 1.05rem;
+	/* orange-600: 3.36:1 on white, clears the 3:1 non-text threshold.
+	   --pl-brand would be 2.33:1 and would fail. */
+	color: hsl(var(--pl-focus));
+	vertical-align: middle;
+}
+
+.pl-page .pl-table__no {
+	display: inline-block;
+	width: 0.75rem;
+	height: 2px;
+	border-radius: 2px;
+	background-color: hsl(var(--pl-border-strong, 212 13% 86%));
+	vertical-align: middle;
+}
