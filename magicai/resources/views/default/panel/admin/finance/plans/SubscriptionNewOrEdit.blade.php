@@ -164,7 +164,7 @@
 						size="lg"
 						required
 					>
-						{{ EntityEnum::toOptions($subscription?->ai_name) }}
+						{{ EntityEnum::toOptions(isset($subscription) ? $subscription->ai_name : null) }}
 						@if (isset($subscription))
 							<option
 								value="text-davinci-003"
@@ -313,7 +313,7 @@
 					label="{{ __('Template Access') }}"
 				>
 					@foreach (\App\Enums\AccessType::cases() as $key)
-						<option @selected($subscription?->plan_type === $key->value) value="{{ $key->value }}">{{ __($key->label()) }}</option>
+						<option @selected(isset($subscription) && $subscription->plan_type === $key->value) value="{{ $key->value }}">{{ __($key->label()) }}</option>
 					@endforeach
 				</x-forms.input>
 
