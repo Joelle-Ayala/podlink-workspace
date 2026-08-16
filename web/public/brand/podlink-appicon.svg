@@ -1,0 +1,17 @@
+<!-- PodLink app icon / maskable source, 512x512.
+     Full-bleed orange field so there is no transparent edge on iOS.
+     All artwork sits inside the central 80% safe zone (r=205 from centre)
+     so Android maskable cropping to a circle never clips a bar.
+     EXPORT TARGETS: apple-touch-icon 180x180 PNG, android 192 + 512 PNG,
+     maskable 512 PNG. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="PodLink">
+  <title>PodLink</title>
+  <rect width="512" height="512" fill="#FF8C00"/>
+  <g fill="#0F0F12">
+    <rect x="118" y="228" width="34" height="56"  rx="17"/>
+    <rect x="176" y="196" width="34" height="120" rx="17"/>
+    <rect x="234" y="160" width="34" height="192" rx="17"/>
+    <rect x="292" y="196" width="34" height="120" rx="17"/>
+    <rect x="350" y="228" width="34" height="56"  rx="17"/>
+  </g>
+</svg>

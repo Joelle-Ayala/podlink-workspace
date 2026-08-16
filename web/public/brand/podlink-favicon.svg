@@ -1,0 +1,12 @@
+<!-- PodLink favicon, 32x32 grid. Three thick bars only - five bars turn to
+     mush at 16px. Ink on orange = 8.20:1, legible on light AND dark browser
+     chrome because the pill supplies its own background. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="PodLink">
+  <title>PodLink</title>
+  <rect x="1" y="7" width="30" height="18" rx="9" fill="#FF8C00"/>
+  <g fill="#0F0F12">
+    <rect x="8"  y="12" width="4" height="8"  rx="2"/>
+    <rect x="14" y="10" width="4" height="12" rx="2"/>
+    <rect x="20" y="12" width="4" height="8"  rx="2"/>
+  </g>
+</svg>

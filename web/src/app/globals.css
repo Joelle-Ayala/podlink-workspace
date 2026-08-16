@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Podlink brand tokens
+   Ported from the MagicAI-era podlink-tokens.css. Values are unchanged — the
+   ramps, semantic tokens and contrast decisions were all measured, see BRAND.md.
+
+   THE ONE RULE THAT MATTERS:
+   #FF8C00 (orange-500) on white is 2.33:1. That FAILS WCAG AA for text and
+   also fails the 3:1 non-text/UI threshold. So:
+     - orange is a FILL colour, never a text colour on light backgrounds
+     - buttons are ink-on-orange (8.20:1), never white-on-orange
+     - orange text on light => --color-accent-text (orange-700, 4.81:1)
+     - focus rings => --color-focus (orange-600, 3.36:1 on white)
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Brand ramp */
+  --color-orange-50: hsl(36 100% 96%);
+  --color-orange-100: hsl(35 100% 91%);
+  --color-orange-200: hsl(34 100% 82%);
+  --color-orange-300: hsl(34 100% 71%);
+  --color-orange-400: hsl(33 100% 61%);
+  --color-orange-500: hsl(33 100% 50%); /* #FF8C00 — fill only */
+  --color-orange-600: hsl(30 100% 43%);
+  --color-orange-700: hsl(28 100% 36%);
+  --color-orange-800: hsl(24 92% 28%);
+  --color-orange-900: hsl(20 85% 20%);
+
+  /* Neutral ramp */
+  --color-ink-0: hsl(0 0% 100%);
+  --color-ink-50: hsl(210 20% 98%);
+  --color-ink-100: hsl(210 16% 96%);
+  --color-ink-200: hsl(210 13% 92%);
+  --color-ink-300: hsl(212 13% 86%);
+  --color-ink-400: hsl(214 12% 64%);
+  --color-ink-500: hsl(217 12% 43%);
+  --color-ink-600: hsl(222 14% 29%);
+  --color-ink-700: hsl(216 13% 21%);
+  --color-ink-800: hsl(213 13% 14%);
+  --color-ink-900: hsl(240 9% 6%);
+
+  /* Status */
+  --color-success: hsl(167 71% 38%);
+  --color-success-text: hsl(167 78% 26%);
+  --color-success-bg: hsl(167 55% 94%);
+  --color-danger: hsl(344 45% 44%);
+  --color-danger-text: hsl(344 52% 36%);
+  --color-danger-bg: hsl(344 60% 96%);
+
+  /* Semantic — surfaces */
+  --color-surface: var(--color-ink-0);
+  --color-surface-alt: var(--color-ink-50);
+  --color-surface-sunken: var(--color-ink-100);
+  --color-surface-ink: var(--color-ink-900);
+  --color-surface-accent: var(--color-orange-50);
+
+  /* Semantic — text */
+  --color-text-primary: var(--color-ink-800);
+  --color-text-body: var(--color-ink-600);
+  --color-text-muted: var(--color-ink-500);
+  --color-text-on-accent: var(--color-ink-900); /* ink on orange = 8.20:1 */
+  --color-text-on-ink: var(--color-ink-0);
+  --color-accent-text: var(--color-orange-700); /* orange text on light */
+
+  /* Semantic — lines & accents */
+  --color-border: var(--color-ink-200);
+  --color-border-strong: var(--color-ink-300);
+  --color-accent: var(--color-orange-500);
+  --color-accent-hover: var(--color-orange-600);
+  --color-focus: var(--color-orange-600);
+
+  /* Type */
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  /* Motion */
+  --ease-out-brand: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark surfaces are used as *bands* inside a light page rather than a global
+   dark mode, so the ink-background tokens are applied by component, not by a
+   colour-scheme media query. See BRAND.md. */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-text-body);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One focus style for the whole site. Uses orange-600, not brand orange —
+     brand orange fails the 3:1 UI threshold on white. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-orange-200);
+    color: var(--color-ink-900);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

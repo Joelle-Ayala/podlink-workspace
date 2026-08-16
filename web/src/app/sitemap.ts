@@ -1,0 +1,77 @@
+import type { MetadataRoute } from "next";
+import { FEATURES } from "@/content/features";
+import { absoluteUrl } from "@/lib/seo";
+
+/**
+ * XML sitemap for podlink.ai.
+ *
+ * Feature URLs are derived from `FEATURES` rather than listed by hand, so a
+ * new entry in `src/content/features.ts` shows up here the moment it ships.
+ * The slugs in that file are the URLs — see the warning at the top of it.
+ *
+ * `lastModified` is the build time. That is honest for a static marketing
+ * site: every page is regenerated on deploy, and there is no per-page
+ * timestamp to be more precise with. Faking older dates to look "stable" or
+ * newer ones to look "fresh" both just teach Google to ignore the field.
+ *
+ * WHAT IS DELIBERATELY NOT HERE
+ *
+ * `/pricing` — omitted. Every tier limit on that page is still an unverified
+ *   placeholder (`src/content/pricing.ts` has a `TODO(pricing): unverified
+ *   limit` on each one), so the page ships `noindex` until the numbers are
+ *   real. Submitting a noindex URL in a sitemap is a self-inflicted
+ *   "Submitted URL marked noindex" error in Search Console, and worse, wrong
+ *   prices are the one kind of marketing error that follows you: they get
+ *   cached in the SERP and people arrive expecting them.
+ *   TO RE-ADD: verify the limits against PRICING.md, drop the `noIndex` flag
+ *   from the page's `pageMetadata()` call, then uncomment the entry below.
+ *
+ * `/legal/*` — INCLUDED, at the floor priority. The alternative was to leave
+ *   them out as boilerplate, but they are canonical, indexable, first-party
+ *   pages, and leaving them out of the sitemap does not stop them being
+ *   indexed — it only removes our say in which URL Google picks when the
+ *   same terms text is reachable from the app domain too. Listing them
+ *   asserts podlink.ai as the canonical home for that text, which is the
+ *   whole reason the two deployments were decoupled. Priority 0.1 and
+ *   `yearly` keeps them from competing with product pages for crawl budget.
+ */
+export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+
+  const staticRoutes: MetadataRoute.Sitemap = [
+    {
+      url: absoluteUrl("/"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 1,
+    },
+    {
+      url: absoluteUrl("/features"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    // { url: absoluteUrl("/pricing"), ... } — see note above.
+  ];
+
+  // One entry per feature. These are the deepest genuinely useful pages on
+  // the site and the ones with a real shot at long-tail search, so they sit
+  // just under the hub rather than being treated as leaf filler.
+  const featureRoutes: MetadataRoute.Sitemap = FEATURES.map((feature) => ({
+    url: absoluteUrl(`/features/${feature.slug}`),
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const legalRoutes: MetadataRoute.Sitemap = ["/legal/terms", "/legal/privacy"].map(
+    (path) => ({
+      url: absoluteUrl(path),
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.1,
+    }),
+  );
+
+  return [...staticRoutes, ...featureRoutes, ...legalRoutes];
+}
