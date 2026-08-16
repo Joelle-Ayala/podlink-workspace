@@ -26,6 +26,82 @@ class Index extends Controller {
 
     public function index() {
 
+        /* PodLink: this Biolink install (podlink.fm) only exists to serve public
+         * /{username} bio pages and short links for the real product at podlink.ai.
+         * The stock Biolink marketing homepage (pricing, testimonials, "3+ creators", etc.)
+         * describes the wrong product and must not be shown at the root path.
+         *
+         * This check only ever runs from the Index controller, which the router only
+         * dispatches to when the request has NO path segments (or the literal "/index").
+         * It is never reached for /{username} lookups, which resolve to a completely
+         * separate controller (Altum\Controllers\Link under the "l" path) before this
+         * class is even loaded - see Altum\Router::parse_controller(). So this cannot
+         * shadow bio link pages.
+         *
+         * IMPORTANT - what "reversible" actually means here: the Railway service
+         * (biolink-public) currently only carries DATABASE_* + SITE_URL. Neither
+         * HOMEPAGE_REDIRECT_URL nor HOMEPAGE_REDIRECT_DISABLED exists there yet, and
+         * setting/changing a Railway variable triggers a redeploy of the service - so
+         * "reversible via env var" still costs a redeploy, it just doesn't require a
+         * code change/PR. There is no truly zero-deploy kill switch today.
+         *
+         * The disable flag is a separate, explicit-truthy variable (not an empty
+         * string) on purpose: an empty string is what IaC/UI tooling routinely
+         * strips or normalizes away, which would silently re-enable the redirect.
+         * Set HOMEPAGE_REDIRECT_DISABLED=1 to turn this off. HOMEPAGE_REDIRECT_URL
+         * only controls the destination and defaults to https://podlink.ai.
+         *
+         * Host guard: only redirects when the request Host matches SITE_URL's host.
+         * docker-compose passes no env at all (see docker-compose.yml), so SITE_URL
+         * is whatever is in the locally bind-mounted config.php - blank in the
+         * committed template - which this guard will never match against a real
+         * Host header. Without this guard, a local docker-compose boot would 301
+         * straight to production podlink.ai using the default destination. Custom
+         * creator domains never reach this controller in the first place (they're
+         * routed to Altum\Controllers\Link under path "l" - see the domain lookup in
+         * Router::parse_controller()), so this guard has no effect on them either way.
+         *
+         * Shipping as a 302 first: a 301 gets cached by browsers essentially
+         * permanently, and combined with the redeploy-only rollback above, would
+         * make this very hard to walk back for anyone who already hit it. Promote
+         * to 301 by flipping $homepage_redirect_status below once this has run
+         * clean for ~2 weeks.
+         *
+         * Query string is preserved (podlink.fm/?utm_source=... keeps its
+         * attribution params on the podlink.ai side) - the root path carries real
+         * marketing traffic, so this was worth the extra line. */
+        $homepage_redirect_disabled = in_array(strtolower((string) getenv('HOMEPAGE_REDIRECT_DISABLED')), ['1', 'true', 'yes'], true);
+
+        $homepage_redirect_url = getenv('HOMEPAGE_REDIRECT_URL');
+        if($homepage_redirect_url === false) {
+            $homepage_redirect_url = 'https://podlink.ai';
+        }
+
+        /* A blank SITE_URL means an unconfigured install - that is the committed
+         * config.php template, i.e. a local `docker-compose up`, which passes no env.
+         * Never redirect there, or local dev bounces straight to production podlink.ai.
+         *
+         * Deliberately NOT comparing the request Host to the SITE_URL host: this service
+         * is also reachable on biolink-public-production.up.railway.app, and an equality
+         * test would let that host fall through and serve the stock Biolink marketing
+         * homepage - the exact page this redirect exists to suppress. Every host Railway
+         * routes here should redirect. */
+        $site_host = strtolower((string) parse_url(SITE_URL, PHP_URL_HOST));
+        $is_production_host = (bool) $site_host;
+
+        if(!$homepage_redirect_disabled && !empty($homepage_redirect_url) && $is_production_host) {
+            /* TODO(~2 weeks after ship): change 302 to 301 once confirmed stable. */
+            $homepage_redirect_status = 302;
+
+            $homepage_redirect_target = $homepage_redirect_url;
+            if(!empty($_SERVER['QUERY_STRING'])) {
+                $homepage_redirect_target .= (str_contains($homepage_redirect_target, '?') ? '&' : '?') . $_SERVER['QUERY_STRING'];
+            }
+
+            header('Location: ' . $homepage_redirect_target, true, $homepage_redirect_status);
+            die();
+        }
+
         /* Custom index redirect if set */
         if(!empty(settings()->main->index_url)) {
             header('Location: ' . settings()->main->index_url); die();

@@ -29,6 +29,97 @@ class Blog extends Controller {
 
     public function index() {
 
+        /* PodLink: the stock Biolink blog is generic "link-in-bio SaaS" marketing
+         * content unrelated to podlink.ai. It has no transactional data or user
+         * accounts behind it (unlike /plan, /directory, /contact, /affiliate,
+         * /chrome-extension, which were deliberately left untouched - see the
+         * redirect-engineering report), so redirecting the blog INDEX is low risk.
+         *
+         * CORRECTION (this used to claim the whole Blog controller was reachable
+         * only via the literal "blog" path - that is not the same as saying only
+         * ONE URL shape lands here). Router::parse_controller() dispatches every
+         * request under the reserved "blog" segment to THIS controller's index()
+         * method - Router::parse_method() only peels a leading param off into a
+         * distinct method when a PUBLIC method of that name exists on the class,
+         * and Blog's only other public method is ratings_ajax(). So /blog,
+         * /blog/{post-slug}, /blog/category/{slug} and /blog/feed all execute this
+         * same index() body; params[0]/params[1] are branched on further down
+         * (feed / category / post-slug / index-listing). Redirecting unconditionally
+         * here would have swallowed real posts, categories and the RSS feed too -
+         * not just the marketing listing page. Gated below to fire only when there
+         * is no first param, i.e. only the bare /blog index.
+         *
+         * app/controllers/Sitemap.php (~lines 72, 115-124) still writes blog,
+         * blog/{post} and blog/category/{slug} URLs into sitemap.xml. Those are
+         * deliberately left alone here - they still resolve to real content (posts/
+         * categories keep rendering, unaffected by this gate), so nothing currently
+         * turns those sitemap entries into soft-404s. If a decision is later made to
+         * take down the blog entirely, Sitemap.php needs a matching change or Google
+         * gets handed a sitemap of URLs that all redirect off-domain.
+         *
+         * This can never shadow /{username} bio pages either way - they resolve to
+         * a completely different controller (Altum\Controllers\Link under path "l")
+         * before Blog::index() is ever reached.
+         *
+         * IMPORTANT - what "reversible" actually means here: the Railway service
+         * (biolink-public) currently only carries DATABASE_* + SITE_URL. Neither
+         * BLOG_REDIRECT_URL nor BLOG_REDIRECT_DISABLED exists there yet, and
+         * setting/changing a Railway variable triggers a redeploy of the service -
+         * so "reversible via env var" still costs a redeploy, it just doesn't
+         * require a code change/PR. There is no truly zero-deploy kill switch today.
+         *
+         * The disable flag is a separate, explicit-truthy variable (not an empty
+         * string) on purpose - see Index.php for the same reasoning. Set
+         * BLOG_REDIRECT_DISABLED=1 to turn this off. BLOG_REDIRECT_URL only
+         * controls the destination and defaults to https://podlink.ai.
+         *
+         * Host guard: only redirects when the request Host matches SITE_URL's host,
+         * so a local docker-compose boot (no env passed at all, see
+         * docker-compose.yml) does not 301 to production podlink.ai - see Index.php
+         * for the full explanation.
+         *
+         * Shipping as a 302 first, same rationale as Index.php: a 301 is
+         * effectively permanent in the browser cache, and rollback here is
+         * redeploy-only, so a 301 on day one would be very hard to walk back.
+         * Promote to 301 by flipping $blog_redirect_status below after ~2 weeks
+         * clean.
+         *
+         * Query string is preserved for consistency with the homepage redirect
+         * (e.g. /blog?utm_source=... keeps its attribution params). */
+        $blog_redirect_disabled = in_array(strtolower((string) getenv('BLOG_REDIRECT_DISABLED')), ['1', 'true', 'yes'], true);
+
+        $blog_redirect_url = getenv('BLOG_REDIRECT_URL');
+        if($blog_redirect_url === false) {
+            $blog_redirect_url = 'https://podlink.ai';
+        }
+
+        /* A blank SITE_URL means an unconfigured install - that is the committed
+         * config.php template, i.e. a local `docker-compose up`, which passes no env.
+         * Never redirect there, or local dev bounces straight to production podlink.ai.
+         *
+         * Deliberately NOT comparing the request Host to the SITE_URL host: this service
+         * is also reachable on biolink-public-production.up.railway.app, and an equality
+         * test would let that host fall through and serve the stock Biolink marketing
+         * homepage - the exact page this redirect exists to suppress. Every host Railway
+         * routes here should redirect. */
+        $site_host = strtolower((string) parse_url(SITE_URL, PHP_URL_HOST));
+        $is_production_host = (bool) $site_host;
+
+        /* Only the bare /blog index - NOT /blog/{post}, /blog/category/{slug}, or
+         * /blog/feed, all of which also flow through this same method (see above). */
+        if(!$blog_redirect_disabled && !empty($blog_redirect_url) && $is_production_host && empty($this->params[0])) {
+            /* TODO(~2 weeks after ship): change 302 to 301 once confirmed stable. */
+            $blog_redirect_status = 302;
+
+            $blog_redirect_target = $blog_redirect_url;
+            if(!empty($_SERVER['QUERY_STRING'])) {
+                $blog_redirect_target .= (str_contains($blog_redirect_target, '?') ? '&' : '?') . $_SERVER['QUERY_STRING'];
+            }
+
+            header('Location: ' . $blog_redirect_target, true, $blog_redirect_status);
+            die();
+        }
+
         if(!settings()->content->blog_is_enabled) {
             throw_404();
         }
