@@ -112,8 +112,20 @@ class Blog extends Controller {
             $blog_redirect_status = 302;
 
             $blog_redirect_target = $blog_redirect_url;
+
+            /* Forward the visitor's own query string so ?utm_source= attribution
+             * survives the hop - but strip "altum", which is not the visitor's:
+             * it is the internal rewrite param .htaccess uses to carry the path
+             * (see Router::parse_url). Leaking it produced podlink.ai?altum=blog. */
+            $forwarded_query = '';
             if(!empty($_SERVER['QUERY_STRING'])) {
-                $blog_redirect_target .= (str_contains($blog_redirect_target, '?') ? '&' : '?') . $_SERVER['QUERY_STRING'];
+                parse_str($_SERVER['QUERY_STRING'], $forwarded_params);
+                unset($forwarded_params['altum']);
+                $forwarded_query = http_build_query($forwarded_params);
+            }
+
+            if($forwarded_query !== '') {
+                $blog_redirect_target .= (str_contains($blog_redirect_target, '?') ? '&' : '?') . $forwarded_query;
             }
 
             header('Location: ' . $blog_redirect_target, true, $blog_redirect_status);
