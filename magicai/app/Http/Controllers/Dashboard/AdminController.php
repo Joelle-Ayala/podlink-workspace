@@ -1010,7 +1010,11 @@ class AdminController extends Controller
     {
         $requireUpdate = false;
         $newPlan = false;
-        if ($request->plan_id != 'undefined') {
+        // finance.js's subscriptionSave()/prepaidSave() append plan_id as JS `null`,
+        // which FormData stringifies to the literal string "null" (not "undefined").
+        // Without this check every "create new plan" submission was mistaken for an
+        // edit of plan_id="null" and 404'd via firstOrFail() (found 2026-08-16).
+        if (! in_array($request->plan_id, [null, 'null', 'undefined'], true)) {
             $plan = Plan::where('id', $request->plan_id)->firstOrFail();
         } else {
             $plan = new Plan;
