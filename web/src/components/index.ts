@@ -61,4 +61,4 @@ export {
   type SectionTone,
 } from "./Section";
 export { SiteFooter, type FooterLink, type SiteFooterProps } from "./SiteFooter";
-export { SiteHeader, type SiteHeaderProps } from "./SiteHeader";
+export { default as SiteHeader } from "./SiteHeader";
