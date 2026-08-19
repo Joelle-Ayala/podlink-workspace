@@ -116,9 +116,6 @@ export function SiteFooter({
           <p className="text-xs text-text-on-ink/62">
             © {new Date().getFullYear()} {SITE.name}. {SITE.tagline}
           </p>
-          <p className="text-xs text-text-on-ink/62">
-            {SITE.name} is a {SITE.author} product.
-          </p>
         </div>
       </Container>
     </footer>

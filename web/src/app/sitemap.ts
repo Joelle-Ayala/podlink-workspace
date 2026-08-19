@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { FEATURES } from "@/content/features";
+import { services } from "@/content/services";
+import { visibleCaseStudies } from "@/content/proof";
 import { absoluteUrl } from "@/lib/seo";
 
 /**
@@ -76,5 +78,60 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
-  return [...staticRoutes, ...featureRoutes, ...legalRoutes];
+  // Services business (merged from the 2026-08-19 bundle). Deliberately NOT
+  // here: /resources/podcast-guest-pitch-template (noindex until its download
+  // link is real) and /features/mcp (noindex until the MCP server ships).
+  const serviceRoutes: MetadataRoute.Sitemap = [
+    {
+      url: absoluteUrl("/services"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...services.map((s) => ({
+      url: absoluteUrl(`/services/${s.slug}`),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+    {
+      url: absoluteUrl("/work"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: absoluteUrl("/case-studies"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    // Cleared case studies only — the selector already applies the gate.
+    ...visibleCaseStudies().map((c) => ({
+      url: absoluteUrl(`/case-studies/${c.slug}`),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    {
+      url: absoluteUrl("/about"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: absoluteUrl("/contact"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: absoluteUrl("/changelog"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.4,
+    },
+  ];
+
+  return [...staticRoutes, ...featureRoutes, ...serviceRoutes, ...legalRoutes];
 }

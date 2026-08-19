@@ -1,0 +1,454 @@
+/**
+ * Services design system.
+ *
+ * Server components throughout — nothing here needs client JS.
+ *
+ * BRAND CONTRAST RULES (these are measured, not preference):
+ *   #FF8C00 on white is 2.33:1 — fails AA for text AND the 3:1 non-text threshold.
+ *   So: orange is FILL ONLY.
+ *     - Buttons are ink-on-orange (8.20:1)
+ *     - Orange text on light uses orange-700 #B85600 (4.81:1)
+ *     - Focus rings use orange-600 #DB6E00
+ *
+ * Colours are written as arbitrary hex values so this compiles against any
+ * Tailwind config. If web/src/app/globals.css already defines @theme tokens for
+ * these, swap the arbitrary values for the token classes — the values match.
+ */
+
+import Link from "next/link";
+import type { ReactNode } from "react";
+import type { CaseStudy, Testimonial } from "@/content/proof";
+import type { Faq, PriceTier, ProcessStep, Service } from "@/content/services";
+
+const ORANGE = "#FF8C00";
+const ORANGE_700 = "#B85600";
+const ORANGE_600 = "#DB6E00";
+const INK = "#0f0f12";
+const OFF_WHITE = "#f0ede6";
+
+/* -------------------------------------------------------------------------- */
+/* Primitives                                                                  */
+/* -------------------------------------------------------------------------- */
+
+export function Section({
+  children,
+  className = "",
+  dark = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  dark?: boolean;
+}) {
+  return (
+    <section
+      className={`px-6 py-16 sm:py-24 ${className}`}
+      style={dark ? { backgroundColor: INK, color: OFF_WHITE } : undefined}
+    >
+      <div className="mx-auto max-w-6xl">{children}</div>
+    </section>
+  );
+}
+
+export function Eyebrow({ children }: { children: ReactNode }) {
+  return (
+    <p
+      className="text-sm font-semibold uppercase tracking-widest"
+      style={{ color: ORANGE_700 }}
+    >
+      {children}
+    </p>
+  );
+}
+
+export function CtaButton({
+  href,
+  children,
+  variant = "primary",
+}: {
+  href: string;
+  children: ReactNode;
+  variant?: "primary" | "secondary";
+}) {
+  const base =
+    "inline-flex items-center justify-center rounded-full px-7 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2";
+
+  if (variant === "primary") {
+    return (
+      <Link
+        href={href}
+        className={base}
+        style={{
+          backgroundColor: ORANGE,
+          color: INK,
+          outlineColor: ORANGE_600,
+        }}
+      >
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={`${base} border-2 border-current`}
+      style={{ color: ORANGE_700, outlineColor: ORANGE_600 }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Hero                                                                        */
+/* -------------------------------------------------------------------------- */
+
+export function ServiceHero({ service }: { service: Service }) {
+  return (
+    <Section dark className="!pb-14">
+      <Eyebrow>{service.name}</Eyebrow>
+      <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+        {service.headline}
+      </h1>
+      <p className="mt-6 max-w-2xl text-lg leading-relaxed opacity-80">
+        {service.subhead}
+      </p>
+
+      <div className="mt-10 flex flex-wrap items-center gap-4">
+        <CtaButton href="/contact">Book a call</CtaButton>
+        <Link
+          href="#pricing"
+          className="text-base font-semibold underline underline-offset-4 opacity-80 hover:opacity-100"
+        >
+          {service.pricing.fromLabel}
+        </Link>
+      </div>
+
+      <div
+        className="mt-14 inline-flex flex-col rounded-2xl px-6 py-5"
+        style={{ backgroundColor: "rgba(255,140,0,0.12)" }}
+      >
+        <span
+          className="text-4xl font-bold tabular-nums"
+          style={{ color: ORANGE }}
+        >
+          {service.heroProof.value}
+        </span>
+        <span className="mt-1 text-sm opacity-70">{service.heroProof.label}</span>
+      </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Problem                                                                     */
+/* -------------------------------------------------------------------------- */
+
+export function ProblemBlock({
+  problem,
+}: {
+  problem: { title: string; body: string };
+}) {
+  return (
+    <Section>
+      <div className="grid gap-10 lg:grid-cols-12">
+        <h2 className="text-3xl font-bold tracking-tight lg:col-span-5 lg:text-4xl">
+          {problem.title}
+        </h2>
+        <p className="text-lg leading-relaxed text-zinc-700 lg:col-span-7">
+          {problem.body}
+        </p>
+      </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* What's included                                                             */
+/* -------------------------------------------------------------------------- */
+
+export function IncludesList({ items }: { items: string[] }) {
+  return (
+    <Section className="bg-zinc-50">
+      <Eyebrow>What&rsquo;s included</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        Every engagement ships with this.
+      </h2>
+      <ul className="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3 text-zinc-800">
+            <span
+              aria-hidden
+              className="mt-2 h-2 w-2 shrink-0 rounded-full"
+              style={{ backgroundColor: ORANGE }}
+            />
+            <span className="leading-relaxed">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Process                                                                     */
+/* -------------------------------------------------------------------------- */
+
+export function ProcessSteps({ steps }: { steps: ProcessStep[] }) {
+  return (
+    <Section>
+      <Eyebrow>How it works</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        The actual process, not a diagram.
+      </h2>
+      <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, i) => (
+          <li key={step.title}>
+            <span
+              className="text-sm font-bold tabular-nums"
+              style={{ color: ORANGE_700 }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
+            <p className="mt-2 leading-relaxed text-zinc-700">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Pricing                                                                     */
+/* -------------------------------------------------------------------------- */
+
+export function PricingTable({
+  tiers,
+  footnote,
+}: {
+  tiers: PriceTier[];
+  footnote?: string;
+}) {
+  return (
+    <Section className="bg-zinc-50">
+      <div id="pricing" className="scroll-mt-24">
+        <Eyebrow>Pricing</Eyebrow>
+        <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+          Real numbers, not &ldquo;contact us&rdquo;.
+        </h2>
+        <p className="mt-4 max-w-2xl text-lg text-zinc-700">
+          Starting points based on what this work actually costs to do well.
+          Scope moves the number; we&rsquo;ll tell you which way on the call.
+        </p>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {tiers.map((tier) => (
+            <div
+              key={tier.name}
+              className="flex flex-col rounded-2xl border bg-white p-7"
+              style={{
+                borderColor: tier.featured ? ORANGE : "#e4e4e7",
+                borderWidth: tier.featured ? 2 : 1,
+              }}
+            >
+              {tier.featured && (
+                <span
+                  className="mb-4 inline-flex w-fit rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
+                  style={{ backgroundColor: ORANGE, color: INK }}
+                >
+                  Most common
+                </span>
+              )}
+              <h3 className="text-lg font-semibold">{tier.name}</h3>
+              <p className="mt-3 flex items-baseline gap-2">
+                <span className="text-4xl font-bold tabular-nums">
+                  {tier.price}
+                </span>
+              </p>
+              {tier.unit && (
+                <p className="mt-1 text-sm text-zinc-600">{tier.unit}</p>
+              )}
+              <ul className="mt-6 flex-1 space-y-3">
+                {tier.includes.map((inc) => (
+                  <li key={inc} className="flex gap-2.5 text-sm text-zinc-800">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: ORANGE }}
+                    />
+                    <span className="leading-relaxed">{inc}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {footnote && (
+          <p className="mt-8 max-w-3xl text-sm leading-relaxed text-zinc-600">
+            {footnote}
+          </p>
+        )}
+      </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Proof                                                                       */
+/* -------------------------------------------------------------------------- */
+
+export function ProofSection({
+  caseStudies,
+  testimonial,
+}: {
+  caseStudies: CaseStudy[];
+  testimonial?: Testimonial;
+}) {
+  if (caseStudies.length === 0 && !testimonial) return null;
+
+  return (
+    <Section dark>
+      <Eyebrow>Proof</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        What this has produced.
+      </h2>
+
+      {caseStudies.length > 0 && (
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          {caseStudies.slice(0, 4).map((cs) => (
+            <article
+              key={cs.id}
+              className="rounded-2xl p-7"
+              style={{ backgroundColor: "rgba(240,237,230,0.06)" }}
+            >
+              <p className="text-sm font-semibold opacity-60">
+                {cs.client}
+                {cs.show ? ` · ${cs.show}` : ""} · {cs.industry}
+              </p>
+              <p
+                className="mt-3 text-2xl font-bold leading-tight"
+                style={{ color: ORANGE }}
+              >
+                {cs.headline}
+              </p>
+              <p className="mt-3 leading-relaxed opacity-80">{cs.what}</p>
+              <dl className="mt-6 grid grid-cols-2 gap-4">
+                {cs.metrics.map((m) => (
+                  <div key={m.label}>
+                    <dt className="sr-only">{m.label}</dt>
+                    <dd className="text-xl font-bold tabular-nums">{m.value}</dd>
+                    <dd className="text-xs leading-snug opacity-60">{m.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {testimonial && (
+        <figure className="mt-12 max-w-3xl">
+          <blockquote className="text-2xl font-medium leading-relaxed">
+            &ldquo;{testimonial.quote}&rdquo;
+          </blockquote>
+          <figcaption className="mt-4 text-sm opacity-70">
+            {testimonial.name}
+            {testimonial.title ? `, ${testimonial.title}` : ""}
+            {testimonial.company ? ` · ${testimonial.company}` : ""}
+          </figcaption>
+        </figure>
+      )}
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* FAQ                                                                         */
+/* -------------------------------------------------------------------------- */
+
+export function FaqList({ faqs }: { faqs: Faq[] }) {
+  return (
+    <Section>
+      <Eyebrow>Questions</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        The things people ask before signing.
+      </h2>
+      <dl className="mt-10 max-w-3xl divide-y divide-zinc-200 border-t border-zinc-200">
+        {faqs.map((faq) => (
+          <div key={faq.q} className="py-6">
+            <dt className="text-lg font-semibold">{faq.q}</dt>
+            <dd className="mt-2 leading-relaxed text-zinc-700">{faq.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Related + closing CTA                                                       */
+/* -------------------------------------------------------------------------- */
+
+export function RelatedServices({
+  related,
+}: {
+  related: { slug: string; name: string; tagline: string }[];
+}) {
+  if (related.length === 0) return null;
+
+  return (
+    <Section className="bg-zinc-50">
+      <Eyebrow>Works well with</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        Most shows need two of these, not one.
+      </h2>
+      <div className="mt-10 grid gap-5 sm:grid-cols-3">
+        {related.map((r) => (
+          <Link
+            key={r.slug}
+            href={`/services/${r.slug}`}
+            className="group rounded-2xl border border-zinc-200 bg-white p-6 transition-colors hover:border-zinc-400 focus-visible:outline-2 focus-visible:outline-offset-2"
+            style={{ outlineColor: ORANGE_600 }}
+          >
+            <h3 className="text-lg font-semibold">{r.name}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-700">
+              {r.tagline}
+            </p>
+            <span
+              className="mt-4 inline-block text-sm font-semibold"
+              style={{ color: ORANGE_700 }}
+            >
+              Read more &rarr;
+            </span>
+          </Link>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+export function ClosingCta({
+  headline,
+  body,
+  cta = "Book a call",
+}: {
+  headline: string;
+  body: string;
+  cta?: string;
+}) {
+  return (
+    <Section dark>
+      <div className="max-w-2xl">
+        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl">
+          {headline}
+        </h2>
+        <p className="mt-4 text-lg leading-relaxed opacity-80">{body}</p>
+        <div className="mt-8">
+          <CtaButton href="/contact">{cta}</CtaButton>
+        </div>
+      </div>
+    </Section>
+  );
+}
