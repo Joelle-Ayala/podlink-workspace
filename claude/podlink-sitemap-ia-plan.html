@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Podlink — Sitemap Evolution</title>
+<style>
+  :root{--orange:#FF8C00;--orange700:#B85600;--ink:#0f0f12;--off:#f0ede6;--line:rgba(240,237,230,.14)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--off);
+    font-family:Poppins,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    -webkit-text-size-adjust:100%;line-height:1.55}
+  .wrap{max-width:60rem;margin:0 auto;padding:2rem 1.25rem 5rem}
+  h1{font-size:1.9rem;letter-spacing:-.025em;line-height:1.15;margin:.4rem 0 0}
+  h1 .o{color:var(--orange)}
+  .sub{opacity:.7;margin:.8rem 0 0;max-width:46ch}
+  .eyebrow{color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin:0}
+  h2{font-size:1.3rem;letter-spacing:-.02em;margin:0 0 .2rem}
+  section{margin-top:3.25rem;border-top:1px solid var(--line);padding-top:1.75rem}
+  .note{opacity:.7;font-size:.9rem;margin:.5rem 0 0;max-width:56ch}
+
+  /* domain cards */
+  .domains{display:grid;gap:.85rem;margin-top:1.4rem}
+  .dom{border:1px solid var(--line);border-radius:.9rem;padding:1rem 1.1rem;background:rgba(240,237,230,.03)}
+  .dom h3{margin:0;font-size:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .dom h3 .host{color:var(--orange)}
+  .dom p{margin:.4rem 0 0;font-size:.85rem;opacity:.72}
+
+  /* tree */
+  .tree{margin-top:1.3rem;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+  .row{display:flex;align-items:flex-start;gap:.5rem;padding:.42rem 0;border-bottom:1px dashed rgba(240,237,230,.08);flex-wrap:wrap}
+  .row .path{flex:1;min-width:12rem;word-break:break-word}
+  .row.child .path{padding-left:1.4rem;opacity:.92}
+  .row.child2 .path{padding-left:2.8rem;opacity:.85}
+  .row .path b{color:var(--orange);font-weight:600}
+  .row .why{flex-basis:100%;font-family:inherit;font-size:.75rem;opacity:.55;padding-left:1.4rem;line-height:1.45}
+
+  .tag{font-family:inherit;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    padding:.16rem .45rem;border-radius:.3rem;white-space:nowrap;border:1px solid transparent}
+  .live{background:rgba(240,237,230,.1);color:var(--off)}
+  .new{background:var(--orange);color:var(--ink)}
+  .next{background:transparent;border-color:var(--orange);color:var(--orange)}
+  .later{background:transparent;border-color:rgba(240,237,230,.3);color:rgba(240,237,230,.6)}
+  .noidx{background:rgba(220,38,38,.18);color:#fca5a5}
+  .kill{background:rgba(220,38,38,.28);color:#fecaca}
+  .decide{background:transparent;border:1px dashed var(--orange);color:var(--orange)}
+
+  /* collision table */
+  table{width:100%;border-collapse:collapse;margin-top:1.2rem;font-size:.8rem}
+  th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;opacity:.55;font-weight:700}
+  td code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;color:var(--off)}
+  .risk-hi{color:#fca5a5;font-weight:700}
+  .risk-md{color:var(--orange);font-weight:700}
+  .risk-lo{opacity:.5}
+
+  .callout{border-left:3px solid var(--orange);padding:.1rem 0 .1rem 1rem;margin-top:1.3rem}
+  .callout p{margin:.35rem 0 0;font-size:.9rem;opacity:.85}
+  .callout strong{color:var(--orange)}
+
+  .count{display:inline-flex;align-items:baseline;gap:.4rem;margin-top:1rem}
+  .count b{font-size:2rem;color:var(--orange);line-height:1}
+  .count span{font-size:.8rem;opacity:.6}
+
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.2rem}
+  ol.steps{padding-left:1.1rem;margin-top:1rem}
+  ol.steps li{margin-bottom:.7rem;font-size:.9rem;opacity:.85}
+  ol.steps b{color:var(--off);opacity:1}
+  @media(min-width:760px){
+    .wrap{padding:3rem 2rem 6rem}
+    h1{font-size:2.6rem}
+    .domains{grid-template-columns:1fr 1fr}
+    .row .why{padding-left:1.4rem}
+  }
+</style>
+</head><body>
+<div class="wrap">
+
+  <p class="eyebrow">Information architecture</p>
+  <h1>How services change the <span class="o">Podlink</span> sitemap</h1>
+  <p class="sub">Adding six services pages doesn't just add URLs — it puts a second business on the domain. This is the surface map, the collision risk, and the order to ship it in.</p>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">The bigger picture</p>
+    <h2>Four surfaces, one brand</h2>
+    <p class="note">Services land on <code>podlink.ai</code>, but the sitemap question spans every host. Two of these are actively working against you today.</p>
+
+    <div class="domains">
+      <div class="dom">
+        <h3><span class="host">podlink.ai</span></h3>
+        <p><b>The marketing site.</b> Next.js on Vercel. Product pages today, product + services after this. This is the only host that should rank for anything commercial.</p>
+      </div>
+      <div class="dom">
+        <h3><span class="host">app.podlink.ai</span></h3>
+        <p><b>The product.</b> MagicAI on Railway — but it currently also serves a <em>complete duplicate marketing site</em> at <code>/</code> and <code>/features</code>. Two public marketing sites with near-identical copy. Decide before DNS cutover, not after.</p>
+      </div>
+      <div class="dom">
+        <h3><span class="host">podlink.fm</span></h3>
+        <p><b>Creator link-in-bio pages.</b> Root 302s to podlink.ai. <code>/{handle}</code> pages and <code>/directory</code> still serve. That directory is a genuine long-tail SEO asset nobody is using yet.</p>
+      </div>
+      <div class="dom">
+        <h3><span class="host">checkout.podlink.ai</span></h3>
+        <p><b>Checkout only, not started.</b> The storefront lives on podlink.ai — but Shopify hosts checkout itself and it cannot run on Vercel, so one Shopify-owned hostname is required. Brand it; never expose <code>*.myshopify.com</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">Today</p>
+    <h2>21 pages, one audience</h2>
+    <div class="count"><b>21</b><span>static pages, product-only</span></div>
+
+    <div class="tree">
+      <div class="row"><span class="path">/</span><span class="tag live">live</span></div>
+      <div class="row"><span class="path">/features</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/[slug] &times;8</span><span class="tag live">live</span>
+        <span class="why">download-analytics · transcripts · show-notes · templates · multilingual · clips-and-social · newsletter · link-in-bio</span></div>
+      <div class="row"><span class="path">/pricing</span><span class="tag noidx">noindex</span>
+        <span class="why">Held back until the tier rewrite lands and 27 TODO(pricing) markers are resolved</span></div>
+      <div class="row"><span class="path">/legal/terms · /legal/privacy</span><span class="tag noidx">noindex</span>
+        <span class="why">Placeholders. Required before charging.</span></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The structural gap:</strong> every page on the site today sells a $8–39/month self-serve product. Nothing addresses the buyer who wants work done for them at $275 an episode to $6,750 a month — which is where the actual revenue history is.</p>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">The full map — built, in the bundle</p>
+    <h2>41 pages across four sections — plus the store</h2>
+    <div class="count"><b>41</b><span>static pages once the bundle is merged (21 live today + 20 in the bundle) — commerce adds more, sized by the catalog</span></div>
+
+    <div class="tree">
+      <div class="row"><span class="path">/</span><span class="tag live">live</span></div>
+      <div class="row"><span class="path"><b>/contact</b></span><span class="tag new">built</span>
+        <span class="why">Every CTA lands here. TODO: confirm booking URL (defaults to mailto).</span></div>
+      <div class="row"><span class="path"><b>/about</b></span><span class="tag new">built</span>
+        <span class="why">The track record — 27 clients, since 2021, defensible numbers only.</span></div>
+
+      <div class="row"><span class="path"><b>/services</b></span><span class="tag new">built</span>
+        <span class="why">Hub — six cards, from-price on each. Nav dropdown parent.</span></div>
+      <div class="row child"><span class="path"><b>/services/podcast-editing</b></span><span class="tag new">built</span></div>
+      <div class="row child"><span class="path"><b>/services/podcast-clips</b></span><span class="tag new">built</span></div>
+      <div class="row child"><span class="path"><b>/services/podcast-advertising</b></span><span class="tag new">built</span>
+        <span class="why">Brands — buy-side.</span></div>
+      <div class="row child"><span class="path"><b>/services/podcast-sponsorship</b></span><span class="tag new">built</span>
+        <span class="why">Creators — sell-side.</span></div>
+      <div class="row child"><span class="path"><b>/services/get-booked-on-podcasts</b></span><span class="tag new">built</span></div>
+      <div class="row child"><span class="path"><b>/services/podcast-growth</b></span><span class="tag new">built</span></div>
+
+      <div class="row"><span class="path">/features</span><span class="tag live">live</span>
+        <span class="why">Hub — product side. Nav dropdown parent. Six titles need the tool-intent rewrite (see collision table below).</span></div>
+      <div class="row child"><span class="path">/features/download-analytics</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/transcripts</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/show-notes</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/templates</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/multilingual</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/clips-and-social</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/newsletter</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path">/features/link-in-bio</span><span class="tag live">live</span></div>
+      <div class="row child"><span class="path"><b>/features/mcp</b> — Claude & AI assistants</span><span class="tag noidx">built · noindex</span>
+        <span class="why">The MCP server page: your assistant knows your show — episodes, transcripts, analytics, brand voice. "Whoever holds the show's context is the default door — nobody in podcasting has claimed this." Noindex until the server (uncommitted, magicai/app/Mcp/) actually ships.</span></div>
+
+      <div class="row"><span class="path"><b>/work</b></span><span class="tag new">built</span>
+        <span class="why">Verified placements directory — 21 real episodes, embedded and linked. The AEO asset: densest real-entity page on the site, and the literal answer to "which shows, specifically?"</span></div>
+      <div class="row"><span class="path"><b>/case-studies</b></span><span class="tag new">built</span>
+        <span class="why">Index of all eighteen, badged by service line. HHE and URP now separate engagements. Plain nav item after Features.</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/go-with-elmo</b></span><span class="tag new">built</span>
+        <span class="why">The flagship — one full-engagement story: 31M monthly views, 1M-like clip, 43.9K subs in 90 days, $20K sponsorship package, SEO/AEO on 100+ episode pages</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/opolis</b></span><span class="tag new">built</span>
+        <span class="why">Booking + clips + growth — 32% membership growth, $70 lower CPL</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/my-divorce-solution</b></span><span class="tag new">built</span>
+        <span class="why">Editing — 68+ episodes, 5-year client, 150% traffic</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/docsend</b></span><span class="tag new">built</span>
+        <span class="why">Booking — 134% sign-up lift, Kleiner Perkins' Grit et al.</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/hell-has-an-exit</b></span><span class="tag new">built</span>
+        <span class="why">Growth + clips — 74% downloads in 4 months, 250% reviews</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/fruits-of-motherhood</b></span><span class="tag new">built</span>
+        <span class="why">Growth + sponsorship — 14× in 3 months, $10k+/mo ad revenue</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/worthy</b></span><span class="tag new">built</span>
+        <span class="why">Advertising + sponsorship — 17 months continuous</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/belfort</b></span><span class="tag new">built</span>
+        <span class="why">Editing + sponsorship — million-dollar podcast in year one</span></div>
+      <div class="row child"><span class="path"><b>/case-studies/koii</b></span><span class="tag new">built</span>
+        <span class="why">Booking — 6 named placements incl. All-In</span></div>
+      <div class="row child"><span class="path">/case-studies/{cvs, oracle}</span><span class="tag kill">removed</span>
+        <span class="why">Verified 2026-08-19: misattributed figures, contradicted by the primary record. Deleted with a tombstone so they can't return.</span></div>
+
+      <div class="row"><span class="path"><b>/changelog</b></span><span class="tag new">built</span>
+        <span class="why">Shipped-only changelog + Now/Next/Later roadmap, no public dates. Fed by the private drip calendar — eight announcements drafted for features already live.</span></div>
+      <div class="row"><span class="path"><b>/resources/podcast-guest-pitch-template</b></span><span class="tag noidx">built · noindex</span>
+        <span class="why">Lead magnet. Noindex until the download URL is wired.</span></div>
+      <div class="row"><span class="path">/pricing</span><span class="tag noidx">live · noindex</span>
+        <span class="why">Product tiers. Held until limits are real. Decision sheet now in the project.</span></div>
+      <div class="row"><span class="path">/legal/terms · /legal/privacy</span><span class="tag noidx">live · noindex</span></div>
+      <div class="row"><span class="path">/legal/refunds · /legal/shipping</span><span class="tag decide">missing</span>
+        <span class="why">Required before the store sells a physical product — Shopify checkout links to refund and shipping policies, and card networks expect them. A commerce gate, not a nice-to-have.</span></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Nav:</strong> Services ▾ (6) · Features ▾ (8) · Case Studies · Pricing — hubs are clickable, chevrons open the dropdowns. About stays out of the top nav; Resources surfaces from the booking page.</p>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">The real risk</p>
+    <h2>Features and services will fight each other</h2>
+    <p class="note">Six of eight feature pages target keywords the services pages also want. Left alone, Google picks one, splits the authority, and you rank for neither. The fix is intent separation written into the titles — <em>tool</em> language on features, <em>done-for-you</em> language on services.</p>
+
+    <table>
+      <thead><tr><th>Feature page</th><th>Services page</th><th>Risk</th><th>Separation</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>/features/clips-and-social</code></td>
+          <td><code>/services/podcast-clips</code></td>
+          <td class="risk-hi">High</td>
+          <td>Feature → “AI podcast clip generator”. Service → “podcast clip editing service”.</td>
+        </tr>
+        <tr>
+          <td><code>/features/transcripts</code><br><code>/features/show-notes</code></td>
+          <td><code>/services/podcast-editing</code></td>
+          <td class="risk-hi">High</td>
+          <td>Feature → “automatic transcripts / AI show notes”. Service → “podcast editing &amp; production service”.</td>
+        </tr>
+        <tr>
+          <td><code>/features/download-analytics</code></td>
+          <td><code>/services/podcast-growth</code></td>
+          <td class="risk-md">Medium</td>
+          <td>Feature → “podcast analytics dashboard”. Service → “podcast audience growth agency”.</td>
+        </tr>
+        <tr>
+          <td><code>/features/newsletter</code></td>
+          <td><code>/services/podcast-growth</code></td>
+          <td class="risk-md">Medium</td>
+          <td>Feature owns the tool. Service mentions newsletter only as a deliverable.</td>
+        </tr>
+        <tr>
+          <td><code>/features/link-in-bio</code></td>
+          <td>—</td>
+          <td class="risk-md">Medium</td>
+          <td>Competes with <code>podlink.fm/{handle}</code>, not with services. Separate problem.</td>
+        </tr>
+        <tr>
+          <td><code>/features/templates</code><br><code>/features/multilingual</code></td>
+          <td>—</td>
+          <td class="risk-lo">None</td>
+          <td>Product-only. Leave alone.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p><strong>Which side should lead?</strong> The services pages. Product pages compete against Descript, Riverside and Buzzsprout for head terms — brutal and expensive. Services compete for “podcast booking agency”, “podcast editing service”, “podcast ad agency” — winnable, higher intent, and worth 50–200× more per conversion. Services should carry the indexing priority; features should convert traffic that's already on-site.</p>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">Phase 2 — next</p>
+    <h2>The pages the services work implies</h2>
+    <div class="count"><b>~40</b><span>pages once proof and intent split land</span></div>
+
+    <div class="tree">
+      <div class="row"><span class="path"><b>/case-studies</b></span><span class="tag next">next</span>
+        <span class="why">proof.ts is already structured to generate these.</span></div>
+      <div class="row child"><span class="path">/case-studies/[slug] &times;11</span><span class="tag next">unblocked</span>
+        <span class="why">Go With Elmo &times;3 · Opolis · My Divorce Solution · DocSend · Hell Has an Exit · Fruits of Motherhood · Worthy · Belfort · Koii — permission granted 2026-08-18, now purely a build task</span></div>
+      <div class="row child"><span class="path">/case-studies/{cvs, oracle}</span><span class="tag noidx">held</span>
+        <span class="why">Figures unverified. Not a permission problem — confirm the campaigns were ours.</span></div>
+
+      <div class="row"><span class="path"><b>/about</b></span><span class="tag next">next</span>
+        <span class="why">Five years of work with no company page behind it reads as a brand-new agency. This is where the track record lives.</span></div>
+      <div class="row"><span class="path"><b>/changelog</b></span><span class="tag new">built</span>
+        <span class="why">Shipped-only changelog + Now/Next/Later roadmap, no public dates. Fed by the private drip calendar — eight announcements drafted for features already live.</span></div>
+      <div class="row"><span class="path"><b>/resources/podcast-guest-pitch-template</b></span><span class="tag next">next</span>
+        <span class="why">The lead magnet already exists in Canva. Built in 2022, sent 4 times, never promoted.</span></div>
+      <div class="row"><span class="path">/pricing</span><span class="tag noidx">still noindex</span></div>
+      <div class="row"><span class="path">/legal/*</span><span class="tag next">write for real</span></div>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">Phase 3 — where it scales</p>
+    <h2>Long-tail, once the core ranks</h2>
+
+    <div class="tree">
+      <div class="row"><span class="path">/services/[slug]/[vertical]</span><span class="tag later">later</span>
+        <span class="why">SaaS · fintech · web3 · health &amp; wellness · coaches · consumer. The verticals are already defined in the old decks. Only worth doing with real per-vertical proof — thin programmatic pages will hurt more than help.</span></div>
+      <div class="row"><span class="path" style="opacity:.6">— THE THREE FUNNELS, AS STRATEGIZED —</span></div>
+
+      <div class="row"><span class="path" style="opacity:.85"><b>Funnel 1 · SaaS</b> — self-serve, already mapped</span></div>
+      <div class="row child"><span class="path">/ or /features → /pricing → app.podlink.ai/register</span><span class="tag live">path live</span>
+        <span class="why">Free (analytics + bio link) → Pro $19/mo Episode Content Kit → Creator $39–49/mo Clip Studio (post-launch). Tiers per the canonical pricing spec; /pricing stays noindex until limits are real.</span></div>
+
+      <div class="row"><span class="path" style="opacity:.85"><b>Funnel 2 · Services</b> — high-ticket, in the bundle</span></div>
+      <div class="row child"><span class="path">/services/* or /case-studies/* → /contact → call → proposal</span><span class="tag new">built</span>
+        <span class="why">Entry also via the free pitch-template lead magnet, which nurtures toward Getting Booked.</span></div>
+
+      <div class="row"><span class="path" style="opacity:.85"><b>Funnel 3 · Store</b> — per FUNNEL-ARCHITECTURE.md (now in the project), adapted to the on-main-site decision</span></div>
+
+      <div class="row child"><span class="path"><b>/shop</b> — storefront index</span><span class="tag later">gated</span>
+        <span class="why">Catalog rule: AI creative can honestly demo SIGHT, not SOUND. Sight products get paid spend; sound products get SEO/AEO/email. Nothing builds until the CJ sample gates clear.</span></div>
+
+      <div class="row child"><span class="path"><b>/shop/mic-flag</b> — Flag Funnel landing (build first)</span><span class="tag later">gated</span>
+        <span class="why">Hook: "RØDE wants $199 to put your logo on ONE mic." Two-step page — email + show name captured BEFORE payment fields (abandon = SaaS lead), show name fires a live logo-on-flag preview via Dynamic Mockups.</span></div>
+      <div class="row child"><span class="path"><b>/shop/start</b> — Beginner Funnel quiz</span><span class="tag later">gated</span>
+        <span class="why">"What's your podcast setup style?" — segments audio vs video intent, builds the list, results pitch the Starter Kit. Doubles as the "what do I need to start a podcast" AEO asset.</span></div>
+
+      <div class="row child"><span class="path">/products/[handle] — the catalog, by tier</span><span class="tag later">gated</span></div>
+      <div class="row child2"><span class="path">custom-mic-flag · on-air-light-box · foam-covers</span><span class="tag later">tier 1</span>
+        <span class="why">Full-funnel heroes. Foam covers are AOV add-on only — never own ad spend. Flag price-anchors against the RØDE PodMic Flag preorder (~$199).</span></div>
+      <div class="row child2"><span class="path">led-key-light · teleprompter · acoustic-panels · starter-kit ($129) · show-brand-kit ($109)</span><span class="tag later">tier 2 + bundles</span>
+        <span class="why">Channel specialists: LED is ads-capable, teleprompter ads+AEO, panels the SEO/AEO workhorse (paid ads only after real customer audio exists). Starter Kit = retargeting only, no cold spend. Show Brand Kit is the hero bundle.</span></div>
+      <div class="row child2"><span class="path">usb-mic · boom-arm-combo · wireless-lav · stream-deck</span><span class="tag later">tier 3</span>
+        <span class="why">Composition only — bundle and email-upsell, zero standalone spend. Stream deck sold ONLY as Beginner Funnel OTO 2, two yeses deep, never cold.</span></div>
+
+      <div class="row child"><span class="path"><b>/cart</b> — review page with the ORDER BUMP</span><span class="tag later">gated</span>
+        <span class="why">Flag funnel bump: logo foam covers +$17, same logo shown. Beginner funnel bump: acoustic panels. Lives on our page because in-checkout offers are Plus-only. Intent: lift AOV $49 → ~$65–80, roughly doubling breakeven CAC.</span></div>
+      <div class="row child"><span class="path">checkout.podlink.ai</span><span class="tag later">gated</span>
+        <span class="why">Shopify-hosted, branded to GOAL_STATE values, Shop Pay on, final pre-checkout view shows the buyer's own flag mockup. Supersedes the doc's shop.podlink.ai primary-domain line.</span></div>
+      <div class="row child"><span class="path">Post-purchase OTOs (Shopify screens, not our routes)</span><span class="tag decide">test first</span>
+        <span class="why">Flag: OTO 1 on-air light box ~40% off → downsell foam covers or smaller light. Beginner: OTO 1 video upgrade (teleprompter + LED), OTO 2 stream deck. ⚠ MANDATORY dev-store test: confirm Headless-channel orders are OTO-eligible before building any funnel logic on this. Wallet payments (PayPal) skip OTO screens — never model 100% exposure.</span></div>
+      <div class="row child"><span class="path"><b>/thank-you</b> — the SaaS handoff</span><span class="tag later">gated</span>
+        <span class="why">"Flag enters production today. Your show's page is already built — claim it + 30 days Pro free." Then the 5–7 send production-window email sequence: claim page → onboarding → analytics tease → delivery-day unboxing UGC ask. This is where Funnel 3 feeds Funnel 1.</span></div>
+      <div class="row"><span class="path">/tools/podcast-benchmark</span><span class="tag later">later</span>
+        <span class="why">The download-percentile table (26/72/231/539/3,062 in 7 days) as a free interactive tool — "is my podcast doing well?" is a huge AEO query and this answers it with a number. Feeds both the SaaS and services funnels.</span></div>
+      <div class="row"><span class="path">/compare/[competitor]</span><span class="tag later">later</span>
+        <span class="why">vs Castmagic, vs Podsqueeze etc. — classic SaaS SEO, but gated on the competitor verification the pricing spec already requires. Don't write these from stale assumptions.</span></div>
+      <div class="row"><span class="path">/blog · /guides</span><span class="tag later">later</span>
+        <span class="why">The download-percentile benchmark table alone is a linkable asset. Note podlink.fm/blog currently 302s here with nothing to land on.</span></div>
+      <div class="row"><span class="path">podlink.fm/directory</span><span class="tag later">underused</span>
+        <span class="why">A public directory of shows, already live, already indexed, currently doing nothing for the brand.</span></div>
+      <div class="row"><span class="path">app.podlink.ai/ and /features</span><span class="tag kill">remove</span>
+        <span class="why">Duplicate marketing site. Redirect to podlink.ai or noindex it — before the DNS cutover.</span></div>
+    </div>
+  </section>
+
+  <!-- ============================ -->
+  <section>
+    <p class="eyebrow">Order of operations</p>
+    <h2>What to do, in sequence</h2>
+    <ol class="steps">
+      <li><b>Unblock Vercel.</b> Nothing on this page ships until the repo access is granted. Still the top of the list.</li>
+      <li><b>Build <code>/contact</code>.</b> Six pages of CTAs currently point at a 404.</li>
+      <li><b>Merge the services bundle</b> and extend <code>sitemap.ts</code> to derive from the services list as well as features.</li>
+      <li><b>Rewrite the six colliding feature titles</b> toward tool intent. Twenty minutes of work that protects both sides.</li>
+      <li><b>Kill the duplicate marketing site</b> on app.podlink.ai before DNS cutover.</li>
+      <li><b>Build the case-study tier.</b> Unblocked — permission granted across the board.</li>
+      <li><b>Verify the CVS and Oracle figures</b>, or drop them permanently. Those two are a factual question, not a permission one.</li>
+      <li><b>Confirm 2026 pricing</b>, then drop the noindex and let services into the index.</li>
+    </ol>
+
+    <div class="legend">
+      <span class="tag live">live</span><span class="tag new">built, not merged</span>
+      <span class="tag next">next</span><span class="tag later">later</span>
+      <span class="tag noidx">noindex</span><span class="tag kill">remove</span>
+    </div>
+  </section>
+
+</div>
+</body></html>
