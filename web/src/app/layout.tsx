@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import { SiteFooter, SiteHeader } from "@/components";
 import { FEATURES } from "@/content/features";
@@ -66,6 +67,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter featureLinks={FEATURE_LINKS} />
+        {/* GA4 — property "Podlink", stream podlink.ai (set up 2026-08-19).
+            gtag.js loads afterInteractive so it never blocks first paint. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-6BJQCTFXZZ"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-6BJQCTFXZZ');`}
+        </Script>
       </body>
     </html>
   );
