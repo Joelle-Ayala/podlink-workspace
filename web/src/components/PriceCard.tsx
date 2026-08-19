@@ -104,6 +104,12 @@ export function PriceCard({
             </div>
           </>
         )}
+
+        {tier.priceNote ? (
+          <p className="mt-2 text-[13px] leading-[1.5] text-text-muted [.on-ink_&]:text-text-on-ink/72">
+            {tier.priceNote}
+          </p>
+        ) : null}
       </div>
 
       <div className="mt-6">

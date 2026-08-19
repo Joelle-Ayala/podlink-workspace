@@ -78,8 +78,14 @@ export interface PricingTier {
    * Leave undefined to derive it.
    */
   priceAnnual?: number;
+  /**
+   * A caveat rendered under the price, e.g. when the number is a placeholder
+   * inside a decided range or the tier is not on sale yet. Omit when the price
+   * is final — an empty caveat line is noise.
+   */
+  priceNote?: string;
   blurb: string;
-  /** e.g. "Most popular". Null for none. */
+  /** e.g. "Post-launch". Null for none. */
   badge?: string | null;
   features: string[];
   cta: { label: string; href: string };

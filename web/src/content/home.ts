@@ -111,7 +111,7 @@ export const HOME_FAQ: FaqItem[] = [
   },
   {
     q: "What does it cost?",
-    a: "Free to start, with analytics, transcripts and your podlink.fm page included for as long as you want them. Creator is $19 a month and Pro is $49, both with two months free if you pay annually.",
+    a: "Free to start, with your download analytics and your podlink.fm page included for as long as you want them. Pro is $19 a month for the episode content kit — transcripts, show notes, newsletter and social posts — with two months free if you pay annually.",
   },
 ];
 

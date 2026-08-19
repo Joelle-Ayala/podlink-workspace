@@ -14,22 +14,31 @@ import { CTA_BAND } from "@/content/home";
 import { pageMetadata } from "@/lib/seo";
 
 /**
- * NOINDEX, deliberately.
+ * NOINDEX, deliberately. Confirmed by the founder 2026-08-19.
  *
- * Every tier limit in src/content/pricing.ts still carries a
- * `TODO(pricing): unverified limit` marker. A public, indexed pricing page
- * carrying numbers we haven't confirmed is worse than no pricing page —
- * it's a promise the product may not keep, and it's what Google caches.
+ * The tiers here follow the 2026-08-17 canon in
+ * `claude/pricing-and-personalization-spec.md`: Free / Pro $19 / Creator
+ * $39–49. The *ladder* is decided; the page still isn't ready to be indexed,
+ * for two reasons that are both greppable in src/content/pricing.ts:
  *
- * The prices themselves ($0 / $19 / $49) are decided; the *limits* are not.
- * Go-live is: verify the limits, strip the TODO markers, flip noIndex to
- * false here, and re-add "/pricing" to src/app/sitemap.ts (there's a comment
- * there with the steps).
+ *   `TODO(pricing): unverified limit` — splits and numbers nobody has decided.
+ *   `TODO(pricing): unshipped`        — capabilities that are real in the plan
+ *                                       but not built yet (transcript pipeline,
+ *                                       MCP, YouTube, episode report, clips).
+ *
+ * An indexed pricing page carrying either is worse than no pricing page: it is
+ * a promise the product may not keep, and it is what Google caches and what
+ * buyers arrive quoting.
+ *
+ * Go-live is: ship or strip everything marked `unshipped`, decide everything
+ * marked `unverified limit`, flip noIndex to false here, then re-add
+ * "/pricing" to src/app/sitemap.ts (there's a comment there with the steps).
+ * Spec §11 asks for exactly that — it is the last step of the pricing work.
  */
 export const metadata = pageMetadata({
   title: "Pricing",
   description:
-    "Free to start. Creator $19 a month, Pro $49, both with two months free when billed annually.",
+    "Download analytics and your podlink.fm page are free. Pro is $19 a month for the episode content kit, with two months free when billed annually.",
   path: "/pricing",
   noIndex: true,
 });
@@ -42,7 +51,7 @@ export default function PricingPage() {
       <Hero
         eyebrow="Pricing"
         title="Start free. Pay when it's saving you evenings"
-        sub="Download analytics, transcripts and your podlink.fm page are included on every plan, free one included — they're the part you should never have to pay to see."
+        sub="Your download numbers and your podlink.fm page are free on every plan, including the free one — they're the part you should never have to pay to see. Pro is for the writing after you publish."
         layout="center"
       />
 
@@ -62,13 +71,13 @@ export default function PricingPage() {
       <Section tone="alt" id="compare">
         <SectionHead
           title="What's in each plan"
-          intro="Everything below is per connected show. Limits shown are for a single podcast."
+          intro="Everything below is for one connected show — which is all Podlink supports per account today."
         />
         <div className="mt-10">
           <ComparisonTable
             sections={COMPARISON}
             tiers={TIER_COLUMNS}
-            caption="Podlink plan comparison: Free, Creator and Pro"
+            caption="Podlink plan comparison: Free, Pro and Creator"
           />
         </div>
       </Section>

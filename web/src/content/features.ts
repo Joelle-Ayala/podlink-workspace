@@ -11,6 +11,23 @@
  *   * no social proof, no counts of customers, no testimonials. The proof is
  *     product fact: analytics come from OP3, an open source we do not control.
  *
+ * NAMES ARE THE SEO TITLES — do not shorten them back (2026-08-19).
+ * `name` is rendered as the page <title>, the og/twitter title, the H1 and the
+ * breadcrumb leaf (see src/app/features/[slug]/page.tsx). Six of these pages
+ * target keywords the /services/* pages also want, so per
+ * `claude/podlink-sitemap-ia-plan.md` §4 the intent separation is written into
+ * the titles themselves: TOOL language here ("generator", "dashboard",
+ * "automatic"), DONE-FOR-YOU language on services ("service", "agency"). If a
+ * name reads oddly short next to its neighbours, that is the collision fix,
+ * not an oversight:
+ *   download-analytics → "Podcast analytics dashboard"  (vs /services/podcast-growth)
+ *   transcripts        → "Automatic transcripts"        (vs /services/podcast-editing)
+ *   show-notes         → "AI show notes generator"      (vs /services/podcast-editing)
+ *   clips-and-social   → "AI podcast clip generator"    (vs /services/podcast-clips)
+ *   newsletter         → "Podcast newsletter generator" (vs /services/podcast-growth)
+ *   link-in-bio        → "Podcast link in bio page"     (brand string dropped so the
+ *                        marketing page stops competing with podlink.fm/{handle})
+ *
  * Note on groups: `publish` is a framing section on the index (connect the feed
  * you already have) and deliberately has no detail page of its own, so
  * getFeaturesByGroup("publish") returns an empty array. Render its intro, not
@@ -52,7 +69,7 @@ export const FEATURES: Feature[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "download-analytics",
-    name: "Download analytics",
+    name: "Podcast analytics dashboard",
     tagline: "Know which episodes actually got downloaded",
     group: "understand",
     icon: "chart",
@@ -115,7 +132,7 @@ export const FEATURES: Feature[] = [
 
   {
     slug: "transcripts",
-    name: "Transcripts",
+    name: "Automatic transcripts",
     tagline: "Every word you said, searchable",
     group: "understand",
     icon: "transcript",
@@ -181,7 +198,7 @@ export const FEATURES: Feature[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "show-notes",
-    name: "AI show notes",
+    name: "AI show notes generator",
     tagline: "Hit publish with the notes already written",
     group: "create",
     icon: "notes",
@@ -366,7 +383,7 @@ export const FEATURES: Feature[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "clips-and-social",
-    name: "Clips and social posts",
+    name: "AI podcast clip generator",
     tagline: "One episode, a week of things to post",
     group: "grow",
     icon: "clip",
@@ -429,7 +446,7 @@ export const FEATURES: Feature[] = [
 
   {
     slug: "newsletter",
-    name: "Episode newsletter",
+    name: "Podcast newsletter generator",
     tagline: "The issue that goes with the episode, already drafted",
     group: "grow",
     icon: "mail",
@@ -493,7 +510,7 @@ export const FEATURES: Feature[] = [
 
   {
     slug: "link-in-bio",
-    name: "Your podlink.fm page",
+    name: "Podcast link in bio page",
     tagline: "One link that points at every place your show lives",
     group: "grow",
     icon: "link",

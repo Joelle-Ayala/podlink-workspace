@@ -16,15 +16,18 @@ import { absoluteUrl } from "@/lib/seo";
  *
  * WHAT IS DELIBERATELY NOT HERE
  *
- * `/pricing` — omitted. Every tier limit on that page is still an unverified
- *   placeholder (`src/content/pricing.ts` has a `TODO(pricing): unverified
- *   limit` on each one), so the page ships `noindex` until the numbers are
- *   real. Submitting a noindex URL in a sitemap is a self-inflicted
- *   "Submitted URL marked noindex" error in Search Console, and worse, wrong
- *   prices are the one kind of marketing error that follows you: they get
- *   cached in the SERP and people arrive expecting them.
- *   TO RE-ADD: verify the limits against PRICING.md, drop the `noIndex` flag
- *   from the page's `pageMetadata()` call, then uncomment the entry below.
+ * `/pricing` — omitted, confirmed 2026-08-19. The tier ladder now follows the
+ *   2026-08-17 canon (Free / Pro $19 / Creator $39–49), but
+ *   `src/content/pricing.ts` still carries two blocking marker types:
+ *   `TODO(pricing): unverified limit` (splits nobody has decided) and
+ *   `TODO(pricing): unshipped` (capabilities in the plan but not built). So
+ *   the page ships `noindex`. Submitting a noindex URL in a sitemap is a
+ *   self-inflicted "Submitted URL marked noindex" error in Search Console,
+ *   and worse, wrong prices are the one kind of marketing error that follows
+ *   you: they get cached in the SERP and people arrive expecting them.
+ *   TO RE-ADD: clear both marker types in `src/content/pricing.ts` (the canon
+ *   is the spec, NOT the stale PRICING.md), drop the `noIndex` flag from the
+ *   page's `pageMetadata()` call, then uncomment the entry below.
  *
  * `/legal/*` — INCLUDED, at the floor priority. The alternative was to leave
  *   them out as boilerplate, but they are canonical, indexable, first-party
