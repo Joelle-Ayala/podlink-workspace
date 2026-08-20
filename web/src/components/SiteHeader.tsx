@@ -164,12 +164,16 @@ export default function SiteHeader() {
           >
             Sign in
           </Link>
+          {/* Global primary = the volume path (self-serve signup). Book-a-call
+              is demoted from the global nav (founder decision 2026-08-20): the
+              high-ticket ask lives contextually on services/case-study surfaces
+              where that intent exists, not in front of every visitor. */}
           <Link
-            href="/contact"
+            href={appUrl("/register")}
             className="rounded-full px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ backgroundColor: ORANGE, color: INK, outlineColor: ORANGE_600 }}
           >
-            Book a call
+            Start free
           </Link>
 
           <button
@@ -255,9 +259,25 @@ export default function SiteHeader() {
                 </div>
               );
             })}
+            {/* Primary first (Start free), call-booking second, sign-in last —
+                mirrors the desktop hierarchy. */}
+            <Link
+              href={appUrl("/register")}
+              className="mt-4 block rounded-full px-4 py-3 text-center text-base font-bold"
+              style={{ backgroundColor: ORANGE, color: INK }}
+            >
+              Start free
+            </Link>
+            <Link
+              href="/contact"
+              className="mt-3 block rounded-full border-2 py-3 text-center text-base font-bold"
+              style={{ color: ORANGE_700, borderColor: ORANGE_700 }}
+            >
+              Book a call
+            </Link>
             <Link
               href={appUrl("/login")}
-              className="block py-3.5 text-base font-bold"
+              className="block py-3.5 text-center text-base font-bold"
               style={{ color: INK }}
             >
               Sign in

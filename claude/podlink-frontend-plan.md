@@ -290,3 +290,9 @@ Next build queue: episode persistence + transcript pipeline + unique(user_id) li
 Drip #1 (Download Analytics): copy ready in feature-drip-calendar.md; blocked only on
 the login click-verify (calendar rule 1) - Joelle, 2 min on mobile, then the changelog
 entry ships.
+
+### 2026-08-20 later additions
+- Nav CTA flip SHIPPED: Start free is the global primary (desktop pill + mobile drawer); Book a call demoted to secondary in the menu, kept contextually on services/case-study surfaces. Rationale: global nav serves the volume path (self-serve signup); the high-ticket ask belongs where high-ticket intent exists.
+- Templates committed: claude/feature-page-template.md v1.1 (visual spec layered), claude/services-page-template.md v1 (services sequenced FIRST - revenue-primary).
+- claude/feature-claims-truth-audit.md v0: doc-based claims matrix. RED indexed overpromises found: homepage auto-transcription-on-arrival, episode workspace, clips present-tense (rows 3/4/8). Fixes gated on Joelle sign-off via audit thread.
+- Homepage gets its own template exercise (dual-funnel answer required) - queued in audit thread.
