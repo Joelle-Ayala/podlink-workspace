@@ -296,3 +296,5 @@ entry ships.
 - Templates committed: claude/feature-page-template.md v1.1 (visual spec layered), claude/services-page-template.md v1 (services sequenced FIRST - revenue-primary).
 - claude/feature-claims-truth-audit.md v0: doc-based claims matrix. RED indexed overpromises found: homepage auto-transcription-on-arrival, episode workspace, clips present-tense (rows 3/4/8). Fixes gated on Joelle sign-off via audit thread.
 - Homepage gets its own template exercise (dual-funnel answer required) - queued in audit thread.
+- Template docs tranche 2 committed: case-study-template.md, contact-page-template.md, pricing-page-template.md (all v1). Sequencing: after homepage/services/features work. Following tranche (NOT started, per founder): /work, podlink.fm handle pages, /about, /changelog.
+- Pricing template carries a CANON CORRECTION: directive referenced a Creator placeholder; canon is v2 Free/Pro 29/Studio 99 - flagged to Joelle.
