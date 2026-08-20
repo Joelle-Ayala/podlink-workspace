@@ -272,3 +272,4 @@ figures and a fabricated testimonial; never source from them.
   templates, pitch one-pager templates, rate cards. Job numbers run 79066 → 98012
   (Dec 2021 → Sep 2023) and are the only reliable delivery-volume evidence —
   the Descript workspace is empty and Asana/Slack belong to other orgs.
+entry ships.)  
