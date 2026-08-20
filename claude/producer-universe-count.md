@@ -2,9 +2,25 @@
 **Created:** 2026-08-19 (evening session) · **Status:** READY TO RUN — blocked only on a Podcast Index API key (human, ~3 min)
 **Question:** How many addressable podcast producers exist? (GTM sizing input.)
 
-## Operational definition
-A "producer" = one distinct feed **owner email** (RSS `itunes:owner`) across feeds that pass the
-seriousness gate: **≥3 episodes** published. Cuts reported separately:
+## Operational definition (CORRECTED 2026-08-20 to match handoff rev 2 §5)
+**Primary question — the Studio sizing number:** distinct **owner emails that appear on ≥3
+feeds** (multi-show producers/agencies). Handoff rev 2: this count "decides whether Studio
+outbound is a channel or a niche."
+
+```sql
+-- multi-show producers: the Studio universe
+SELECT COUNT(*) FROM (
+  SELECT LOWER(TRIM(itunesOwnerEmail)) AS em
+  FROM podcasts
+  WHERE itunesOwnerEmail LIKE '%@%'
+  GROUP BY em
+  HAVING COUNT(*) >= 3
+);
+-- distribution: how many owners at 3, 4–5, 6–10, 11+ feeds (Studio's 40-ep meter check)
+```
+
+**Secondary — the Pro universe:** distinct owner emails across feeds that pass the
+seriousness gate (**≥3 episodes** published). Cuts reported separately:
 - Alive: newest episode within 90 days (the sellable universe)
 - Active weekly: newest within 14 days
 - By host (Buzzsprout/Transistor/Libsyn/etc. from feed URL patterns) — matters because Podlink

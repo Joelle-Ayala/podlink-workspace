@@ -29,6 +29,18 @@ Table + worker (1 session) → transcripts behind credits (1–2 sessions) → S
 (1 session, needs a brand pass). No dependency on the pricing decision — metering knobs read
 plan config, whatever the prices end up being.
 
+## Rev-2 alignment (added 2026-08-20)
+- **Instrument the parser fully on the FIRST crawl** (handoff rev 2 standing rule): capture
+  sponsor language, funding tag, transcript tag, tracking prefixes, notes length, producer
+  credits, category. Missing fields = a full re-crawl later. Add these columns to `episodes`/
+  `podcast_shows` up front.
+- **Show Report is a live page, never an attachment** (standing rule). GTM docs put it at
+  `podlink.ai/report/{show}`; this spec drafted `app.podlink.ai/report/{hash}` — resolve to
+  the GTM location (podlink.ai) since it's a marketing surface; the app only generates it.
+- **`unique(user_id)` lift is in scope here** (rev 2 §5 calls it the most expensive single
+  line of schema in the company): it gates Studio, the directory claim path, and the
+  multi-show grader. Sequence it with the episodes table migration.
+
 ## Open questions for Joelle (non-blocking to start)
 - Is the Show Report public-by-default or opt-in per show? (Recommend opt-in, default off.)
 - Transcript STT provider ceiling per episode (cost control) — recommend cap at 90 min audio.

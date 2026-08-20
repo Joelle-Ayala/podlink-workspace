@@ -1,57 +1,57 @@
 /**
  * Pricing content for /pricing.
  *
- * *** CANON: `claude/pricing-and-personalization-spec.md`, founder decision of
- * 2026-08-17. DO NOT RE-FLIP THIS FILE TO THE OLDER LADDER. ***
+ * *** CANON: `claude/podlink-pricing-v2.md` — ADOPTED by Joelle 2026-08-20
+ * (mobile chief-of-staff thread). Supersedes the 08-17 ladder in
+ * `pricing-and-personalization-spec.md` §1, which itself superseded the
+ * 08-08 ladder. DO NOT re-flip this file to either older ladder. ***
  *
- * The ladder here is Free / **Pro $19** / **Creator $39–49**. An earlier
- * version of this file (commit "web: sync pricing tiers to locked 2026-08-08
- * ladder", synced 2026-08-16) had Creator at $19 and Pro at $49 with the tier
- * meanings inverted. That ladder is dead. The 08-17 decision is explicit that
- * it supersedes it, and PRICING.md / M4-STRIPE-HANDOFF.md still describe the
- * old one — if you are reconciling this file against either of those, this
- * file is right and they are stale.
+ * The ladder is Free / **Pro $29** / **Studio $99**, with clips as a future
+ * **$20 add-on** (v2 §4d) — there is no Creator tier any more.
  *
- * What each tier means now (spec §1):
- *   * Free    — download analytics + the podlink.fm link-in-bio page. Free by
- *               strategy, and also by code: episodes are never persisted and
- *               OP3 is read live, so analytics *cannot* be metered without new
- *               code. Free turns that limitation into the acquisition hook.
- *   * Pro $19 — the **Episode Content Kit**: automatic transcripts plus
- *               transcript-grounded generation (show notes, newsletter, social),
- *               brand voice auto-populated from the feed, the same tools over
- *               MCP, and the episode report when it lands. Generation burns AI
- *               credits and transcription has a real per-episode Whisper cost,
- *               which is why this is the line where money starts.
- *   * Creator — **AI Clip Studio** (clips, captions, AI video editor, dubbing).
- *               Post-launch per GOAL_STATE; price is a decided *range*, not a
- *               decided number.
+ * What each tier means (v2 §3):
+ *   * Free   — download analytics + the podlink.fm page (+ YouTube views when
+ *              ML2 ships). Free by strategy and by code: episodes are never
+ *              persisted and OP3 is read live, so analytics cannot be metered.
+ *              Acquisition; every free page is distribution.
+ *   * Pro    — $29. The Episode Content Kit PLUS the attribution loop
+ *              (tracked links, per-episode pages, episode report) — the loop
+ *              is the answer to "why not Castmagic at the same price". Priced
+ *              against the $48+ stack it replaces (Podpage $19 + repurposer
+ *              $29), not against other content tools.
+ *   * Studio — $99. Producers/editors/small agencies: unlimited shows metered
+ *              on ~40 episodes/month, client workspaces, branded reports,
+ *              free client viewer seats. NOT SELF-SERVE YET: `podcast_shows`
+ *              has `unique(user_id)`, so multi-show accounts do not exist in
+ *              the product. Until that schema work lands (see
+ *              claude/feed-ingestion-show-report-spec.md), Studio's CTA is
+ *              "talk to us", never a checkout.
  *
- * Annual = 10× monthly, marketed as "2 months free" — the literal arithmetic of
- * a 10x multiplier, not a rounded percentage that dies at the next price change.
+ * Annual is deliberately asymmetric (v2 §4c): Pro annual = 8× monthly ($232,
+ * "4 months free" / 33% off) because annual prepay is what makes the outbound
+ * CAC math work at this price point; Studio annual = 10× ($990, "2 months
+ * free") because Studio retains and margin matters there. Do not "fix" the
+ * asymmetry to match — it is the decision.
  *
  * HONESTY RULES (unchanged, and load-bearing)
- *   * Download analytics and the podlink.fm page are never the paywall. OP3
- *     measures the downloads, not us, and charging for a free open source is
- *     not a business model.
- *   * Nothing here asserts a quantity the product can enforce. In particular
- *     there is deliberately **no "episodes per month" line anywhere on this
- *     page**: episodes are not persisted (spec §3), so per-episode metering is
- *     impossible today. Do not add one back before that ships.
- *   * "1 connected show" is a real, verified limit — `podcast_shows` has
- *     `unique(user_id)`. It is the only hard number on this page stated without
- *     a marker.
+ *   * Download analytics and the podlink.fm page are never the paywall.
+ *   * Nothing here asserts a quantity the product can enforce. There is still
+ *     deliberately **no "episodes per month" line in the comparison table**:
+ *     episodes are not persisted, so metering is impossible today. Studio's
+ *     40-episode meter appears ONLY inside the Studio card, marked unshipped.
+ *   * "1 connected show" on Free/Pro is a real, verified limit
+ *     (`unique(user_id)`), the only hard number stated without a marker.
  *
  * TWO GREPPABLE MARKERS, BOTH BLOCKING GO-LIVE
- *   `TODO(pricing): unverified limit`   — the split or number is undecided.
- *   `TODO(pricing): unshipped`          — the capability is real in the plan
- *                                         but not built yet (spec §6 build
- *                                         order). Must be removed or delivered
- *                                         before this page is shown to buyers.
+ *   `TODO(pricing): unverified limit` — the split or number is undecided
+ *                                       (v2 §7.1 still open: Free caps).
+ *   `TODO(pricing): unshipped`        — real in the plan, not built. Must be
+ *                                       removed or delivered before this page
+ *                                       is shown to buyers.
  *
- * /pricing stays `noindex` and stays out of the sitemap until both markers are
- * gone. (Spec §11 asks for the noindex to come off — that is the *last* step of
- * the pricing work, not this one. Founder direction 2026-08-19: keep it hidden.)
+ * /pricing stays `noindex` and out of the sitemap until both marker types are
+ * gone AND v2 §7's open items close (Free limits, reverse-trial mechanics,
+ * Studio overage). Founder direction 2026-08-19: keep it hidden.
  */
 
 import { appUrl } from "@/lib/site";
@@ -69,8 +69,8 @@ export const TIERS: PricingTier[] = [
     features: [
       "Download analytics from OP3, on every episode — no cap, ever",
       "Which apps and countries your listeners are in, and the trend across the show",
-      "Your page at podlink.fm/yourshow, updating itself from your feed", // TODO(pricing): unverified limit — which bio-link features, if any, are held back on Free
-      "Per-episode YouTube views once you connect your channel", // TODO(pricing): unshipped — ships alongside the Pro build; TODO(pricing): unverified limit — free vs Pro placement still open (spec §8.9)
+      "Your page at podlink.fm/yourshow, updating itself from your feed", // TODO(pricing): unverified limit — v2 §7.1 suggests ~10 links on Free; not decided
+      "Per-episode YouTube views once you connect your channel", // TODO(pricing): unshipped — ships alongside ML2; free placement per v2 §3 ("the only product with both in one view" — claim gated on shipping)
       "One connected show, the same as every plan",
     ],
     cta: { label: "Start free", href: appUrl("/register") },
@@ -79,57 +79,57 @@ export const TIERS: PricingTier[] = [
   {
     id: "pro",
     name: "Pro",
-    priceMonthly: 19,
-    priceAnnual: 190,
+    priceMonthly: 29,
+    priceAnnual: 232,
+    priceNote: "Annual is 8× monthly — 4 months free.",
     blurb:
-      "The two to four hours after you hit publish, gone. One subscription instead of a link page, a repurposer and a headline tool — and the drafts quote what you actually said.",
+      "Replaces your link page and your repurposer, and adds the one thing nobody sells: which post actually moved downloads. The two to four hours after you hit publish, gone.",
     badge: "Core plan",
     features: [
       "Everything in Free",
       "Every new episode transcribed automatically, on arrival",
       "The Episode Content Kit: show notes, titles, description, newsletter and social posts, all written from the transcript",
       "Brand voice filled in from your own feed, so the first draft already sounds like your show",
-      "The same content tools inside Claude, over MCP", // TODO(pricing): unshipped — MCP Phase 1 (spec §4)
-      "Bring an edited transcript from your editing tool and get the kit before you publish", // TODO(pricing): unshipped — import_transcript (spec §4)
-      "Episode reports: downloads, page clicks and YouTube views on one page", // TODO(pricing): unshipped — Episode Report v1 (spec §6 step 3)
-      "The template library and multilingual output", // TODO(pricing): unverified limit — ride-along parity features, tier placement never decided (spec §5)
+      "Tracked links and a page per episode, so a share has somewhere to land", // TODO(pricing): unshipped — the loop, v2 §3 puts it in Pro from day one
+      "Episode reports: downloads, page clicks and YouTube views on one page", // TODO(pricing): unshipped — Episode Report v1
+      "The same content tools inside Claude, over MCP", // TODO(pricing): unshipped — MCP Phase 1
+      "Bring an edited transcript from your editing tool and get the kit before you publish", // TODO(pricing): unshipped — import_transcript
+      "The template library and multilingual output", // TODO(pricing): unverified limit — ride-along parity features, tier placement never decided
     ],
     cta: { label: "Start free", href: appUrl("/register") },
     highlighted: true,
   },
   {
-    id: "creator",
-    name: "Creator",
-    priceMonthly: 39,
-    priceAnnual: 390,
+    id: "studio",
+    name: "Studio",
+    priceMonthly: 99,
+    priceAnnual: 990,
     priceNote:
-      "Placeholder. The decided figure is a range — $39 to $49 — and Clip Studio is not on sale yet.",
+      "Not self-serve yet — multi-show accounts are being built. Talk to us and we'll set you up as they land.",
     blurb:
-      "AI Clip Studio, for shows with no editing workflow to clip in. Arriving after launch; the plan is here so you can see where Podlink is going, not so you can buy it today.",
-    badge: "Post-launch",
+      "For producers, editors and small agencies running a roster: every client's show, every client's report, one bill. No per-show fees.",
+    badge: "For producers & teams",
     features: [
       "Everything in Pro",
-      "Clips cut from the episode, with captions burned in", // TODO(pricing): unshipped — Clip Studio is post-launch (spec §6 step 5)
-      "AI video editor and AI dubbing", // TODO(pricing): unshipped
-      "Clip moments chosen with your own analytics in the loop", // TODO(pricing): unshipped — the Podlink-only edge (spec §0), needs the report first
+      "Unlimited shows — metered on episodes, about 40 a month across your roster", // TODO(pricing): unshipped — blocked by unique(user_id) AND by episode persistence; overage price open (v2 §7.3)
+      "A workspace per client, so handoff is a link", // TODO(pricing): unshipped
+      "Branded client reports you can send as your own", // TODO(pricing): unshipped
+      "Client viewer seats: free and uncapped, always", // TODO(pricing): unshipped — free-viewer policy decided (v2 §4b), product not built
     ],
-    cta: { label: "Start free", href: appUrl("/register") },
+    cta: { label: "Talk to us", href: "/contact" },
     highlighted: false,
   },
 ];
 
 /*
- * Column order below must match TIERS, because /pricing derives the table
- * columns from it: free → pro → creator.
+ * Column order below must match TIERS: free → pro → studio.
  *
- * Two rows that used to live here are deliberately gone:
- *   * "Episodes of AI output a month" — see the honesty rules at the top of
- *     this file. There is nothing to count episodes with.
- *   * "Podlink badge on your page / on clips" — the badge split came from the
- *     2026-08-08 ladder, where it was a Creator→Pro line at $49. Under the
- *     08-17 canon nobody has decided whether a $19 Pro removes it. Rather than
- *     move an invented split onto a new tier, it is off the page until it is
- *     decided.
+ * Deliberately NOT in this table:
+ *   * "Episodes of AI output a month" — nothing exists to count episodes with
+ *     (honesty rules above). Studio's meter lives in its card, marked.
+ *   * "Podlink badge" rows — no decision on what a $29 Pro removes.
+ *   * A Clip Studio section — clips are a future $20 add-on (v2 §4d), not a
+ *     tier. They get a FAQ, not a column.
  */
 export const COMPARISON: ComparisonSection[] = [
   {
@@ -137,20 +137,20 @@ export const COMPARISON: ComparisonSection[] = [
     rows: [
       {
         label: "Connected shows",
-        // Verified, not a placeholder: podcast_shows has unique(user_id).
-        values: { free: "1", pro: "1", creator: "1" },
+        // free/pro "1" is verified (unique(user_id)). Studio "roster" is the plan, not the product.
+        values: { free: "1", pro: "1", studio: "Your roster" }, // TODO(pricing): unshipped — multi-show accounts blocked by unique(user_id)
       },
       {
         label: "Works off the RSS feed you already publish",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "Back catalogue imported on connect",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
-        label: "Seats",
-        values: { free: "1", pro: "1", creator: "1" }, // TODO(pricing): unverified limit — no seat model exists; a second seat was a $49-tier line on the dead ladder
+        label: "Client viewer seats, free",
+        values: { free: false, pro: false, studio: "Unlimited" }, // TODO(pricing): unshipped — no seat model exists yet
       },
     ],
   },
@@ -159,23 +159,31 @@ export const COMPARISON: ComparisonSection[] = [
     rows: [
       {
         label: "OP3 download analytics",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "App and country breakdown",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "Episode-over-episode comparison",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "YouTube views per episode",
-        values: { free: true, pro: true, creator: true }, // TODO(pricing): unshipped; TODO(pricing): unverified limit — free vs Pro placement open (spec §8.9)
+        values: { free: true, pro: true, studio: true }, // TODO(pricing): unshipped — ML2
+      },
+      {
+        label: "Tracked links and per-episode pages",
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — the loop
       },
       {
         label: "Episode report — downloads, clicks and views together",
-        values: { free: false, pro: true, creator: true }, // TODO(pricing): unshipped — Episode Report v1
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — Episode Report v1
+      },
+      {
+        label: "Branded reports for clients",
+        values: { free: false, pro: false, studio: true }, // TODO(pricing): unshipped
       },
     ],
   },
@@ -184,19 +192,19 @@ export const COMPARISON: ComparisonSection[] = [
     rows: [
       {
         label: "Your page at podlink.fm/yourshow",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "Every listening app behind one link",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "Your own links — newsletter, sponsor, merch",
-        values: { free: true, pro: true, creator: true }, // TODO(pricing): unverified limit — whether Free caps the number of links is undecided
+        values: { free: true, pro: true, studio: true }, // TODO(pricing): unverified limit — whether Free caps the number of links is undecided (v2 §7.1 suggests ~10)
       },
       {
         label: "Latest episodes pulled from your feed",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
     ],
   },
@@ -205,52 +213,35 @@ export const COMPARISON: ComparisonSection[] = [
     rows: [
       {
         label: "Automatic transcripts",
-        values: { free: false, pro: true, creator: true },
+        values: { free: false, pro: true, studio: true },
       },
       {
         label: "Show notes, titles and descriptions",
-        values: { free: false, pro: true, creator: true },
+        values: { free: false, pro: true, studio: true },
       },
       {
         label: "Episode newsletter drafts",
-        values: { free: false, pro: true, creator: true },
+        values: { free: false, pro: true, studio: true },
       },
       {
         label: "Social posts, written per platform",
-        values: { free: false, pro: true, creator: true },
+        values: { free: false, pro: true, studio: true },
       },
       {
         label: "Brand voice, filled in from your feed",
-        values: { free: false, pro: true, creator: true },
+        values: { free: false, pro: true, studio: true },
       },
       {
         label: "Content tools in Claude, over MCP",
-        values: { free: false, pro: true, creator: true }, // TODO(pricing): unshipped — MCP Phase 1
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — MCP Phase 1
       },
       {
         label: "Import a transcript from your editing tool",
-        values: { free: false, pro: true, creator: true }, // TODO(pricing): unshipped — import_transcript
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — import_transcript
       },
       {
         label: "Template library and multilingual output",
-        values: { free: false, pro: true, creator: true }, // TODO(pricing): unverified limit — ride-along parity, placement never decided
-      },
-    ],
-  },
-  {
-    heading: "Clip Studio",
-    rows: [
-      {
-        label: "Clips with captions burned in",
-        values: { free: false, pro: false, creator: true }, // TODO(pricing): unshipped — post-launch
-      },
-      {
-        label: "AI video editor",
-        values: { free: false, pro: false, creator: true }, // TODO(pricing): unshipped
-      },
-      {
-        label: "AI dubbing",
-        values: { free: false, pro: false, creator: true }, // TODO(pricing): unshipped
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unverified limit — ride-along parity, placement never decided
       },
     ],
   },
@@ -259,15 +250,15 @@ export const COMPARISON: ComparisonSection[] = [
     rows: [
       {
         label: "Help centre",
-        values: { free: true, pro: true, creator: true },
+        values: { free: true, pro: true, studio: true },
       },
       {
         label: "Email support",
-        values: { free: false, pro: true, creator: true }, // TODO(pricing): unverified limit
+        values: { free: false, pro: true, studio: true }, // TODO(pricing): unverified limit
       },
       {
-        label: "Priority processing",
-        values: { free: false, pro: false, creator: true }, // TODO(pricing): unverified limit
+        label: "Priority processing and onboarding help",
+        values: { free: false, pro: false, studio: true }, // TODO(pricing): unverified limit
       },
     ],
   },
@@ -279,12 +270,12 @@ export const PRICING_FAQ: FaqItem[] = [
     a: "Because that is where the costs actually are. Your download numbers come from OP3, which is open, independently run and free — reading it back to you costs us almost nothing, and charging for it would be strange. Transcribing an hour of audio and generating a week of content from it costs real money every single episode. So the line falls where the meter is.",
   },
   {
-    q: "What does $19 actually replace?",
-    a: "A link-in-bio page, a repurposing tool and whatever you use to write titles and show notes — usually three subscriptions between $9 and $30 each. Pro is meant to be a consolidation, not another tool stacked on the pile.",
+    q: "What does $29 actually replace?",
+    a: "A link page (Podpage runs $19 a month) and a repurposing tool (most run $29) — call it $48 of subscriptions — plus the thing none of them sell at any price: seeing which post actually moved downloads. Pro is a consolidation, not another tool stacked on the pile.",
   },
   {
     q: "How does annual billing work?",
-    a: "You pay for ten months and get twelve. That is where \"2 months free\" comes from — it is the arithmetic, not a rounded-up percentage. Switch between monthly and annual whenever you like.",
+    a: "Pro annual is $232 — eight months' price for twelve, so four months free. Studio annual is $990 — ten months' price for twelve. Switch between monthly and annual whenever you like.",
   },
   {
     q: "Do I need to change podcast hosts to use Podlink?",
@@ -295,8 +286,8 @@ export const PRICING_FAQ: FaqItem[] = [
     a: "It's a plan. Your download analytics and your podlink.fm page stay free for as long as you want them, with no card and no clock. Pro is what you add when the writing after each episode is the part eating your evening.",
   },
   {
-    q: "When does Clip Studio arrive?",
-    a: "After launch. The Creator tier is on this page so the direction is visible, not so you can buy it yet — and the price is a range we haven't landed on rather than a number we're quietly hoping you don't check.",
+    q: "What about clips?",
+    a: "Clips are coming as a $20 add-on to any paid plan, not a tier of their own — cut from the episode with captions burned in, and picked with your own analytics in the loop. Not on sale yet; we'll say so in the changelog the day they are.",
   },
   {
     q: "What happens to my work if I downgrade?",
@@ -307,7 +298,7 @@ export const PRICING_FAQ: FaqItem[] = [
     a: "Upgrade, downgrade or cancel from your dashboard whenever you like. Downgrades take effect at the end of the period you have already paid for, so you never lose time you bought.",
   },
   {
-    q: "I run more than one show. What then?",
-    a: "Podlink connects one show per account today — that is a real limit in the product, not a packaging decision. If you run several, get in touch and we will sort it out properly rather than selling you the same plan three times.",
+    q: "I run several shows — a roster, or clients. What then?",
+    a: "That's Studio: unlimited shows, metered on episodes rather than per-show fees, with free viewer seats for your clients. Multi-show accounts are still being built, so Studio isn't self-serve yet — get in touch and we'll onboard you as it lands.",
   },
 ];
