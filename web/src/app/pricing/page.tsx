@@ -16,9 +16,9 @@ import { pageMetadata } from "@/lib/seo";
 /**
  * NOINDEX, deliberately. Confirmed by the founder 2026-08-19.
  *
- * The tiers here follow the 2026-08-17 canon in
- * `claude/pricing-and-personalization-spec.md`: Free / Pro $19 / Creator
- * $39–49. The *ladder* is decided; the page still isn't ready to be indexed,
+ * The tiers here follow Pricing v2 — `claude/podlink-pricing-v2.md`, adopted
+ * 2026-08-20: Free / Pro $29 / Studio $99, clips as a future $20 add-on.
+ * The *ladder* is decided; the page still isn't ready to be indexed,
  * for two reasons that are both greppable in src/content/pricing.ts:
  *
  *   `TODO(pricing): unverified limit` — splits and numbers nobody has decided.
@@ -77,7 +77,7 @@ export default function PricingPage() {
           <ComparisonTable
             sections={COMPARISON}
             tiers={TIER_COLUMNS}
-            caption="Podlink plan comparison: Free, Pro and Creator"
+            caption="Podlink plan comparison: Free, Pro and Studio"
           />
         </div>
       </Section>
