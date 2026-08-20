@@ -272,4 +272,21 @@ figures and a fabricated testimonial; never source from them.
   templates, pitch one-pager templates, rate cards. Job numbers run 79066 → 98012
   (Dec 2021 → Sep 2023) and are the only reliable delivery-volume evidence —
   the Descript workspace is empty and Asana/Slack belong to other orgs.
-entry ships.)  
+
+---
+
+## Status append - 2026-08-20 (mobile chief-of-staff thread)
+
+Shipped since this plan was written: services bundle merged + live; pricing rewritten to
+the ADOPTED Pricing v2 ladder (Free / Pro $29 / Studio $99, clips = future $20 add-on);
+/studio page built (noindex until Studio purchasable - flip note in the file); GA4 live
+(G-6BJQCTFXZZ); Minting House stripped sitewide; MCP server committed to branch
+mcp-server for review (NOT on main - needs review + deploy test before merge).
+
+Next build queue: episode persistence + transcript pipeline + unique(user_id) lift
+(claude/feed-ingestion-show-report-spec.md) -> Show Report at podlink.ai/report/{show}
+-> Episode Report v1 (gates S4 outbound + /pricing index flip).
+
+Drip #1 (Download Analytics): copy ready in feature-drip-calendar.md; blocked only on
+the login click-verify (calendar rule 1) - Joelle, 2 min on mobile, then the changelog
+entry ships.
