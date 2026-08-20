@@ -41,6 +41,28 @@ plan config, whatever the prices end up being.
   line of schema in the company): it gates Studio, the directory claim path, and the
   multi-show grader. Sequence it with the episodes table migration.
 
+## Analytics differentiators (added 2026-08-20, founder-approved "lets do it")
+**A. Percentile badge (v1 = sprint-sized, build with the episodes table):**
+User's weekly downloads (already live via Op3Service) looked up against a benchmark
+distribution → "top X% of OP3-measured shows." GATE: re-verify the 26/72/231/539/3,062
+weekly table against its primary source (OP3 published stats) before user-facing use; cite
++ date it. Universe caveat ("among OP3-measured shows") is mandatory copy, not optional.
+Surfaces: dashboard, Show Report, /grader later.
+**B. Content-performance insights:**
+v1 (no transcript cost): LLM pass over RSS metadata (titles, descriptions, durations) ×
+per-episode OP3 downloads → observations ("interview episodes outperform", "question titles
+beat statements"). Constraints baked in: OP3 measures only post-prefix-install episodes;
+small-n shows get "what we noticed" framing, NEVER causal claims (evidence rules).
+v2: transcript-grounded topic analysis as transcript coverage builds (credit-gated backfill).
+**C. Weekly digest:** plain-language summary generated from A+B data through the existing
+credit-metered generation path; scheduled job. Ships after A and B exist.
+**Validation data:** Joelle is adding the OP3 prefix to three client shows she manages in
+Megaphone (Moms Moving On, Go With Elmo, My Divorce Solution) — real side-by-side vs
+Megaphone's IAB-certified numbers. EXPECTATION: counts will not match exactly (methodology,
+filtering, and OP3 only counts from install date). Log deltas as calibration data — the gap
+itself is publishable research material if sourced carefully. NOTE: one show per account
+until unique(user_id) lifts → three separate accounts/emails.
+
 ## Open questions for Joelle (non-blocking to start)
 - Is the Show Report public-by-default or opt-in per show? (Recommend opt-in, default off.)
 - Transcript STT provider ceiling per episode (cost control) — recommend cap at 90 min audio.
