@@ -1,4 +1,4 @@
-# Feature Page Template (v1 — Joelle's 10-section stack, 2026-08-20)
+# Feature Page Template (v1.1 — Joelle's 10-section stack + visual spec, 2026-08-20)
 **Status:** DRAFT stack approved for drafting; Joelle may still tweak section order/content.
 **Applies to:** all 8 /features/* pages. Deliverable = one template, applied per page, with
 placeholder assets where none exist. Big copy deviations from current pages go through the
@@ -34,6 +34,37 @@ copy-vs-canon audit sign-off process — do not silently ship rewrites of live m
 9. **Related features** — 2–3 internal links from the feature graph (footer already derives
    from FEATURES; on-page block should too — no hardcoded slugs, see nav.ts TODO).
 10. **Final CTA banner** — outcome-focused, reuse `CTA_BAND` pattern.
+
+## Visual spec per section (Joelle, 2026-08-20 — codified verbatim)
+1. **Hero** — headline ≤~10 words. ONE high-contrast CTA + reassurance microcopy ("free, no
+   card required"). Asset: screenshot in a browser frame with soft shadow, OR a muted ≤30s
+   autoplay loop with poster (VideoObject only when the video is real). Mobile: visual BELOW
+   text. The hero image is the LCP — priority-load it (`priority` on next/image, no lazy).
+2. **Trust strip** — single low-height row; grayscale logos or one one-line quote + avatar.
+   Keep it short enough that the next section peeks above the fold.
+3. **Problem framing** — typography-only moment: larger type, generous whitespace, optional
+   dark contrast band (ink). NO imagery.
+4. **How it works** — 3 numbered steps; columns on desktop, stacked on mobile; one small
+   visual each; parallel phrasing across steps; numbered badges or a connector line.
+5. **Deep-dives** — alternating zig-zag text/image. Screenshots cropped to the relevant UI
+   with annotation callouts. Consistent aspect ratios across all blocks. Each block: one
+   benefit H2 + 2–3 sentences (+ optional 3 bullets).
+6. **Compatibility** — logo chips with names, wrapping row, single caption line.
+7. **Testimonial** — ONE pull-quote card only: the number displayed large, the quote, avatar
+   + show name. (Evidence-gated as specified above.)
+8. **Pricing context** — a single inline card/banner: plan, price, inclusions, CTA. Never a
+   full comparison table on a feature page.
+9. **FAQ** — accordions with large tap targets and chevrons; answers REMAIN IN THE DOM when
+   collapsed so FAQPage schema and crawlers see them regardless of state.
+10. **Related features** — 3-card grid: icon + title + one-liner.
+11. **Final CTA** — full-width brand-orange band, outcome-phrased headline, one button,
+    reassurance line. (Note: orange band = ink text/button per the contrast findings —
+    #FF8C00 fails AA for text on white; buttons are ink-on-orange, 8.20:1.)
+
+**Globals:** 8pt spacing rhythm · ~65ch max text width · lazy-load all below-fold media ·
+zero CLS from late media (explicit width/height everywhere) · orange reserved for CTAs only ·
+motion only where it demonstrates the product, and respect `prefers-reduced-motion` · brand
+palette/typography per the existing site (Poppins; orange on ink; tokens in globals.css).
 
 ## Under the hood
 - Schema: FAQPage per page; `VideoObject` ONLY when a real video asset exists (schema for a
