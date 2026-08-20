@@ -298,3 +298,6 @@ entry ships.
 - Homepage gets its own template exercise (dual-funnel answer required) - queued in audit thread.
 - Template docs tranche 2 committed: case-study-template.md, contact-page-template.md, pricing-page-template.md (all v1). Sequencing: after homepage/services/features work. Following tranche (NOT started, per founder): /work, podlink.fm handle pages, /about, /changelog.
 - Pricing template carries a CANON CORRECTION: directive referenced a Creator placeholder; canon is v2 Free/Pro 29/Studio 99 - flagged to Joelle.
+
+### GREEN LIGHT recorded 2026-08-20 (Joelle): move everything forward that does not need her.
+Kickoff order for build threads (no further authorization needed): 1) episode persistence + transcript pipeline + unique(user_id) lift per feed-ingestion-show-report-spec.md; 2) services template application (sponsorship->advertising->editing->clips->booking->growth); 3) homepage template exercise incl. dual-funnel answer + claims-truth RED fixes (befores/afters to Joelle); 4) feature pages per template; 5) tranche-2 applications. Copy-audit befores/afters accumulate in claude/copy-audit-decisions.md as they are drafted. Hard rules unchanged: no pricing admin/Stripe, no emails, no unverified claims, never git add -A. Claude does not create accounts or enter credentials: Podcast Index signup + cPanel rotation stay with Joelle.
