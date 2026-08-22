@@ -10,8 +10,9 @@ import {
   Section,
   SectionHead,
 } from "@/components";
+import Link from "next/link";
 import { FEATURE_GROUPS, FEATURES, getFeaturesByGroup } from "@/content/features";
-import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS } from "@/content/home";
+import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS, TWO_DOORS } from "@/content/home";
 import {
   faqLd,
   jsonLd,
@@ -24,7 +25,7 @@ import {
 export const metadata = pageMetadata({
   title: "Grow your show. Not your workload.",
   description:
-    "Show notes, clips, social posts, a newsletter and download numbers you can defend — generated from the episode you just published, on the podcast host you already use.",
+    "Show notes, social posts, a newsletter and download numbers a sponsor can check — written from what you actually said, on the podcast host you already use.",
   path: "/",
 });
 
@@ -56,6 +57,34 @@ export default function HomePage() {
         visual={<ScreenshotFrame caption="The episode workspace" priority />}
       />
 
+      {/* The two-door band — personas doc §4.1. Two businesses, one center of
+          gravity: the software funnel and the done-for-you funnel get a door
+          each, above the fold, instead of the services business being
+          invisible on the front page. */}
+      <Section tone="alt" id="two-doors">
+        <Grid cols={2}>
+          {TWO_DOORS.map((door) => (
+            <div
+              key={door.heading}
+              className="rounded-2xl border border-zinc-200 bg-white p-8"
+            >
+              <Heading level={2} className="text-2xl">
+                {door.heading}
+              </Heading>
+              <Prose className="mt-3">
+                <p>{door.body}</p>
+              </Prose>
+              <Link
+                href={door.cta.href}
+                className="mt-5 inline-block text-sm font-bold text-accent-text focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {door.cta.label} &rarr;
+              </Link>
+            </div>
+          ))}
+        </Grid>
+      </Section>
+
       {/* Groups are framing, not a grid — `publish` deliberately has no
           features under it, so we render each group's copy and only draw a
           card grid where features actually exist. */}
@@ -63,7 +92,7 @@ export default function HomePage() {
         <SectionHead
           eyebrow="What it does"
           title="One episode in, a week of material out"
-          intro="Podlink takes on the work that happens after the audio is done — measuring it, transcribing it, writing it up and cutting it into everything you need to promote it."
+          intro="Podcasters spend more time on descriptions, show notes and posts than on the episode itself. That's the part Podlink takes — measuring it, writing it up and giving it somewhere to land."
         />
         <div className="mt-16 space-y-20">
           {FEATURE_GROUPS.map((group) => {

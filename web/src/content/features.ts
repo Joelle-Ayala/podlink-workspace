@@ -41,7 +41,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
     id: "publish",
     title: "Keep publishing where you publish",
     intro:
-      "Point Podlink at the feed you already have. Nothing moves, nothing breaks, and every episode from here on is measured, transcribed and ready to be repurposed.",
+      "Point Podlink at the feed you already have. Nothing moves, nothing breaks, and every episode from here on is measured — with its transcript and content kit one paste away.",
   },
   {
     id: "understand",
@@ -59,7 +59,7 @@ export const FEATURE_GROUPS: FeatureGroup[] = [
     id: "grow",
     title: "Turn one episode into a week of promotion",
     intro:
-      "Every episode is a week of marketing material. Podlink cuts it, writes it, and gives it somewhere to live.",
+      "Every episode is a week of marketing material. Podlink writes it and gives it somewhere to live.",
   },
 ];
 
@@ -137,7 +137,7 @@ export const FEATURES: Feature[] = [
     group: "understand",
     icon: "transcript",
     summary:
-      "Every episode is transcribed on arrival with speaker labels and timestamps. Search the whole archive to find the moment you half-remember, quote yourself correctly, and give search engines something to actually index. The transcript is also what every other draft in Podlink is written from.",
+      "Upload an episode and get a clean, editable transcript with speaker labels and timestamps. Search your archive to find the moment you half-remember, quote yourself correctly, and give search engines something to actually index. The transcript is also what every other draft in Podlink is written from.",
     bullets: [
       "Speaker labels and timestamps, not a wall of text",
       "Search across every episode you have published, not just the last one",

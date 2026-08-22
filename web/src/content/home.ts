@@ -54,7 +54,7 @@ export interface CtaBand {
 export const HERO: Hero = {
   eyebrow: "Grow your show. Not your workload.",
   headline: "Record the episode. Podlink does the other four hours",
-  sub: "Show notes, clips, social posts, a newsletter and download numbers you can defend — generated from the episode you just published, on the podcast host you already use.",
+  sub: "Show notes, social posts, a newsletter and download numbers a sponsor can check — written from what you actually said, on the podcast host you already use.",
   primaryCta: { label: "Start free", href: appUrl("/register") },
   secondaryCta: { label: "See what it does", href: "/features" },
   note: "Connect your RSS feed in under a minute. No host migration, no card required.",
@@ -73,13 +73,13 @@ export const HOW_IT_WORKS: HowItWorks = {
     },
     {
       number: "02",
-      heading: "Drop in your episodes",
-      body: "Publish the way you always do. Each episode lands in a workspace of its own, transcribed on arrival, with the show notes, titles, description, clips, social posts and newsletter drafted from what was actually said — in your format, because you set it once.",
+      heading: "Bring in an episode",
+      body: "Paste the link or drop in the transcript, and get the kit: show notes, titles, description, newsletter and social drafts — in your format, because you set it once.",
     },
     {
       number: "03",
       heading: "Publish and watch what lands",
-      body: "Review, adjust, copy it where it goes. Then see the downloads come in per episode, by app and by country, and find out which topics and titles carried — so the next episode is a decision rather than a guess.",
+      body: "Review, adjust, copy it where it goes. Then see the downloads come in per episode, by app and by country, and find out which topics and titles carried — so the next episode is a decision, and the sponsor email writes itself.",
     },
   ],
 };
@@ -107,17 +107,43 @@ export const HOME_FAQ: FaqItem[] = [
   },
   {
     q: "Can my producer or editor work in this with me?",
-    a: "Yes. The episode workspace is the shared surface — audio, transcript, notes, clips and social copy in one place — so handing an episode over is a link rather than a folder of files and a Slack thread.",
+    a: "Podlink is built for one login per show today. Producer seats and client workspaces are on the roadmap — that's the Studio tier, made for the people who run several shows for other people.",
+  },
+  {
+    q: "I already pay for a link-in-bio tool and an AI writer. Why switch?",
+    a: "That's the point — Pro replaces both, typically about $48 a month between them, and adds the one thing neither sells: download numbers a sponsor can verify against the source.",
   },
   {
     q: "What does it cost?",
-    a: "Free to start, with your download analytics and your podlink.fm page included for as long as you want them. Pro is $29 a month for the episode content kit — transcripts, show notes, newsletter and social posts — with four months free if you pay annually.",
+    a: "Free to start, with your download analytics and your podlink.fm page included for as long as you want them. Pro is $29 a month — about what a link page and a repurposer cost together, except those don't come with numbers you can defend. Four months free if you pay annually.",
+  },
+];
+
+/** The two-door band — personas doc §4.1: two businesses, one center of
+ *  gravity. Door 1 is the volume path (self-serve), door 2 the services
+ *  funnel. Rendered directly under the hero. */
+export interface Door {
+  heading: string;
+  body: string;
+  cta: CtaLink;
+}
+
+export const TWO_DOORS: Door[] = [
+  {
+    heading: "Software that handles post-publish",
+    body: "See your downloads free, then turn every episode into a week of marketing — in your voice.",
+    cta: { label: "Start free", href: appUrl("/register") },
+  },
+  {
+    heading: "A team that does it for you",
+    body: "Production, clips, booking, sponsorship and growth — for people who'd rather run their business than their post-production.",
+    cta: { label: "Explore services", href: "/services" },
   },
 ];
 
 export const CTA_BAND: CtaBand = {
-  heading: "Your next episode could publish itself",
-  body: "Connect your feed, publish as normal, and find the show notes, clips, newsletter and social copy already waiting for you.",
+  heading: "Your next episode deserves the full week of attention",
+  body: "Connect your feed, bring the episode, and the show notes, newsletter and social copy are done before your coffee is.",
   primaryCta: { label: "Start free", href: appUrl("/register") },
   secondaryCta: { label: "See pricing", href: "/pricing" },
   note: "Keep your podcast host. No card required. Cancel any time.",

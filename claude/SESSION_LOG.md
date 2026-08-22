@@ -1,0 +1,20 @@
+# SESSION_LOG (web/GTM workstream)
+Created 2026-08-20 by the mobile chief-of-staff thread. (The app workstream's session log
+— Sessions 1–11, referenced by PODLINK-MCP-SCOPING — predates this file and was never
+filed into the repo; file it here if found.) Newest entries on top.
+
+## 2026-08-20 — Homepage rewrite shipped (mobile CoS thread)
+Joelle approve-all on the six-item sign-off sheet (claude/homepage-copy-audit.md).
+Shipped: hero sub (item 1 chosen over 1b — rationale in audit doc), two-door funnel band
+under hero (personas §4.1), how-it-works step 2 truth rewrite + step 3 sponsor bridge,
+closing band rewrite, producer-FAQ honesty rewrite (seeds Studio), consolidation FAQ added,
+what-it-does lead-in with the sourced S1 pain, features.ts group-intro + transcripts-summary
+claims fixes. All voice-guide-compliant; claims-truth RED rows 3/4/8 CLOSED on the homepage
+(feature-page bodies still carry deeper instances — queued for template application).
+Earlier same day: voice guide v1 (binding) · copy-audit brief · Pricing v2 adopted + shipped
+· /studio page · nav CTA flip · services bundle merge verified · GA4 · MCP server branch ·
+templates (feature/services/case-study/contact/pricing) · claims matrix v0 ·
+analytics differentiators spec'd · JOELLE-TODO.md.
+
+Next per committed order: services pages under the same lens (befores/afters →
+sign-off → ship), engineering thread (episode persistence + unique(user_id) lift).
