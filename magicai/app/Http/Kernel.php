@@ -13,6 +13,7 @@ use App\Http\Middleware\DemoCheckMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RedirectLegacyMarketing;
 use App\Http\Middleware\RefererMiddleware;
 use App\Http\Middleware\SentryContextMiddleware;
 use App\Http\Middleware\SurveyMiddleware;
@@ -75,6 +76,7 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
+            RedirectLegacyMarketing::class,
             ApplicationCheckLicense::class,
             ApplicationStatus::class,
             VerifyCsrfToken::class,
