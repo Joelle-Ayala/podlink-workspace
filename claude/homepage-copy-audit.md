@@ -104,3 +104,8 @@ Feature-card titles (§4 collision rewrites, settled) · nav (flip already shipp
 5. Producer/editor FAQ honesty rewrite (kills a RED claim, seeds Studio) — YES/NO
 Items 1/3/4/5 also close claims-truth RED rows 3, 4 and 8 on the indexed homepage.
 Say "approve all" or list numbers to hold, and the rewrite ships same session.
+
+---
+
+## Voice-guide compliance pass (2026-08-20, guide v1)
+All AFTER copy above checked against claude/voice-guide.md: positions kept (switching-hosts line, numbers-not-ours-to-spin), honesty register used for the step-2 and producer-FAQ rewrites (P2 pattern), no banned words introduced, all numbers exact + sourced (P4/rules), bridges per the section-5 map. One strengthen available if Joelle wants it: hero sub could carry the sponsor bridge harder - variant: "...download numbers a sponsor can check against the source - because they come from OP3, not from us." Flag as item 1b, optional.
