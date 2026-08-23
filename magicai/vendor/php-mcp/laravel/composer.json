@@ -1,0 +1,72 @@
+{
+    "name": "php-mcp/laravel",
+    "description": "Laravel SDK for building Model Context Protocol (MCP) servers - Seamlessly integrate MCP tools, resources, and prompts into Laravel applications",
+    "keywords": [
+        "laravel",
+        "mcp",
+        "model-context-protocol",
+        "ai",
+        "llm",
+        "tools",
+        "laravel mcp",
+        "laravel mcp sdk",
+        "laravel mcp server",
+        "laravel mcp tools",
+        "laravel mcp resources",
+        "laravel mcp prompts",
+        "laravel model context protocol"
+    ],
+    "homepage": "https://github.com/php-mcp/laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kyrian Obikwelu",
+            "email": "koshnawaza@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^9.46 || ^10.34 || ^11.29 || ^12.0 || ^13.0",
+        "php-mcp/server": "^3.3"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.13",
+        "mockery/mockery": "^1.6",
+        "orchestra/pest-plugin-testbench": "^2.1 || ^4.0",
+        "orchestra/testbench": "^8.0 || ^9.0 || ^11.0",
+        "pestphp/pest": "^2.0 || ^4.0",
+        "pestphp/pest-plugin-laravel": "^2.0 || ^4.0",
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpMcp\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpMcp\\Laravel\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PhpMcp\\Laravel\\McpServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
