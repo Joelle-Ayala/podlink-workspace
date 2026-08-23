@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border border-gray-100 mt-4 index-highly-rounded d-lg-none">
     <div class="container">
         <a
-            href="<?= url() ?>"
+            href="<?= /* PODLINK CUSTOMIZATION: same reasoning as app_sidebar.php — this partial only renders inside app_wrapper (authenticated dashboard), so send the logo to the Biolink dashboard, not SITE_URL which now 302s to podlink.ai. */ is_logged_in() ? url('dashboard') : url() ?>"
             class="navbar-brand d-flex"
             data-logo
             data-light-value="<?= settings()->main->logo_light != '' ? settings()->main->logo_light_full_url : settings()->main->title ?>"

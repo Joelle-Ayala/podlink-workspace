@@ -3,7 +3,7 @@
 <div class="app-sidebar">
     <div class="app-sidebar-title text-truncate">
         <a
-                href="<?= url() ?>"
+                href="<?= /* PODLINK CUSTOMIZATION: app_sidebar is only rendered when logged in (see app/core/Controller.php wrapper selection), so the logo should return to the Biolink dashboard rather than SITE_URL (podlink.fm root), which now 302s to podlink.ai and would loop the user back through SSO. */ is_logged_in() ? url('dashboard') : url() ?>"
                 class="text-truncate"
                 data-logo
                 data-light-value="<?= settings()->main->logo_light != '' ? settings()->main->logo_light_full_url : settings()->main->title ?>"
@@ -24,6 +24,20 @@
     <div class="app-sidebar-links-wrapper flex-grow-1">
         <ul class="app-sidebar-links">
             <?php if(is_logged_in()): ?>
+                <?php /* PODLINK CUSTOMIZATION: cross-surface nav back to the main app.
+                       The Biolink editor is reached via "My Podlink Page" SSO from app.podlink.ai,
+                       but previously had no way back, stranding users here. This is intentionally
+                       isolated (own <li>, own class, own comment block) so future AltumCode/vendor
+                       updates to this file stay diffable. Do not merge into core markup above/below. */ ?>
+                <li class="podlink-back-to-app">
+                    <a href="https://app.podlink.ai/dashboard/user"><i class="fas fa-fw fa-sm fa-arrow-left mr-2"></i> Back to Podlink</a>
+                </li>
+
+                <div class="divider-wrapper">
+                    <div class="divider"></div>
+                </div>
+                <?php /* END PODLINK CUSTOMIZATION */ ?>
+
                 <li class="<?= \Altum\Router::$controller == 'Dashboard' ? 'active' : null ?> d-flex dropdown" id="internal_notifications">
                     <a href="<?= url('dashboard') ?>"><i class="fas fa-fw fa-sm fa-th mr-2"></i> <?= l('dashboard.menu') ?></a>
 

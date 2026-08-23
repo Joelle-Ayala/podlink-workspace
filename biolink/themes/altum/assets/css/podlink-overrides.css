@@ -144,3 +144,18 @@ a {
 .border-primary {
     border-color: #FF8C00 !important;
 }
+
+/* ---- PODLINK CUSTOMIZATION: cross-surface nav, app_sidebar.php "Back to Podlink" ----
+ * Isolated selector, only touches the one <li> added in app_sidebar.php. Safe to drop
+ * if the vendor nav markup changes shape — nothing else depends on this class.
+ */
+.app-sidebar-links li.podlink-back-to-app > a {
+    color: #FF8C00;
+    font-weight: 600;
+}
+
+.app-sidebar-links li.podlink-back-to-app > a:hover,
+.app-sidebar-links li.podlink-back-to-app > a:focus {
+    color: #FFA94D;
+}
+/* ---- END PODLINK CUSTOMIZATION ---- */
