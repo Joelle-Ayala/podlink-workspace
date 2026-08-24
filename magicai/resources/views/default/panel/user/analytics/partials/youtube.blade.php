@@ -15,21 +15,23 @@
 
 @if (!$youtubeConfigured)
     {{-- State 1: env gate --}}
-    <x-card class:body="flex flex-wrap items-center gap-4 p-5">
+    <x-card class:body="flex items-start gap-4 p-5">
         <div class="grid size-10 shrink-0 place-items-center rounded-full bg-primary/10">
             <x-tabler-brand-youtube class="size-5 text-primary" />
         </div>
         <div class="min-w-0 grow">
-            <h3 class="m-0 text-sm font-semibold text-heading-foreground">
-                {{ __('YouTube analytics — setup in progress') }}
-            </h3>
-            <p class="m-0 text-2xs text-foreground/60">
+            <div class="flex flex-wrap items-center gap-2">
+                <h3 class="m-0 text-sm font-semibold text-heading-foreground">
+                    {{ __('YouTube analytics — setup in progress') }}
+                </h3>
+                <span class="shrink-0 rounded-full bg-foreground/5 px-2.5 py-1 text-3xs font-medium text-foreground/60">
+                    {{ __('Coming soon') }}
+                </span>
+            </div>
+            <p class="m-0 mt-1 text-2xs text-foreground/60">
                 {{ __('Downloads only tell half the story. Soon you\'ll connect your YouTube channel here and see per-episode video views next to your download numbers — the full picture of an episode, in one place.') }}
             </p>
         </div>
-        <span class="shrink-0 rounded-full bg-foreground/5 px-2.5 py-1 text-3xs font-medium text-foreground/60">
-            {{ __('Coming soon') }}
-        </span>
     </x-card>
 @elseif ($youtubeConnection === null)
     {{-- State 2: configured, not connected --}}

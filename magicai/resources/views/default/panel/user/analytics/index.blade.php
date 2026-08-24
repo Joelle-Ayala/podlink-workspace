@@ -305,9 +305,14 @@
                 @endif
             @endif
 
-            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            @php
+                // Two columns only when the top-apps card is actually there,
+                // otherwise the episodes list is stranded in half the width.
+                $showTopApps = $hasOp3Show && $hasAnyData;
+            @endphp
+            <div @class(['grid grid-cols-1 gap-5', 'lg:grid-cols-2' => $showTopApps])>
                 {{-- Top apps --}}
-                @if ($hasOp3Show && $hasAnyData)
+                @if ($showTopApps)
                     <x-card class:body="p-5">
                         <h3 class="m-0 mb-4 text-sm font-semibold text-heading-foreground">
                             {{ __('Top listening apps') }}
