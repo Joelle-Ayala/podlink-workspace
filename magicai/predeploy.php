@@ -9,7 +9,16 @@ $steps = [
     'php create-biolink-db.php',
     // reset-admin-once removed 2026-07-28 after founder login (it would
     // clobber the founder's password on every deploy)
+    //
+    // (2026-08-23) Passport bring-up for the MCP server. MUST run BEFORE
+    // migrate: it clears the imported dump's false "Passport migrations
+    // already applied" ledger rows so the very next migrate actually creates
+    // the five oauth_* tables. Self-guarding + idempotent (no-ops once
+    // oauth_clients exists). See provision-passport-once.php header.
+    'php provision-passport-once.php',
     'php artisan migrate --force',
+    // Read-only post-migrate evidence line in the deploy log.
+    'php provision-passport-once.php verify',
 ];
 foreach ($steps as $cmd) {
     echo "[predeploy] >>> $cmd\n";
