@@ -291,36 +291,55 @@ class Op3Service
         }
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($rssFeedUrl) {
-            try {
-                $response = Http::withHeaders(['User-Agent' => 'Podlink/1.0 (+https://podlink.ai)'])
-                    ->timeout(self::TIMEOUT)
-                    ->get($rssFeedUrl);
+            $body = $this->fetchFeedBody($rssFeedUrl);
 
-                if (! $response->successful()) {
-                    Log::warning('OP3 feed inspection failed', [
-                        'url'    => $rssFeedUrl,
-                        'status' => $response->status(),
-                    ]);
+            if ($body === null) {
+                return null;
+            }
 
-                    return null;
-                }
+            return [
+                'podcast_guid'    => $this->extractPodcastGuid($body),
+                'prefix_detected' => $this->detectOp3Prefix($body),
+                'title'           => $this->extractFeedTitle($body),
+            ];
+        });
+    }
 
-                $body = $response->body();
+    /**
+     * Fetch the raw RSS body for a feed URL.
+     *
+     * Shared by inspectFeed() and EpisodeSyncService so there is exactly one
+     * place that knows how Podlink talks HTTP to a podcast feed (user agent,
+     * timeout, failure logging). Deliberately NOT cached: the only two
+     * callers already throttle themselves (inspectFeed caches its parsed
+     * result for an hour; the episode sync runs at most hourly), and RSS
+     * bodies are large enough that caching them would be wasteful.
+     */
+    public function fetchFeedBody(string $rssFeedUrl): ?string
+    {
+        try {
+            $response = Http::withHeaders(['User-Agent' => 'Podlink/1.0 (+https://podlink.ai)'])
+                ->timeout(self::TIMEOUT)
+                ->get($rssFeedUrl);
 
-                return [
-                    'podcast_guid'    => $this->extractPodcastGuid($body),
-                    'prefix_detected' => $this->detectOp3Prefix($body),
-                    'title'           => $this->extractFeedTitle($body),
-                ];
-            } catch (\Exception $e) {
-                Log::warning('OP3 feed inspection exception', [
-                    'url'     => $rssFeedUrl,
-                    'message' => $e->getMessage(),
+            if (! $response->successful()) {
+                Log::warning('Podcast feed fetch failed', [
+                    'url'    => $rssFeedUrl,
+                    'status' => $response->status(),
                 ]);
 
                 return null;
             }
-        });
+
+            return $response->body();
+        } catch (\Exception $e) {
+            Log::warning('Podcast feed fetch exception', [
+                'url'     => $rssFeedUrl,
+                'message' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
     }
 
     private function extractPodcastGuid(string $xml): ?string
