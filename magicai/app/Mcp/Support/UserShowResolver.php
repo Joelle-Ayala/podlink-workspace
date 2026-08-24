@@ -95,4 +95,28 @@ class UserShowResolver
     {
         return route('dashboard.user.analytics.index');
     }
+
+    /**
+     * The "connected but OP3 has no data yet" payload — same underlying
+     * condition and message as notConnectedPayload('no_op3_data'), but with
+     * connected:true. A show that's linked to a Podlink account but simply
+     * hasn't produced OP3 data yet is still connected; get_show_overview
+     * already reflects that (status: 'no_op3_data' alongside connected:true).
+     * This keeps get_top_apps and list_episodes consistent with it instead of
+     * reporting connected:false for a show the user has in fact connected.
+     *
+     * @return array<string, mixed>
+     */
+    public function connectedNoOp3DataPayload(?string $showTitle): array
+    {
+        return [
+            'connected' => true,
+            'status' => 'no_op3_data',
+            'show_title' => $showTitle,
+            'message' => 'This podcast is connected but OP3 has no download data for it yet. '
+                . 'The OP3 prefix (https://op3.dev/e/) has to be added at the podcast host, '
+                . 'and stats appear once episodes are downloaded through it.',
+            'setup_url' => $this->dashboardAnalyticsUrl(),
+        ];
+    }
 }

@@ -54,7 +54,13 @@ trait ResolvesMcpUser
             return null;
         }
 
-        $clean = trim(preg_replace('/\s+/u', ' ', strip_tags($value)) ?? '');
+        // RSS/OP3 titles frequently arrive HTML-entity-encoded (e.g. "Show
+        // &amp; Tell"); decode before stripping tags so entities that decode
+        // to markup are still stripped, but plain text isn't left mangled
+        // (e.g. show_title returning "&amp;" instead of "&").
+        $decoded = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $clean = trim(preg_replace('/\s+/u', ' ', strip_tags($decoded)) ?? '');
 
         if ($clean === '') {
             return null;

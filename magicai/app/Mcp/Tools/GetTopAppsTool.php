@@ -46,13 +46,13 @@ class GetTopAppsTool
         }
 
         if (blank($show->op3_show_uuid)) {
-            return $this->shows->notConnectedPayload('no_op3_data');
+            return $this->shows->connectedNoOp3DataPayload($this->safeText($context['show_title']));
         }
 
         $apps = $this->op3->topAppsForShow((string) $show->op3_show_uuid);
 
         if ($apps === null) {
-            return $this->shows->notConnectedPayload('no_op3_data');
+            return $this->shows->connectedNoOp3DataPayload($this->safeText($context['show_title']));
         }
 
         return [

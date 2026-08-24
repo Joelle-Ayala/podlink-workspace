@@ -22,6 +22,13 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::enablePasswordGrant();
+
+        // MCP polish: bound token lifetimes explicitly rather than relying on
+        // Passport's defaults (personal access tokens otherwise never expire).
+        Passport::tokensExpireIn(now()->addDays(30));
+        Passport::refreshTokensExpireIn(now()->addDays(60));
+        Passport::personalAccessTokensExpireIn(now()->addDays(30));
+
         $this->registerPolicies();
     }
 }

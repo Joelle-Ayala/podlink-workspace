@@ -46,13 +46,13 @@ class ListEpisodesTool
         }
 
         if (blank($show->op3_show_uuid)) {
-            return $this->shows->notConnectedPayload('no_op3_data');
+            return $this->shows->connectedNoOp3DataPayload($this->safeText($context['show_title']));
         }
 
         $episodes = $this->op3->recentEpisodes((string) $show->op3_show_uuid, $limit);
 
         if ($episodes === null) {
-            return $this->shows->notConnectedPayload('no_op3_data');
+            return $this->shows->connectedNoOp3DataPayload($this->safeText($context['show_title']));
         }
 
         return [
