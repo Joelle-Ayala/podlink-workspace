@@ -6,7 +6,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\PodcastShow;
+use App\Models\YoutubeConnection;
+use App\Services\EpisodeSyncService;
 use App\Services\Op3Service;
+use App\Services\YouTubeAnalyticsService;
+use App\Services\YouTubeOAuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,8 +25,13 @@ use Illuminate\View\View;
  */
 class AnalyticsController extends Controller
 {
-    public function index(Request $request, Op3Service $op3): View
-    {
+    public function index(
+        Request $request,
+        Op3Service $op3,
+        EpisodeSyncService $episodeSync,
+        YouTubeOAuthService $youtubeOauth,
+        YouTubeAnalyticsService $youtubeAnalytics,
+    ): View {
         $user = $request->user();
 
         $show = PodcastShow::query()->where('user_id', $user->id)->first();
@@ -57,24 +66,66 @@ class AnalyticsController extends Controller
             if (filled($show->op3_show_uuid)) {
                 $downloads = $op3->downloadsForShow($show->op3_show_uuid);
                 $topApps = $op3->topAppsForShow($show->op3_show_uuid);
-                $episodes = $op3->recentEpisodes($show->op3_show_uuid);
+            }
+
+            // Episode persistence (spec §3): the feed is the source of truth
+            // for the episode list now, not OP3. Throttled to hourly.
+            $episodeSync->syncIfStale($show);
+            $episodes = $episodeSync->recent($show, 10);
+
+            // Graceful fallback: a show whose feed has never parsed keeps the
+            // old OP3-reported list rather than showing an empty section.
+            if ($episodes->isEmpty() && filled($show->op3_show_uuid)) {
+                $episodes = collect($op3->recentEpisodes($show->op3_show_uuid) ?? [])
+                    ->map(static fn (array $episode): array => [
+                        'title'            => $episode['title'] ?? null,
+                        'pub_date'         => $episode['pub_date'] ?? null,
+                        'youtube_video_id' => null,
+                    ]);
+            }
+        }
+
+        // ── YouTube (ML2-lite) ──────────────────────────────────────────
+        $youtubeConfigured = $youtubeOauth->isConfigured();
+        $youtubeConnection = null;
+        $youtubeVideos = [];
+        $youtubeViews = [];
+
+        if ($youtubeConfigured) {
+            $youtubeConnection = YoutubeConnection::query()->where('user_id', $user->id)->first();
+
+            if ($youtubeConnection !== null) {
+                $youtubeVideos = $youtubeAnalytics->videos($youtubeConnection);
+                $youtubeViews = $youtubeAnalytics->viewsByVideoId($youtubeVideos);
+
+                // Naive title pairing — writes episodes.youtube_video_id only
+                // where it is still null, and logs every match.
+                if ($show !== null && $youtubeVideos !== []) {
+                    if ($youtubeAnalytics->pairEpisodes($show, $youtubeVideos) > 0) {
+                        $episodes = $episodeSync->recent($show, 10);
+                    }
+                }
             }
         }
 
         return view('panel.user.analytics.index', [
-            'show'           => $show,
-            'showTitle'      => $showTitle,
-            'op3Configured'  => $op3->isConfigured(),
-            'prefixDetected' => (bool) ($feedInfo['prefix_detected'] ?? false),
-            'downloads'      => $downloads,
-            'topApps'        => $topApps,
-            'episodes'       => $episodes,
-            'op3Prefix'      => Op3Service::PREFIX,
-            'hosts'          => $this->podcastHosts(),
+            'show'              => $show,
+            'showTitle'         => $showTitle,
+            'op3Configured'     => $op3->isConfigured(),
+            'prefixDetected'    => (bool) ($feedInfo['prefix_detected'] ?? false),
+            'downloads'         => $downloads,
+            'topApps'           => $topApps,
+            'episodes'          => $episodes,
+            'op3Prefix'         => Op3Service::PREFIX,
+            'hosts'             => $this->podcastHosts(),
+            'youtubeConfigured' => $youtubeConfigured,
+            'youtubeConnection' => $youtubeConnection,
+            'youtubeVideos'     => $youtubeVideos,
+            'youtubeViews'      => $youtubeViews,
         ]);
     }
 
-    public function connect(Request $request, Op3Service $op3): RedirectResponse
+    public function connect(Request $request, Op3Service $op3, EpisodeSyncService $episodeSync): RedirectResponse
     {
         $data = $request->validate([
             'rss_feed_url' => 'required|url|starts_with:http|max:2048',
@@ -82,13 +133,30 @@ class AnalyticsController extends Controller
 
         $user = $request->user();
 
+        $existing = PodcastShow::query()->where('user_id', $user->id)->first();
+        $feedChanged = $existing !== null && $existing->rss_feed_url !== $data['rss_feed_url'];
+
         $show = PodcastShow::query()->updateOrCreate(
             ['user_id' => $user->id],
-            ['rss_feed_url' => $data['rss_feed_url'], 'op3_show_uuid' => null],
+            [
+                'rss_feed_url'            => $data['rss_feed_url'],
+                'op3_show_uuid'           => null,
+                'episodes_last_synced_at' => null,
+            ],
         );
+
+        // Pointing at a different feed means a different show — the old
+        // episode rows no longer belong to it.
+        if ($feedChanged) {
+            $show->episodes()->delete();
+        }
 
         // Bypass the feed cache — the user likely just changed something.
         $feedInfo = $op3->inspectFeed($show->rss_feed_url, fresh: true);
+
+        // Connect is one of the two sync triggers (the other is a stale
+        // analytics page load) — pull the episode list in immediately.
+        $episodeSync->sync($show);
 
         $resolved = filled($feedInfo['podcast_guid'] ?? null)
             ? $op3->showByFeedOrGuid((string) $feedInfo['podcast_guid'])

@@ -77,6 +77,22 @@ return [
     ],
 
     /*
+     * YouTube Data API v3 (analytics-in).
+     *
+     * Deliberately separate from the 'google' block above: that one is the
+     * social-login client, this one is Podlink's own OAuth client with the
+     * youtube.readonly scope and its own redirect URI. Leaving these unset
+     * gates the entire YouTube feature behind a "setup in progress" card.
+     *
+     * 'redirect' is optional — when unset the callback route URL is used.
+     */
+    'youtube' => [
+        'client_id'     => env('YOUTUBE_CLIENT_ID'),
+        'client_secret' => env('YOUTUBE_CLIENT_SECRET'),
+        'redirect'      => env('YOUTUBE_REDIRECT_URI'),
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Payment Gateways Services
     |--------------------------------------------------------------------------

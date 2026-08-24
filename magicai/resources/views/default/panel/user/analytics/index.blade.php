@@ -7,7 +7,7 @@
     @php
         $hasShow = $show !== null;
         $hasOp3Show = $hasShow && filled($show->op3_show_uuid);
-        $hasAnyData = filled($downloads) || filled($topApps) || filled($episodes);
+        $hasAnyData = filled($downloads) || filled($topApps);
 
         $formatDate = static function ($value) {
             try {
@@ -16,6 +16,11 @@
                 return null;
             }
         };
+
+        // Episodes come from the DB now (App\Models\Episode), with a graceful
+        // fallback to OP3-reported arrays — data_get() reads both shapes.
+        $hasEpisodes = filled($episodes) && count($episodes) > 0;
+        $youtubeConnected = $youtubeConfigured && $youtubeConnection !== null;
     @endphp
 
     <div class="flex flex-col gap-6 py-10">
@@ -297,64 +302,90 @@
                             description="{{ __('OP3 knows your show but hasn\'t reported numbers yet. New downloads appear here within about an hour.') }}"
                         />
                     </x-card>
-                @else
-                    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                        {{-- Top apps --}}
-                        <x-card class:body="p-5">
-                            <h3 class="m-0 mb-4 text-sm font-semibold text-heading-foreground">
-                                {{ __('Top listening apps') }}
-                            </h3>
-                            @if (filled($topApps))
-                                <ul class="m-0 flex list-none flex-col gap-3 p-0">
-                                    @foreach ($topApps as $app)
-                                        <li>
-                                            <div class="mb-1 flex items-center justify-between text-2xs">
-                                                <span class="font-medium text-heading-foreground">{{ $app['app'] }}</span>
-                                                <span class="text-foreground/60">{{ $app['share'] }}%</span>
-                                            </div>
-                                            <div class="h-1.5 overflow-hidden rounded-full bg-foreground/5">
-                                                <div
-                                                    class="h-full rounded-full bg-primary"
-                                                    style="width: {{ min(100, max(0, $app['share'])) }}%"
-                                                ></div>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p class="m-0 text-2xs text-foreground/60">
-                                    {{ __('No app data yet — this fills in as downloads come through the prefix.') }}
-                                </p>
-                            @endif
-                        </x-card>
-
-                        {{-- Recent episodes --}}
-                        <x-card class:body="p-5">
-                            <h3 class="m-0 mb-4 text-sm font-semibold text-heading-foreground">
-                                {{ __('Recent episodes') }}
-                            </h3>
-                            @if (filled($episodes))
-                                <ul class="m-0 flex list-none flex-col p-0">
-                                    @foreach ($episodes as $episode)
-                                        <li class="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
-                                            <span class="min-w-0 truncate text-2xs font-medium text-heading-foreground">
-                                                {{ $episode['title'] ?? __('Untitled episode') }}
-                                            </span>
-                                            <span class="shrink-0 text-3xs text-foreground/50">
-                                                {{ $formatDate($episode['pub_date']) ?? '—' }}
-                                            </span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p class="m-0 text-2xs text-foreground/60">
-                                    {{ __('No episodes reported yet. New episodes show up here after their first prefixed downloads.') }}
-                                </p>
-                            @endif
-                        </x-card>
-                    </div>
                 @endif
             @endif
+
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                {{-- Top apps --}}
+                @if ($hasOp3Show && $hasAnyData)
+                    <x-card class:body="p-5">
+                        <h3 class="m-0 mb-4 text-sm font-semibold text-heading-foreground">
+                            {{ __('Top listening apps') }}
+                        </h3>
+                        @if (filled($topApps))
+                            <ul class="m-0 flex list-none flex-col gap-3 p-0">
+                                @foreach ($topApps as $app)
+                                    <li>
+                                        <div class="mb-1 flex items-center justify-between text-2xs">
+                                            <span class="font-medium text-heading-foreground">{{ $app['app'] }}</span>
+                                            <span class="text-foreground/60">{{ $app['share'] }}%</span>
+                                        </div>
+                                        <div class="h-1.5 overflow-hidden rounded-full bg-foreground/5">
+                                            <div
+                                                class="h-full rounded-full bg-primary"
+                                                style="width: {{ min(100, max(0, $app['share'])) }}%"
+                                            ></div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="m-0 text-2xs text-foreground/60">
+                                {{ __('No app data yet — this fills in as downloads come through the prefix.') }}
+                            </p>
+                        @endif
+                    </x-card>
+                @endif
+
+                {{-- Recent episodes — read from the episodes table, kept in
+                     sync from the RSS feed (hourly, on page load). --}}
+                <x-card class:body="p-5">
+                    <div class="mb-4 flex items-center justify-between gap-3">
+                        <h3 class="m-0 text-sm font-semibold text-heading-foreground">
+                            {{ __('Recent episodes') }}
+                        </h3>
+                        @if ($hasEpisodes && $youtubeConnected)
+                            <span class="shrink-0 text-3xs uppercase tracking-wide text-foreground/40">
+                                {{ __('YouTube views') }}
+                            </span>
+                        @endif
+                    </div>
+
+                    @if ($hasEpisodes)
+                        <ul class="m-0 flex list-none flex-col p-0">
+                            @foreach ($episodes as $episode)
+                                @php
+                                    $episodeVideoId = data_get($episode, 'youtube_video_id');
+                                    $episodeViews = $episodeVideoId ? ($youtubeViews[$episodeVideoId] ?? null) : null;
+                                @endphp
+                                <li class="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
+                                    <span class="min-w-0 truncate text-2xs font-medium text-heading-foreground">
+                                        {{ data_get($episode, 'title') ?? __('Untitled episode') }}
+                                    </span>
+                                    <span class="flex shrink-0 items-center gap-3">
+                                        @if ($episodeViews !== null)
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-3xs font-medium text-primary">
+                                                <x-tabler-brand-youtube class="size-3" />
+                                                {{ number_format($episodeViews) }}
+                                            </span>
+                                        @endif
+                                        <span class="text-3xs text-foreground/50">
+                                            {{ $formatDate(data_get($episode, 'pub_date')) ?? '—' }}
+                                        </span>
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="m-0 text-2xs text-foreground/60">
+                            {{ __('No episodes yet. We read your episode list straight from your RSS feed — it appears here within an hour of a new episode going out.') }}
+                        </p>
+                    @endif
+                </x-card>
+            </div>
+
+            {{-- ── YouTube (ML2-lite) ───────────────────────────────────── --}}
+            @include('panel.user.analytics.partials.youtube')
         @endif
     </div>
 @endsection

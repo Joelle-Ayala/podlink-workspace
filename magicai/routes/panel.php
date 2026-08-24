@@ -52,6 +52,7 @@ use App\Http\Controllers\Dashboard\UGCStudioController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\VideoStudioController;
 use App\Http\Controllers\Dashboard\VipStatusController;
+use App\Http\Controllers\Dashboard\YouTubeConnectController;
 use App\Http\Controllers\EmailTemplatesController;
 use App\Http\Controllers\ExportChatController;
 use App\Http\Controllers\Finance\CreditsTransferController;
@@ -131,6 +132,17 @@ Route::middleware(['auth', 'updateUserActivity'])
                 // Podcast Analytics — OP3 (op3.dev) download stats for the user's show
                 Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
                 Route::post('analytics/connect', [AnalyticsController::class, 'connect'])->name('analytics.connect');
+
+                // YouTube channel connect (ML2-lite) — per-episode video views
+                // alongside downloads. Inert until YOUTUBE_CLIENT_ID/SECRET are set.
+                Route::prefix('analytics/youtube')
+                    ->name('analytics.youtube.')
+                    ->controller(YouTubeConnectController::class)
+                    ->group(static function () {
+                        Route::get('connect', 'connect')->name('connect');
+                        Route::get('callback', 'callback')->name('callback');
+                        Route::post('disconnect', 'disconnect')->name('disconnect');
+                    });
 
                 Route::controller(UserController::class)
                     ->prefix('api-keys')
