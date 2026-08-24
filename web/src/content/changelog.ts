@@ -21,6 +21,13 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-08-23",
+    title: "Download Analytics",
+    tag: "New",
+    tier: "Free",
+    body: "See every download, free. Podlink now shows your downloads by episode and by app — live from the open OP3 standard, no migration, no new host. Connect your feed and the numbers are just there.",
+  },
+  {
     date: "2026-08-16",
     title: "The new podlink.ai",
     tag: "Announcement",
