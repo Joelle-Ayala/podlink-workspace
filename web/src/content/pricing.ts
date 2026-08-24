@@ -70,7 +70,7 @@ export const TIERS: PricingTier[] = [
       "Download analytics from OP3, on every episode — no cap, ever",
       "Which apps and countries your listeners are in, and the trend across the show",
       "Your page at podlink.fm/yourshow, updating itself from your feed", // TODO(pricing): unverified limit — v2 §7.1 suggests ~10 links on Free; not decided
-      "Per-episode YouTube views once you connect your channel", // TODO(pricing): unshipped — ships alongside ML2; free placement per v2 §3 ("the only product with both in one view" — claim gated on shipping)
+      "Per-episode YouTube views once you connect your channel — coming soon", // TODO(pricing): unshipped — ships alongside ML2; free placement per v2 §3 ("the only product with both in one view" — claim gated on shipping)
       "One connected show, the same as every plan",
     ],
     cta: { label: "Start free", href: appUrl("/register") },
@@ -91,7 +91,7 @@ export const TIERS: PricingTier[] = [
       "The Episode Content Kit: show notes, titles, description, newsletter and social posts, all written from the transcript",
       "Brand voice filled in from your own feed, so the first draft already sounds like your show",
       "Tracked links and a page per episode, so a share has somewhere to land", // TODO(pricing): unshipped — the loop, v2 §3 puts it in Pro from day one
-      "Episode reports: downloads, page clicks and YouTube views on one page", // TODO(pricing): unshipped — Episode Report v1
+      "Episode reports: downloads and page clicks on one page, plus YouTube views — coming soon", // TODO(pricing): unshipped — Episode Report v1
       "The same content tools inside Claude, over MCP", // TODO(pricing): unshipped — MCP Phase 1
       "Bring an edited transcript from your editing tool and get the kit before you publish", // TODO(pricing): unshipped — import_transcript
       "The template library and multilingual output", // TODO(pricing): unverified limit — ride-along parity features, tier placement never decided
@@ -171,15 +171,15 @@ export const COMPARISON: ComparisonSection[] = [
       },
       {
         label: "YouTube views per episode",
-        values: { free: true, pro: true, studio: true }, // TODO(pricing): unshipped — ML2
+        values: { free: "Soon", pro: "Soon", studio: "Soon" }, // TODO(pricing): unshipped — ML2
       },
       {
         label: "Tracked links and per-episode pages",
         values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — the loop
       },
       {
-        label: "Episode report — downloads, clicks and views together",
-        values: { free: false, pro: true, studio: true }, // TODO(pricing): unshipped — Episode Report v1
+        label: "Episode report — downloads, clicks and YouTube views together",
+        values: { free: false, pro: "Soon", studio: "Soon" }, // TODO(pricing): unshipped — Episode Report v1; "Soon" covers the whole bundled report, not just the YouTube-views component
       },
       {
         label: "Branded reports for clients",
