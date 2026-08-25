@@ -63,3 +63,6 @@ all templates committed · claims matrix v0 · analytics differentiators spec'd.
 
 ## See also (added 2026-08-25)
 claude/WORK-CANON.md is now the full sequenced canon. New on your side since this list: branding voice interview (claude/branding-voice-interview.md - answer by voice memo), asset capture per claude/asset-shot-list.md (or lend a session), admin hygiene (admin email + 2FA + OpenAI key rotation), Stripe activation decisions, social accounts + support inbox, transactional email provider choice.
+
+## 12. TikTok + Meta/Instagram developer app reviews (NEW, calendar-time critical)
+Start both applications early - approval queues are the cost. You will likely need: business identity/verification (legal entity details - note Minting House dissolution status), app privacy policy URL (podlink.ai/legal/privacy), and a demo video of the integration. Claude preps everything prep-able; the identity/verification steps are yours. Flag anything the forms ask that you want drafted.

@@ -54,3 +54,9 @@ flow · password-reset email · terms/privacy/contact exist · error logging · 
 
 **Sequence logic:** A-track runs parallel to B3/C1 and must complete before any paid
 acquisition; D3 starts NOW (clock); C8 last. Nothing in C promises what B1 hasn't verified.
+
+## Amendments 2026-08-25 (ML2/ML3 green light)
+- B3/B4 UPDATE: ml2-lite shipped on main 08-23 (episodes table, EpisodeSyncService, YouTube OAuth+analytics, dashboard reads DB). Remaining engineering scope: transcript pipeline, Show Report, unique(user_id) lift, differentiators, then Twitch -> X per the ML3 verdict (claude/podlink-ml3-build-vs-buy.md; architecture reconciliation in feed-ingestion-show-report-spec.md).
+- B5 CLOSED: drip #1 (Download Analytics) published 08-23 in changelog.ts by the ml2-lite thread.
+- NEW D9 (J): TikTok + Meta app-review applications - start now, calendar-gated (JOELLE-TODO #12).
+- NOTE: Joelle's podcast-analytics-API list (basis for a per-source verdict) is NOT in the project - awaiting re-paste; verdict framework ready in the ingestion spec when it lands.

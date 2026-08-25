@@ -63,6 +63,31 @@ filtering, and OP3 only counts from install date). Log deltas as calibration dat
 itself is publishable research material if sourced carefully. NOTE: one show per account
 until unique(user_id) lifts → three separate accounts/emails.
 
+## ML2/ML3 verdict adopted (2026-08-25 — full report: claude/podlink-ml3-build-vs-buy.md)
+**Reality check first:** the `ml2-lite` commits (08-23, main) already shipped episodes table
++ Episode/PodcastShow models + EpisodeSyncService + YouTube OAuth/analytics services +
+youtube_connections table + the analytics page reading from the DB. Episode persistence v1
+EXISTS; this spec's remaining scope = transcript pipeline, Show Report page, unique(user_id)
+lift, and the differentiators (percentile badge, insights, digest).
+**ML3 architecture (adopted):**
+- Auth layer OWNED, via Laravel Socialite. Target shape: one `social_accounts` table
+  (encrypted tokens) + normalized `video_stats` — platforms swappable DIY↔vendor.
+  RECONCILIATION: `youtube_connections` (ml2-lite) stays as-is for v1; generalize to
+  `social_accounts` when the SECOND platform lands, not before (no churn on a working v1).
+- OP3 untouched; social data meets downloads only on the episode dashboard.
+- Build order: YouTube (ML2, incl. Shorts, free) → Twitch (free Helix, no app review,
+  VOD views) → X DIY (pay-per-use since Feb 2026, ~$45/mo at 100 creators).
+- TikTok Display API + Meta/Instagram app-review applications: START EARLY (cost =
+  calendar time). Anything needing business identity/verification → JOELLE (flagged in
+  JOELLE-TODO).
+- Ayrshare Business ($599/mo, per-creator-profile) = fallback ONLY if TikTok/Meta stall;
+  if ever used, sits behind a paid tier.
+- Kick deferred (no per-VOD analytics yet — recheck ~Feb 2027). Skip Phyllo/Metricool/
+  Data365.
+**Claims-matrix effect:** rows 3/4 (episode persistence/workspace) move NOT SHIPPED →
+PARTIAL in code (metadata sync exists; automatic transcription still absent — row 3's
+copy constraint stands until the transcript pipeline ships).
+
 ## Open questions for Joelle (non-blocking to start)
 - Is the Show Report public-by-default or opt-in per show? (Recommend opt-in, default off.)
 - Transcript STT provider ceiling per episode (cost control) — recommend cap at 90 min audio.
