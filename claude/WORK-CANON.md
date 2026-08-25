@@ -1,0 +1,56 @@
+# WORK CANON — the single to-do list (v1, 2026-08-25)
+**This file supersedes scattered task lists.** JOELLE-TODO.md stays as the founder-facing
+tap-by-tap subset; the frontend plan and handoff point here. Owners: **J** = Joelle-only ·
+**C** = Claude-drivable now · **J→C** = her unlock, then Claude runs.
+**M8 = Launch readiness** (claude/app-handoff-docs/13-launch-milestones…): billing test
+flow · password-reset email · terms/privacy/contact exist · error logging · backups/rollback
+· founder QA. Items marked **[M8]** block launch.
+
+## A. Launch-blocking (sequence first)
+| # | Item | Owner | Notes |
+|---|---|---|---|
+| A1 | Stripe activation + end-to-end signup→payment test [M8] | J→C | Admin ladder to Pro $29 first (J), then a real test purchase + refund; C can drive the test via lent session |
+| A2 | Real legal pages before charging [M8] | J→C | /legal/* are noindex placeholders; C drafts from templates, J/counsel approves |
+| A3 | Transactional email/SMTP (password reset works) [M8] | J→C | Pick provider (Postmark/SES), J creates account, C configures MagicAI mailer + tests |
+| A4 | Admin account hygiene: admin email, 2FA, OpenAI key rotation [M8] | J | Credentials = hers by rule |
+| A5 | Error logging + backups/rollback documented [M8] | C | Railway/Laravel config + runbook doc |
+| A6 | Customize MagicAI SaaS features in admin (her item 1) | J→C | Feature visibility/gating per tier spec; C specs the exact toggle list, J clicks (or lends session) |
+| A7 | Customize Biolink features in admin (her item 2) | J→C | Same pattern |
+| A8 | Founder mobile/desktop QA pass [M8] | J | Last, after A1–A7 |
+
+## B. Truth + analytics (the credibility spine)
+| # | Item | Owner | Notes |
+|---|---|---|---|
+| B1 | Claims-truth verification in app (matrix v0 → final) | J→C | Lent desktop session; her item 3's client demo show on OP3 doubles as this |
+| B2 | Megaphone side-by-side: 3 client accounts + OP3 prefix (her item 3) | J | JOELLE-TODO #4; feeds B1 + calibration |
+| B3 | Engineering thread: episode persistence + transcript pipeline + unique(user_id) lift | C | Green-lit; spec ready; gates Studio/report/index-flip |
+| B4 | Analytics level-up: ML2 YouTube + richer reports/APIs (her item 4 — appetite CONFIRMED) | C | = the differentiators section (percentile badge, insights v1, digest) + ML2; fold into B3 thread |
+| B5 | Drip #1 click-verify → publish | J→C | 2 min; then changelog ships |
+| B6 | Producer-universe count | J→C | Needs PI key (JOELLE-TODO #7) or dump route |
+
+## C. Site + copy (in the committed order)
+| # | Item | Owner | Notes |
+|---|---|---|---|
+| C1 | Services pages befores/afters → sign-off → ship | C→J→C | Next in audit order; voice guide binding |
+| C2 | Feature pages template application (incl. deep RED fixes) | C→J→C | After services |
+| C3 | Tranche-2 applications: case studies ×18, /contact, /pricing | C→J→C | Contact needs C4/C5 |
+| C4 | Contact form backend + endpoints (her item 7) | J→C | Decide: form provider vs. Laravel endpoint; C builds once decided |
+| C5 | Booking URL + response-time promise (her item 7) | J | Two one-liners |
+| C6 | Branding voice interview → voice-guide TODOs closed (her item 5) | J→C | Question list: claude/branding-voice-interview.md — voice memo is fine |
+| C7 | Product videos/images per template slots (her item 6) | J→C | Shot list: claude/asset-shot-list.md; capture via lent session possible |
+| C8 | /pricing index flip | C | Checklist in pricing-page-template.md; gated on B1/B3 + v2 §7 decisions |
+
+## D. Channels + infra
+| # | Item | Owner | Notes |
+|---|---|---|---|
+| D1 | GSC verify + sitemap submit + Bing import | C | Desktop Chrome now restored — pending one go-ahead |
+| D2 | www redirect (Cloudflare) | J or C | 3 min; C can attempt now that window is restored |
+| D3 | Sending domains + warm-up (75-day clock) | J | JOELLE-TODO #8 — most time-critical J item |
+| D4 | MCP branch review + deploy test → merge → directory listing prep | C | Ships WITH Pro; "first podcast MCP" claim gated on listing |
+| D5 | Social accounts for footer + support inbox | J | Which platforms + one support address |
+| D6 | v2 §7 decisions (Free caps / trial / Studio overage) | J | Three yes/nos |
+| D7 | cPanel rotation · Spotify payout | J | Standing |
+| D8 | app.podlink.ai cleanup middleware — verify deployed | C | RedirectLegacyMarketing committed by other thread; verify live |
+
+**Sequence logic:** A-track runs parallel to B3/C1 and must complete before any paid
+acquisition; D3 starts NOW (clock); C8 last. Nothing in C promises what B1 hasn't verified.

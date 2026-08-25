@@ -60,3 +60,6 @@ fresh. Until then app.podlink.ai shows a duplicate marketing site w/ minting-hou
 Done recently (no action): services bundle live · Pricing v2 adopted + live · /studio page ·
 nav CTA flip (Start free primary) · GA4 (G-6BJQCTFXZZ) · MCP server on review branch ·
 all templates committed · claims matrix v0 · analytics differentiators spec'd.
+
+## See also (added 2026-08-25)
+claude/WORK-CANON.md is now the full sequenced canon. New on your side since this list: branding voice interview (claude/branding-voice-interview.md - answer by voice memo), asset capture per claude/asset-shot-list.md (or lend a session), admin hygiene (admin email + 2FA + OpenAI key rotation), Stripe activation decisions, social accounts + support inbox, transactional email provider choice.
