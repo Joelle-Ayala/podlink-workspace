@@ -8,7 +8,14 @@ intelligence about OTHER shows = services/research layer, licensed, never silent
 Verdicts: USE (services-team tool) · INTEGRATE (API into product, terms-gated) ·
 COPY (build ourselves) · SKIP (with reason).
 
-## USE — services-team tools now
+## ⛔ PURCHASE HOLD — founder decision 2026-08-25
+All tool purchases below are ON HOLD: no Pod Engine / Podchaser / Particle / Rephonic
+trials or subscriptions until Joelle says buy. Verdicts stand as **approved-to-buy-later,
+on her word** — when she green-lights, start with the Pod Engine $75 trial per the
+recommendation below. Nothing in this hold blocks the now-plan (all engineering items run
+on free/owned data: OP3, Podcast Index, RSS, YouTube OAuth).
+
+## USE — services-team tools (approved-to-buy-later, ON HOLD)
 | Vendor | What | Cost | Notes |
 |---|---|---|---|
 | **Particle** (particle.pro) | 100k+ shows transcribed/diarized in minutes; entity search; SPONSORSHIP INTEL (every ad read→brand); Apple Top 200 ×130+ verticals; MCP server | ~$0.01/req, $10 free | Sponsor prospecting + booking research; MCP into the team's Claude today. INTEGRATE later: sponsor-intel in media kit + P4 lanes (⚠️ verify API ToS resale) |

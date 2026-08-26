@@ -68,3 +68,11 @@ acquisition; D3 starts NOW (clock); C8 last. Nothing in C promises what B1 hasn'
 - NEW C9: Media Kit feature (sponsor-facing, OAuth-only sources) - spec at claude/media-kit-demographics-spec.md; sequences after ML2-expanded + Biolink stats, feeds the sponsorship line.
 - NEW roadmap item: podcast rankings tracking (chart-position history - the dead Chartable feature); Spotify public charts + Apple category charts, terms verification gated; Later.
 - Audio-listener demographics (survey tool): open non-blocker, deliberately not specced.
+
+## EXECUTION ORDER LOCKED - founder decision 2026-08-25 (the now-plan)
+1. Transcript pipeline - #1 engineering priority (gates Episode Report, insights v1, MCP v1.1, index flip).
+2. ML2 YouTube demographics expansion (per media-kit-demographics-spec.md; verify API dimensions at build).
+3. TikTok + Meta app-review submissions - Claude preps everything (scope names, application text, privacy-policy URL, demo plan) up to the fields needing her business identity, then hands off.
+4. MCP branch review + deploy test (branch mcp-server), then v1.1 transcript tools.
+5. Template applications + copy rewrites continue in the committed audit order (services -> features -> tranche 2).
+VENDOR PURCHASES: ALL ON HOLD (podcast-data-vendors.md header) - approved-to-buy-later on her word; Pod Engine $75 first when released.
