@@ -60,3 +60,11 @@ acquisition; D3 starts NOW (clock); C8 last. Nothing in C promises what B1 hasn'
 - B5 CLOSED: drip #1 (Download Analytics) published 08-23 in changelog.ts by the ml2-lite thread.
 - NEW D9 (J): TikTok + Meta app-review applications - start now, calendar-gated (JOELLE-TODO #12).
 - NOTE: Joelle's podcast-analytics-API list (basis for a per-source verdict) is NOT in the project - awaiting re-paste; verdict framework ready in the ingestion spec when it lands.
+
+## Amendments 2026-08-25 (later) - demographics + media kit directives
+- HARD RULE: no import flows in the product, ever - OAuth-consented API data only (CSV/screenshot import ideas are dead).
+- ML2 scope EXPANDED: YouTube demographics (age/gender/geo, watch time, traffic sources; channel+video, thresholds apply) = primary automated audience-demographics source. Verify API dimensions/quotas at build time.
+- D9 amended: TikTok/Meta applications request insight scopes day one (JOELLE-TODO #12 amendment).
+- NEW C9: Media Kit feature (sponsor-facing, OAuth-only sources) - spec at claude/media-kit-demographics-spec.md; sequences after ML2-expanded + Biolink stats, feeds the sponsorship line.
+- NEW roadmap item: podcast rankings tracking (chart-position history - the dead Chartable feature); Spotify public charts + Apple category charts, terms verification gated; Later.
+- Audio-listener demographics (survey tool): open non-blocker, deliberately not specced.

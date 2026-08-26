@@ -66,3 +66,6 @@ claude/WORK-CANON.md is now the full sequenced canon. New on your side since thi
 
 ## 12. TikTok + Meta/Instagram developer app reviews (NEW, calendar-time critical)
 Start both applications early - approval queues are the cost. You will likely need: business identity/verification (legal entity details - note Minting House dissolution status), app privacy policy URL (podlink.ai/legal/privacy), and a demo video of the integration. Claude preps everything prep-able; the identity/verification steps are yours. Flag anything the forms ask that you want drafted.
+
+### #12 amendment (2026-08-25): request insight scopes DAY ONE
+TikTok Display + Meta/Instagram applications must request audience/follower-insight permissions (age/gender/territory) in the FIRST submission so we never re-apply. Claude verifies the exact scope names for current API versions and preps the application text; you supply business identity/verification.
