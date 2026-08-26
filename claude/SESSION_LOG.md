@@ -18,3 +18,6 @@ analytics differentiators spec'd · JOELLE-TODO.md.
 
 Next per committed order: services pages under the same lens (befores/afters →
 sign-off → ship), engineering thread (episode persistence + unique(user_id) lift).
+
+## 2026-08-26 morning (mobile CoS thread)
+Services copy audit v1 delivered (best copy on site; 1 price bug fixed live; S1-S4 sign-off items queued). MCP branch code review DONE: high quality, spec-faithful, one deploy blocker (composer.lock not committed) + Passport-guard verification note - claude/mcp-branch-review.md. Overnight from other thread: MCP directory launch plan doc. Awaiting Joelle: S1-S3 approvals, JOELLE-TODO list (desktop sitting still #1).
