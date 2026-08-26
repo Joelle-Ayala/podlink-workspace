@@ -71,3 +71,5 @@ Then the 8 feature pages per feature-page-template.md.
 | Service | Hero asset | Proof-card imagery |
 |---|---|---|
 | all 6 | TODO(asset) montage/results visual | number-led, no image required |
+
+**Component sourcing:** the lego workflow rules in feature-page-template.md apply here identically (patterns in, dependencies out, license-checked, restyled to tokens).

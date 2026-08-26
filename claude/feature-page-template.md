@@ -86,3 +86,12 @@ upgraded page.)
 | Feature | Hero asset | Step visuals | Video |
 |---|---|---|---|
 | all 8 | TODO(asset) ScreenshotFrame | TODO(asset) | none yet — no VideoObject |
+
+## Component sourcing - the lego workflow (adopted NARROWLY, 2026-08-25)
+Verdict on the viral component-library workflow: our situation inverts the thread's premise - podlink.ai already HAS its curated lego set (the brand-locked ~20-component system + services section library; Tailwind v4, zero runtime deps beyond React/Next). The genuine gap is ~6 structural sections (zig-zag deep-dive, timeline, trust strip, fit-qualifier, upgraded FAQ accordion, step visuals).
+RULES: patterns in, dependencies out.
+- COPY structure + accessibility patterns from MIT sources, re-implement in our tokens: ui.shadcn.com (a11y/ARIA reference), transitions.dev FREE tier (CSS-only micro-transitions - its grid-rows accordion is the FAQ pattern; respects reduced-motion), magicui.design (static marketing blocks only).
+- ZERO new runtime deps (Motion/Radix/etc.) without founder sign-off - most libraries in the thread are Motion-dependent, and the visual spec allows motion only where it demonstrates product.
+- Restyle 100 percent to tokens (Poppins, orange-CTA-only, ink-on-orange contrast law, 8pt, CLS-safe explicit dims). A component that fights the globals gets rebuilt, not patched.
+- LICENSE CHECK per source before any code lands (all adopted sources above are MIT/free-tier). PAID sources (shadcnblocks, transitions.dev Pro, Mobbin, aceternity Pro) fall under the standing purchase hold.
+- SKIPPED with reasons: aceternity (Motion-heavy neon aesthetic fights the brand) - rareui (novelty decoration) - beautifului.dev + elements.ai-sdk.dev (AI-chat primitives: irrelevant to marketing, NOTED for future app/MCP-side UI) - Mobbin (inspiration subscription, no code, hold).
