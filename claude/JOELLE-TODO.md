@@ -69,3 +69,6 @@ Start both applications early - approval queues are the cost. You will likely ne
 
 ### #12 amendment (2026-08-25): request insight scopes DAY ONE
 TikTok Display + Meta/Instagram applications must request audience/follower-insight permissions (age/gender/territory) in the FIRST submission so we never re-apply. Claude verifies the exact scope names for current API versions and preps the application text; you supply business identity/verification.
+
+## 13. Two GTM decisions from the 8-lever analysis (NEW) - 1 min each
+(a) Agency channel: white-label reports + rev-share on Pro seats - yes/no? (KMG history says wholesale margins were thin; terms matter more than the yes.) (b) ML2 YouTube-analytics beta: dual-publisher waitlist + founding pricing framing - yes/no? Full analysis: claude/growth-plan-8-levers-verdict.md.

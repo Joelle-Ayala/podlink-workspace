@@ -113,12 +113,48 @@ the first crawl costs a full re-crawl later.**
   human-edited replies at 5.1% vs 3.8% fully-human and 2.4% fully-automated
   (Lavender, 100M emails).
 
+## 4c. Amendments (2026-08-25 — the 8-lever plan absorbed; full analysis in
+`growth-plan-8-levers-verdict.md`)
+
+An external 8-lever growth plan was analyzed lever-by-lever. Most of it already
+existed here in stronger form; these pieces are ADOPTED into this canon (one
+plan, no fork):
+
+- **§3 pipeline gains four signal triggers:** new-YouTube-upload ↔ RSS
+  cross-match (finds dual publishers — also the ML2 beta waitlist source), OP3
+  threshold crossings, sponsor mentions in notes, public competitor-complaint
+  mining for personalization. Displacement copy only via evidence-verified gaps.
+- **Activation gate (instrument now):** week-1 activation = feed connected +
+  YouTube connected + first report viewed. Outbound automation scales only
+  when free-tier week-1 activation clears ~40–50%. Concierge onboarding is
+  post-payment or ≤15 min on Pro; full concierge = Studio/services lanes.
+- **Every artifact ships shareable:** public link + "Powered by podlink.ai"
+  one-click-signup badge on kits/reports/media kits; anonymized cohort
+  benchmarks as the switching cost. (Folded into the report/media-kit specs.)
+- **§6 gains standing rules:** <3-month payback on any channel; weekly
+  unit-econ dashboard (CAC by channel, free→connected→generated→paid,
+  30/60/90 retention) from the first cold-email batch.
+- **ML2 launches as a tentpole:** dual-publisher waitlist → private beta →
+  scarcity push, inside the existing drip/tentpole structure.
+- **Revenue reality check (unit math, 2026-08-25):** $10k MRR = 345 Pro units
+  at sticker (517 at annual-effective). The defensible target is **$2–3k MRR
+  by month 6; $10k at month 15–24**, contingent on Studio shipping and GRR
+  proving out. Sending capacity (2 domains, 75-day clock) is the binding
+  constraint on every outbound number — the domains task is the most
+  time-critical human item in the company.
+- **Explicitly rejected:** $40–60 blended ARPA before Studio exists; 2–4k
+  sends/day in months 1–2; concierge on the automated Pro lane.
+
 ## 5. Decisions only Joelle can make
 
-1. **Pro at $19 (what you decided Aug 17) or $29 (what the competitive
-   research supports)?** Must be decided *before* the MagicAI admin fix.
-2. **Clips: keep "Creator" as a $39–49 tier, or demote to a $20 add-on?**
-   (Same decision moment as #1.)
+1. ~~Pro $19 vs $29~~ **CLOSED 2026-08-20: Pricing v2 adopted — Pro $29.**
+   (Admin fix now unblocked, still pending — JOELLE-TODO #3.)
+2. ~~Clips tier vs add-on~~ **CLOSED 2026-08-20: $20 add-on; Creator tier
+   retired.**
+2b. **NEW (from the 8-lever analysis):** white-label/rev-share structure for
+   the agency channel — yes/no and terms (must clear the KMG wholesale-economics
+   history). And: beta-waitlist go + founding-pricing framing for the ML2
+   tentpole — yes/no.
 3. **Producer directory: build on `podlink.fm/directory` (already indexed) or
    fresh on podlink.ai?** (Recommendation: podlink.ai.)
 4. Confirm the trial rule: 14 days free / 30 with purchase.

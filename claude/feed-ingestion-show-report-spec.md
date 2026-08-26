@@ -91,3 +91,8 @@ copy constraint stands until the transcript pipeline ships).
 ## Open questions for Joelle (non-blocking to start)
 - Is the Show Report public-by-default or opt-in per show? (Recommend opt-in, default off.)
 - Transcript STT provider ceiling per episode (cost control) — recommend cap at 90 min audio.
+
+## 8-lever absorption (2026-08-25, gtm-plan 4c)
+- Pipeline scoring adds four signal triggers: YouTube-upload/RSS cross-match (dual-publisher flag - also the ML2 beta waitlist source), OP3 threshold crossings, sponsor mentions, competitor-complaint signals.
+- Show Report + every generated artifact: public share link + "Powered by podlink.ai" one-click-signup badge + anonymized cohort benchmark line ("top X% for YouTube conversion among shows your size") - the switching-cost layer.
+- Activation instrumentation: week-1 activation event chain (feed connected -> YouTube connected -> first report viewed) tracked from day one; gates outbound automation per gtm-plan 4c.
