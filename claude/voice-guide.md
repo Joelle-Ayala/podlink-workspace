@@ -83,6 +83,7 @@ Voice-of-customer verbatims are load-bearing (personas doc, real threads):
 | Clip selection informed by your own analytics | Podlink-only edge per spec — UNSHIPPED | FUTURE-TENSE ONLY |
 | "You don't need 20,000 downloads to be sponsorable — you need the right audience, proven" | personas §2 monetization-lockout, sourced | YES (services side) |
 | First podcast MCP in the connectors directory | claimable ONLY after listing is live (standing rule) | NOT YET |
+| "Talk to your podcast, not just your analytics" — your show's transcripts + analytics + voice, queryable from your own Claude | MCP v1.1 transcript tools (PODLINK-MCP-SCOPING.md amendment) — UNSHIPPED | FUTURE-TENSE ONLY |
 
 ## 3. Banned phrases & patterns
 **Words:** seamlessly · streamline · unlock · supercharge · revolutionize · game-changing ·
@@ -124,3 +125,4 @@ propaganda") · synergy-anything · reach multipliers (CVS lesson, personas §3)
 - `TODO(voice)`: percentile-table source verification (shared gate with ingestion spec).
 - `TODO(voice)`: confirm the "five years" delivery span phrasing against the evidence
   brief's date range (Canva job numbers run Dec 2021–Sep 2023; "since 2021" is the safe form).
+
