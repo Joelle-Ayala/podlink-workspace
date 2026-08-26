@@ -53,3 +53,5 @@ None of these touches the OP3/OAuth backbone.
 - Every ⚠️ above is a BUILD-TIME verification step — record findings in this doc.
 - Claims rule: no demographics claim on marketing surfaces until the pull works against a
   real connected account (Megaphone client shows + Joelle's channels are the test data).
+
+**2026-08-25 later:** full 12-vendor list consolidated in claude/podcast-data-vendors.md (canonical) - includes Pod Engine ($75/mo, the value pick), Taddy/Listen Notes/host APIs skipped, Spotify no-API finding confirmed.
