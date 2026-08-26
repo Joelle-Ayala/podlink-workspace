@@ -46,3 +46,11 @@ a podlink.fm page; check what actually persists). Record: works / works-with-con
 No claim without primary source now explicitly includes CAPABILITY claims. The drip
 calendar's verify-then-announce rule is the same law: never announce (or keep live) what
 hasn't been clicked.
+
+## App-verified pass 1 - 2026-08-26 (lent admin session, desktop window)
+- Row 1 Analytics: VERIFIED SHIPPED. Page live, real feed connected (New Heights/Megaphone test feed), honest waiting-for-prefix empty state exactly per M5 spec. Real numbers light up when the client shows get the prefix (JOELLE-TODO 4).
+- Rows 5/6/10 Generation/templates: VERIFIED SHIPPED. Episode Title Generator exercised live - output streamed correctly from manual input. Podcast template pack present (show notes, titles, etc.). Include-Your-Brand toggle present on generators.
+- Row 7 Brand voice: VERIFIED PARTIAL. Brand Voice feature exists (manual company setup, integrates into generators via toggle). "Filled in from your own feed" is NOT shipped - pricing.ts line needs a TODO(pricing): unshipped marker or copy soften. QUEUED as copy fix.
+- Row 8 Clips: CONFIRMED NOT SHIPPED - no clip tool anywhere in the user dashboard (AI Video is stock video-gen, not episode clipping). Homepage fixes already shipped; feature-page body fixes queued.
+- Row 2 podlink.fm page: My Podlink Page nav exists; full provisioning flow untested this pass.
+- ADMIN FINDING: plans table contains ONLY Free ($0/monthly, updated 08-16). Old inverted paid rows were DELETED - no paid SKU exists, therefore NO legacy $19 subscribers, no grandfathering question. The admin fix is purely additive: create Pro $29/$232 + reset_credits_on_renewal.

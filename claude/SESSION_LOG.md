@@ -21,3 +21,6 @@ sign-off → ship), engineering thread (episode persistence + unique(user_id) li
 
 ## 2026-08-26 morning (mobile CoS thread)
 Services copy audit v1 delivered (best copy on site; 1 price bug fixed live; S1-S4 sign-off items queued). MCP branch code review DONE: high quality, spec-faithful, one deploy blocker (composer.lock not committed) + Passport-guard verification note - claude/mcp-branch-review.md. Overnight from other thread: MCP directory launch plan doc. Awaiting Joelle: S1-S3 approvals, JOELLE-TODO list (desktop sitting still #1).
+
+## 2026-08-26 - THE DESKTOP SITTING (window seized)
+CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discovered). podlink.fm VERIFIED (TXT added via Cloudflare, auto-verified). Bing Webmaster: signed in via Google SSO, GSC import completed - podlink.ai + podlink.fm + sitemap in. www.podlink.ai FIXED: was WP Engine SaaS-hostname interception (her zone rules could not fire); solution = www added to Vercel project as 301->apex + Cloudflare www repointed CNAME cname.vercel-dns.com DNS-only; verified 301 w/ path+query preserved. Claims verification pass 1 run in lent admin session (see claims audit). Admin plans: only Free exists - fix is additive. Task 9 (GA4/GSC/Bing) COMPLETE.
