@@ -123,3 +123,8 @@ MCP entitlement principle).
   genuine NEW entry.
 - The honesty rule applies to the data: show contact cards display WHERE each
   contact came from (feed / site / verified) — provenance as a feature.
+
+## Addendum 2026-08-25 - vendor verdicts affecting the waterfall (see media-kit-demographics-spec.md 3b)
+- Rephonic ($299/mo): podcast-specific contact DB with community-verified votes - candidate ALTERNATIVE or supplement to the Snov step for show contacts; resale terms verification required (same legal gate as Snov, section 6.1).
+- Podchaser Starter/Pro: credits/guest graph is unique booking-research data but ToS FORBIDS resale/redistribution below Enterprise - services-team tool only; never behind product endpoints without Enterprise terms.
+- Particle (~$0.01/req): sponsorship intel (which brands buy which shows) = the P4 sponsor-lane data source candidate; ToS verification pending. Its MCP server can be added to the services team's Claude TODAY for manual-era research.
