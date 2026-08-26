@@ -306,7 +306,7 @@ export const services: Service[] = [
     relatedSlugs: ["podcast-editing", "podcast-growth", "get-booked-on-podcasts"],
     metaTitle: "Podcast Clips & Short-Form Video | Podlink",
     metaDescription:
-      "Two branded, captioned short-form clips per episode in portrait and landscape, with social copy written to post. From $300 per episode.",
+      "Two branded, captioned short-form clips per episode in portrait and landscape, with social copy written to post. From $250 per episode.",
   },
 
   // -------------------------------------------------------------------------
