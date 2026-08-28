@@ -1,0 +1,42 @@
+# Podlink
+
+> Podlink is podcast analytics, a link-in-bio page, and an AI content kit in
+> one subscription. Download numbers come from OP3, the open, independently
+> checkable measurement standard — numbers a sponsor can verify. Connect your
+> RSS feed; no host migration, ever.
+
+Podlink also runs done-for-you services: podcast editing, clips, sponsorship
+sales, guest booking, advertising, and growth.
+
+## Product
+
+- [Home](https://podlink.ai/): what Podlink does, for podcasters and producers
+- [Features](https://podlink.ai/features): download analytics, AI show notes,
+  clips and social, transcripts, templates, newsletter, link-in-bio
+- [Studio](https://podlink.ai/studio): for producers and agencies running
+  multiple shows
+
+## Services
+
+- [Services overview](https://podlink.ai/services)
+- [Podcast editing](https://podlink.ai/services/podcast-editing)
+- [Podcast clips](https://podlink.ai/services/podcast-clips)
+- [Podcast sponsorship sales](https://podlink.ai/services/podcast-sponsorship)
+- [Get booked on podcasts](https://podlink.ai/services/get-booked-on-podcasts)
+- [Podcast advertising](https://podlink.ai/services/podcast-advertising)
+- [Podcast growth](https://podlink.ai/services/podcast-growth)
+- [Client work](https://podlink.ai/work): verified placements and case studies
+
+## Connect an AI assistant
+
+Podlink runs an MCP (Model Context Protocol) server, so podcasters can connect
+their show to Claude or other MCP clients and ask about their own analytics —
+downloads, top listening apps, recent episodes — read-only, over OAuth, scoped
+to their own account.
+
+- [Podlink MCP](https://podlink.ai/features/mcp): what it does and how to
+  connect
+
+## Contact
+
+- [Contact](https://podlink.ai/contact) · support@podlink.ai

@@ -81,3 +81,18 @@ already live and e2e-verified. If you say "start the clock": (a) buy the minimum
 Claude Team org (submission portal requires it), (b) give me a privacy-policy URL
 green light (I draft, you approve - it also unblocks TikTok/Meta #12), (c) name a
 support address. I ship rate limits + demo account + setup-docs this week either way.
+UPDATE 08-27: clock STARTED on your word. Support address = support@podlink.ai (decided).
+Privacy policy DRAFTED and live at podlink.ai/legal/privacy — review it; your green light
+is one of the two remaining gates (the other is the Team org purchase).
+
+## 15. Three 2-minute mailbox/calendar taps (NEW 2026-08-27)
+(a) support@podlink.ai mailbox: podlink.ai mail is Google Workspace (MX verified) - in
+Google Admin, add "support" as an ALIAS on your user (free, 1 min) or a group. Until it
+exists, mail to it bounces - it's now on /legal/privacy and submission materials.
+(b) HubSpot meetings link: you have NO active scheduling page (portal 20159837 checked;
+all public slugs 404). In HubSpot: Sales -> Meetings -> Create scheduling page -> connect
+your Google Calendar -> pick a slug (suggest "podlink"). Send me the link and /contact
+flips from mailto to the calendar as primary the same hour ("I'd not just do email" -
+this is the missing piece).
+(c) Optional, helps me see HubSpot data: Settings -> AI -> enable "Customer conversation
+data" (their AI access toggle currently blocks meeting/conversation reads).

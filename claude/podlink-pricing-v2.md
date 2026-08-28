@@ -247,14 +247,15 @@ for, with citable numbers behind every figure.
 ---
 
 ## 7. Open items before `/pricing` ships
-
-1. **Set concrete Free limits** — the 27 `TODO(pricing)` markers still need real
-   values. Recommendation: unlimited analytics history, bio link capped at ~10
-   links, no episode report (that's the reverse trial's job).
-2. **Reverse trial mechanics** — 14 days full Pro on signup, then drop to Free.
-   This is what stops the RB2B 0.2% failure.
-3. **Studio overage price** — suggest $2/episode over 40, capped so no one gets
-   a surprise. Bill shock is the #1 documented agency-tier complaint.
+**DECISIONS 1–3 CLOSED by Joelle 2026-08-27 (all YES to the recommendations):**
+1. **Free limits — DECIDED:** unlimited analytics history, bio link capped at
+   ~10 links, NO episode report on Free (reverse trial's job). The 27
+   TODO(pricing) markers resolve against these values.
+2. **Reverse trial — DECIDED:** 14 days full Pro on signup, then drop to Free.
+3. **Studio overage — DECIDED:** $2/episode past 40, HARD-CAPPED (no surprise
+   bills). Cap amount to state on the page when implemented.
+Items 4–6 below remain open (4 = Joelle's admin fix, 5 = unique(user_id)
+schema, 6 = Podsqueeze re-verify).
 4. **Fix the inverted tiers in the MagicAI admin first.** Creator $19 / Pro $49
    is still live and publicly indexable. Plan rows drive Stripe — admin only,
    never Stripe directly. And set `reset_credits_on_renewal` per plan.

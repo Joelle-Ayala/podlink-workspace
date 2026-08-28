@@ -50,6 +50,7 @@ export default function ContactPage() {
             {contact.secondaryCta}
           </CtaButton>
         </div>
+        <p className="mt-6 text-sm opacity-70">{contact.replyPromise}</p>
       </Section>
 
       <Section>

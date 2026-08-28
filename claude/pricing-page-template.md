@@ -29,7 +29,7 @@ argument and v2 §6 prescribes the stack-replacement lead.
 ## Index-flip checklist (ALL required before removing noindex)
 - [ ] Zero `TODO(pricing)` markers of either type in content/pricing.ts
 - [ ] Claims matrix: every table row SHIPPED or removed
-- [ ] Free-tier caps decided (v2 §7.1) · reverse-trial decided (§7.2) · Studio overage (§7.3)
+- [x] Free-tier caps decided (v2 §7.1: ~10 bio links, no episode report, unlimited history) · reverse-trial decided (§7.2: 14-day full Pro → Free) · Studio overage (§7.3: $2/ep past 40, hard-capped) — ALL DECIDED 2026-08-27
 - [ ] MagicAI admin ladder matches the page exactly (Joelle's admin fix)
 - [ ] Re-add /pricing to sitemap.ts (uncomment note is in that file)
 
