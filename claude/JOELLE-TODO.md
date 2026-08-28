@@ -72,3 +72,12 @@ TikTok Display + Meta/Instagram applications must request audience/follower-insi
 
 ## 13. Two GTM decisions from the 8-lever analysis (NEW) - 1 min each
 (a) Agency channel: white-label reports + rev-share on Pro seats - yes/no? (KMG history says wholesale margins were thin; terms matter more than the yes.) (b) ML2 YouTube-analytics beta: dual-publisher waitlist + founding pricing framing - yes/no? Full analysis: claude/growth-plan-8-levers-verdict.md.
+
+## 14. MCP directory: "start the clock"? (NEW 2026-08-27) - 1 min decision + 2 taps
+The growth research (claude/mcp-growth-research-podlink.md) flips the D-1 recommendation
+to SUBMIT EARLY: reviews run 2wk-1mo+ in silence; the listing is a multiplier, not a
+prerequisite; the "podcast analytics connector" window is ~1-2 quarters. The server is
+already live and e2e-verified. If you say "start the clock": (a) buy the minimum-seat
+Claude Team org (submission portal requires it), (b) give me a privacy-policy URL
+green light (I draft, you approve - it also unblocks TikTok/Meta #12), (c) name a
+support address. I ship rate limits + demo account + setup-docs this week either way.

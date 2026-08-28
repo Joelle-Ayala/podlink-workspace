@@ -170,6 +170,77 @@ The MCP listing going live (§3 step 7) is **LinkedIn launch #1** — the offer 
 5. Support address one-liner (D5).
 6. LinkedIn launch-#1 asset prep (§7: 1-page doc, post + gate copy, DM drafts, video script) — C-drivable now; video recording and paid-creator unhold are hers.
 
+## AMENDMENT 2026-08-27 — growth-research adoption (founder-directed)
+**Source:** claude/mcp-growth-research-podlink.md (completed research task; sourced).
+**Where this section conflicts with the 08-25 plan above, THIS governs.**
+
+### A. Corrections to the plan's premises
+1. **"Podcast slot is empty" is FALSIFIED.** Descript, Transistor, Riverside,
+   Castmagic and Springcast have all shipped podcast MCPs; Springcast claims
+   "first podcast platform with MCP". The 08-25 catalog-mirror check missed
+   non-directory MCPs. **BUT the position is still open where it matters:** every
+   shipped MCP clusters on hosting/editing ACTIONS; nobody owns analytics.
+   **New claim (voice-guide updated): "the podcast analytics connector."**
+   Buzzsprout has nothing. Window estimate: ~1–2 quarters. All §4/§6 "first
+   podcast MCP" copy variants are RETIRED; the scoped directory-first forms
+   survive only if re-verified on listing day.
+2. **Listing is a multiplier, not a prerequisite (QRflows: 1+ month review
+   silence, server fully usable as a custom connector throughout).** The §3
+   sequencing that holds distribution until the listing is wrong-shaped: the
+   custom-connector funnel (server URL + setup-docs + OAuth — ALL LIVE as of
+   2026-08-27) is a launchable channel today.
+
+### B. Adopted patterns (build acceptance criteria where marked ★)
+1. **Free-read MCP as acquisition.** Analytics + episode reads free on ALL
+   plans, metered against plan limits — never paywall the connection.
+   Transcripts/exports/write tools = paid gate. ★ v1.1+ tools must declare
+   their gate tier in PODLINK-MCP-SCOPING.md before build.
+2. **Submit early, expect silence.** D-1 RECOMMENDATION UPDATE below. Also
+   submit to the ChatGPT apps directory (open since Dec 2025, 900M WAU) and
+   list on PulseMCP / Glama / Smithery / mcpservers.org (free, self-serve,
+   favor free tiers — C-drivable once setup-docs page exists).
+3. **Pre-empt known rejection causes.** ~30% of rejections = missing
+   annotations — ★ DONE 2026-08-27 (75b1a80fe: title + readOnlyHint on all v1
+   tools). Still open: ★ read/write tool split stays absolute (no combined
+   tools, ever) · Streamable HTTP ✓ · PKCE S256 ✓ · protected-resource
+   metadata ✓ · privacy policy (J) · ★ demo account pre-loaded with a
+   realistic podcast so NO tool ever returns an empty array for the reviewer ·
+   ★ docs page with 3+ example prompts a reviewer can run in 10 minutes.
+4. **First-tool-call wow.** ★ v1.1 scope addition: a zero-setup summary tool
+   ("how your last 5 episodes did + what's unusual") — directory conversion is
+   won at first connect. Spec before transcript tools land; may compose from
+   existing reads.
+5. **Rate limits + circuit breakers from day one.** ★ BLOCKING before
+   submission: per-user and per-tool rate limits on /mcp, session call
+   budgets, circuit breaker on repeated identical calls, daily hard caps.
+   (Documented $47K agent-loop burn; a loop eating a customer's plan quota is
+   an angry-churn event.) Was "before listing" in §5 — now before SUBMISSION.
+6. **Least-privilege as marketing.** Post-Asana-leak (~1,000 orgs cross-tenant),
+   "read-only scopes, per-user OAuth, tenant isolation tested" goes IN the
+   listing copy and docs page — it's a differentiator, not boilerplate. Our
+   tenancy double-assert + safeText() already pass; say so plainly.
+7. **Transcripts = the retention moat, ship as fast-follow.** Analytics gets
+   us listed; searchable transcript archive behind OAuth is what makes the
+   connector irreplaceable ("prompts are portable; archives are not").
+   Confirms canon order: transcript pipeline stays engineering #1.
+8. **Marketing surfaces:** /claude (or /features/mcp as-is) landing page ·
+   llms.txt on podlink.ai · numbers post (Rondot format, real numbers only) ·
+   pitch into "best MCP for podcasters" roundups. Competitors' pattern
+   (mcp.transistor.fm, castmagic.io/claude) validates the dedicated page.
+
+### C. D-1 RECOMMENDATION UPDATE (for Joelle — decision still hers)
+The research argues for the **accelerated variant**: submit the v1
+analytics-only server NOW. Reasons: (a) review clock is 2wk–1mo+ of silence —
+it should run in parallel with the transcript pipeline, not after it;
+(b) the listing is a multiplier, not a prerequisite — nothing else waits on
+it; (c) the analytics category window (~1–2 quarters) is the scarce asset,
+and the transcript-enriched listing copy can be EDITED into the listing
+later. Remaining prerequisites are the same short list either way:
+rate limits (C, code) · demo account (C, on the B2 show) · setup-docs page
+(C, in progress) · privacy policy URL (J) · Team org (J) · support address (J).
+**Recommendation: say "start the clock" and the C-side prerequisites ship
+this week; submission happens the day your Team org + privacy policy exist.**
+
 ## Sources (2026-08-25)
 - Anthropic — Submitting to the Connectors Directory: https://claude.com/docs/connectors/building/submission (portal, Team-org requirement, annotations, privacy-policy rejection rule, listing field limits, review process)
 - Community timeline reports + requirement summaries: https://sunpeak.ai/blogs/claude-connector-directory-submission/ · https://tallyfy.com/how-to-list-mcp-server-anthropic-claude-connectors/

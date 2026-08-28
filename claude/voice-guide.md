@@ -82,7 +82,8 @@ Voice-of-customer verbatims are load-bearing (personas doc, real threads):
 | Clicks and downloads rejoined (the loop) | open seam since Chartable's death — but UNSHIPPED | FUTURE-TENSE ONLY |
 | Clip selection informed by your own analytics | Podlink-only edge per spec — UNSHIPPED | FUTURE-TENSE ONLY |
 | "You don't need 20,000 downloads to be sponsorable — you need the right audience, proven" | personas §2 monetization-lockout, sourced | YES (services side) |
-| First podcast MCP in the connectors directory | claimable ONLY after listing is live (standing rule) | NOT YET |
+| "The podcast analytics connector" (category-position claim) | mcp-growth-research-podlink.md §3: hosting/editing MCPs exist (Descript, Transistor, Riverside, Castmagic, Springcast) but nobody owns analytics; re-verify competitors on claim day | YES, scoped to analytics |
+| ~~First podcast MCP~~ — RETIRED 2026-08-27 | falsified: Springcast claims "first podcast platform with MCP"; Transistor/Descript/Riverside/Castmagic shipped. Only the directory-scoped form ("first podcast [analytics] connector in the Claude directory") remains possible, verify on listing day | RETIRED (unscoped form) |
 | "Talk to your podcast, not just your analytics" — your show's transcripts + analytics + voice, queryable from your own Claude | MCP v1.1 transcript tools (PODLINK-MCP-SCOPING.md amendment) — UNSHIPPED | FUTURE-TENSE ONLY |
 
 ## 3. Banned phrases & patterns

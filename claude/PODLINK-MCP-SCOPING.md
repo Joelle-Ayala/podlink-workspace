@@ -185,3 +185,33 @@ GATE: the transcript pipeline from the current engineering thread (episodes tabl
 **Key architecture note:** the content-ideation use case ("suggest clips/topics from my best-performing episodes") requires NO agent build on our side. The user's Claude IS the agent; our MCP only serves context - analytics (v1 tools), transcripts (v1.1), brand voice/templates (v1.2 generate_content + list_templates). Composability is the product: analytics tool says WHICH episodes performed, transcript tool says WHAT was in them, the user's agent does the reasoning. Do not build reasoning endpoints.
 
 Marketing discipline unchanged: /features/mcp stays noindex + future-tense until the server actually ships to users; "first podcast MCP" claimable only after the directory listing is live.
+
+## Amendment 2026-08-27 - growth-research acceptance criteria (founder-directed)
+Source: claude/mcp-growth-research-podlink.md + launch-plan amendment (governs on conflict).
+Server status note: v1 is LIVE on app.podlink.ai and e2e-verified (OAuth 2.1/DCR/PKCE,
+all 4 tools, annotations 75b1a80fe). The mcp-server branch/sequence language above is
+historical - main supersedes it.
+
+**Build acceptance criteria added (all versions):**
+1. FREE-READ RULE: the MCP connection and analytics/episode read tools are free on every
+   plan, metered against plan limits. Never paywall the connection. Transcripts/exports/
+   write tools are paid-gated; every new tool declares its gate tier HERE before build.
+2. READ/WRITE SPLIT is absolute: no tool combines read and write. Every tool ships with
+   ToolAnnotations (title + readOnlyHint or destructiveHint). (~30% of directory
+   rejections are missing annotations.)
+3. RATE LIMITS BEFORE SUBMISSION (blocking): per-user + per-tool limits on /mcp, session
+   call budgets, circuit breaker on repeated identical calls, daily hard caps. Protects
+   against agent loops (documented $47K burn case) eating infra or a customer's quota.
+4. FIRST-CALL WOW (v1.1 scope addition): zero-setup summary tool - "how your last 5
+   episodes did + what's unusual" - specced before transcript tools land; composes from
+   existing reads, no new data surface.
+5. DEMO ACCOUNT: reviewer-facing account pre-loaded with a realistic podcast so no tool
+   ever returns an empty array. Setup-docs page carries 3+ example prompts runnable in
+   10 minutes.
+6. LEAST-PRIVILEGE AS COPY: tenancy double-assert + read-only scopes + safeText() get
+   stated plainly in the listing + docs (post-Asana-leak differentiator).
+7. TRANSCRIPTS = retention moat, fast-follow (confirms pipeline as engineering #1).
+CLAIM UPDATE: "first podcast MCP" (unscoped) RETIRED - competitors shipped (Springcast,
+Transistor, Descript, Riverside, Castmagic). The claim is now "the podcast analytics
+connector" (nobody owns analytics; hosting/editing actions are covered). Directory-scoped
+first-claims only if re-verified on listing day. Voice-guide updated.
