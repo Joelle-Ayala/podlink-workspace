@@ -1,37 +1,50 @@
-# MCP Branch Review (branch `mcp-server`, 2026-08-26)
-**Verdict: high-quality, spec-faithful, NOT yet deployable — one blocker, two notes.**
+# MCP Review — SUPERSEDED by mainline verification (2026-08-27)
 
-## What's right (reviewed: middleware, routes, resolver trait, discovery controller, config)
-- Tenancy is double-asserted: bearer gate middleware + in-tool `ResolvesMcpUser` trait; NO
-  tool accepts any identity parameter, and routes/mcp.php declares that as a reviewer rule
-  with the complete tool surface in one file (attribute discovery off). Exactly scoping R1.
-- OAuth discovery is spec-compliant: RFC 9728 protected-resource metadata, RFC 8414 AS
-  metadata, DCR endpoint, PKCE public client, and the 401 WWW-Authenticate challenge with
-  `resource_metadata` that claude.ai connectors need to bootstrap. Config kill-switches
-  (MCP_OAUTH_ENABLED, MCP_DCR_ENABLED) present.
-- Prompt-injection mitigation (scoping R5): `safeText()` strips/caps all third-party RSS/
-  OP3 strings before they enter model context. Nice touch rarely seen.
-- v1 tool surface matches PODLINK-MCP-SCOPING.md exactly; v1.1/v1.2 explicitly fenced out.
+**Final status: the MCP server is LIVE on main and verified end-to-end on prod.**
+This doc originally reviewed branch `mcp-server` (2026-08-26). That branch was an
+obsolete parallel snapshot: main already carried the MCP lineage
+(c8fc9d198 → a37238220, vendored `php-mcp/laravel` ^4.0 **with composer.lock** in
+774a745a7). The branch's remote was deleted; the local copy is deleted too. The
+"composer.lock deploy blocker" below was **wrong for main** — kept only as review
+history.
 
-## 🔴 Deploy blocker
-- **composer.lock was not committed.** composer.json adds the MCP package but the lock
-  file isn't in the branch's 17 files — Railway's `composer install` will fail (package
-  missing from lock). Fix: run `composer update php-mcp/laravel` (or the exact package)
-  locally/in a sandbox, commit the lock delta to the branch. NOTE: no PHP/composer on this
-  Windows host — needs the deploy-test session or a dev container.
+## E2E verification on prod (app.podlink.ai, 2026-08-27) — ALL PASS
+- Discovery: RFC 9728 protected-resource + RFC 8414 AS metadata correct; 401
+  WWW-Authenticate challenge carries `resource_metadata`.
+- DCR: registered clients (ids 2, 3 — test clients, revocable from the dashboard).
+- Full OAuth 2.1: PKCE S256 authorize → branded consent → code → token exchange
+  (30-day access token + refresh). `api` guard confirmed Passport-backed
+  (PASSPORT_* keys live on Railway) — note 2 below is resolved.
+- MCP initialize: server "Podlink" v1.0.0, Streamable HTTP session established.
+- tools/list: all 4 v1 tools present. Annotations gap found → fixed on main in
+  75b1a80fe (ToolAnnotations: title + readOnlyHint true + openWorldHint false).
+- tools/call: all 4 tools return 200 with honest structured output (connected
+  state, graceful `no_op3_data`, `handle_not_stored`) against real data.
 
-## Notes for the deploy test
-1. **Package substitution vs scoping doc:** implementation uses `php-mcp/laravel`
-  (community) + custom discovery controllers, NOT the official `laravel/mcp` +
-  `Mcp::oauthRoutes()` the scoping doc assumed. The custom OAuth layer looks complete —
-  but the deploy test must exercise the full DCR → authorize → token → tool-call path
-  against a real claude.ai custom connector before merge.
-2. **Guard assumption:** config comments say the `api` guard is Passport-backed in this
-  app — verify in config/auth.php at deploy time (MagicAI variants ship sanctum/jwt).
-  If Passport isn't installed/migrated, the token path 401s everywhere.
-3. **Post-merge alignment:** ListEpisodes' RSS fallback can flip to the ml2-lite episodes
-  table (now on main) — do it in the merge commit, not on the branch.
+## What's right (review findings, still accurate)
+- Tenancy double-asserted: bearer gate middleware + `ResolvesMcpUser` trait; NO
+  tool accepts any identity parameter; routes/mcp.php declares that as a reviewer
+  rule with the complete tool surface in one file (attribute discovery off).
+  Exactly scoping R1.
+- OAuth spec-compliant (RFC 9728 / 8414 / DCR / PKCE / 401 challenge); config
+  kill-switches (MCP_OAUTH_ENABLED, MCP_DCR_ENABLED) present.
+- Prompt-injection mitigation (scoping R5): `safeText()` strips/caps third-party
+  RSS/OP3 strings before they enter model context.
+- v1 tool surface matches PODLINK-MCP-SCOPING.md exactly; v1.1/v1.2 fenced out.
 
-## Sequence (unchanged from canon)
-Blocker fix → deploy test off-prod → merge → directory submission prep (ships WITH Pro)
-→ v1.1 transcript tools once the pipeline lands.
+## Historical: original branch-review flags (2026-08-26)
+- ~~🔴 composer.lock not committed → Railway install fails~~ **WRONG for main**:
+  main vendored the package + lock in 774a745a7 and is deployed.
+- ~~Guard assumption: verify `api` guard is Passport-backed~~ **Verified live.**
+- Package substitution note (community `php-mcp/laravel` + custom OAuth, not
+  official `laravel/mcp`): stands as documentation; the custom path passed the
+  full DCR → authorize → token → tool-call test with a real client.
+- Post-merge alignment: ListEpisodes' RSS fallback can flip to the ml2-lite
+  episodes table (on main) — still OPEN, do alongside transcript-pipeline work.
+
+## Remaining before directory submission
+1. Annotations deploy verify (75b1a80fe on Railway) — in progress.
+2. Setup-docs page for connecting Claude (relates to /features/mcp, noindex
+   until listing live).
+3. **Joelle**: Claude Team org purchase + privacy policy URL.
+4. "first podcast MCP" claim stays embargoed until the listing is live (canon).

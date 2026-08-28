@@ -76,3 +76,8 @@ acquisition; D3 starts NOW (clock); C8 last. Nothing in C promises what B1 hasn'
 4. MCP branch review + deploy test (branch mcp-server), then v1.1 transcript tools.
 5. Template applications + copy rewrites continue in the committed audit order (services -> features -> tranche 2).
 VENDOR PURCHASES: ALL ON HOLD (podcast-data-vendors.md header) - approved-to-buy-later on her word; Pod Engine $75 first when released.
+
+STATUS 2026-08-27 on item 4: branch was obsolete; MCP is live on MAIN, e2e-verified on prod (OAuth 2.1/DCR/PKCE + all 4 tools; annotations added in 75b1a80fe). See mcp-branch-review.md. Remaining for directory: setup-docs page + Joelle's Team org purchase + privacy policy URL.
+
+## Standing rule - frontend/backend lockstep (founder directive 2026-08-27)
+The front end of the site progresses as the backend does, and vice versa. No frontend copy, page, or index flip may claim a capability the deployed backend cannot do (claims-truth rules apply), and no backend capability ships without its frontend surface scheduled in the same cycle. Every feature commit names its counterpart (or states why none is needed).
