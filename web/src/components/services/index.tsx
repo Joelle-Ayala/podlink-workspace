@@ -113,6 +113,14 @@ export function ServiceHero({ service }: { service: Service }) {
       <p className="mt-6 max-w-2xl text-lg leading-relaxed opacity-80">
         {service.subhead}
       </p>
+      {service.heroNote && (
+        <p
+          className="mt-4 max-w-2xl text-base font-semibold leading-relaxed"
+          style={{ color: ORANGE }}
+        >
+          {service.heroNote}
+        </p>
+      )}
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <CtaButton href="/contact">Book a call</CtaButton>
@@ -360,6 +368,71 @@ export function ProofSection({
           </figcaption>
         </figure>
       )}
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Named placements strip (names clearance-gated via placements-verified.md)   */
+/* -------------------------------------------------------------------------- */
+
+export function PlacementsStrip({
+  placements,
+}: {
+  placements?: Service["placements"];
+}) {
+  if (!placements) return null;
+
+  return (
+    <Section className="!py-10 bg-zinc-50">
+      <p className="flex flex-wrap items-baseline gap-x-3 gap-y-2 text-base text-zinc-800">
+        <span
+          className="text-sm font-semibold uppercase tracking-widest"
+          style={{ color: ORANGE_700 }}
+        >
+          {placements.intro}:
+        </span>
+        {placements.names.map((name, i) => (
+          <span key={name} className="font-semibold">
+            {name}
+            {i < placements.names.length - 1 && (
+              <span aria-hidden className="ml-3 text-zinc-400">
+                &middot;
+              </span>
+            )}
+          </span>
+        ))}
+        <Link
+          href={placements.workLink.href}
+          className="font-semibold underline underline-offset-4"
+          style={{ color: ORANGE_700 }}
+        >
+          {placements.workLink.label} &rarr;
+        </Link>
+      </p>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* DIY cross-link (one line above the footer)                                  */
+/* -------------------------------------------------------------------------- */
+
+export function DiyCrossLink({ diyLink }: { diyLink?: Service["diyLink"] }) {
+  if (!diyLink) return null;
+
+  return (
+    <Section className="!py-8">
+      <p className="text-base text-zinc-700">
+        {diyLink.prompt}{" "}
+        <Link
+          href={diyLink.href}
+          className="font-semibold underline underline-offset-4"
+          style={{ color: ORANGE_700 }}
+        >
+          {diyLink.label} &rarr;
+        </Link>
+      </p>
     </Section>
   );
 }

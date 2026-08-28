@@ -4,8 +4,10 @@ import { getService, services, serviceSlugs } from "@/content/services";
 import { caseStudiesFor, testimonialFor } from "@/content/proof";
 import {
   ClosingCta,
+  DiyCrossLink,
   FaqList,
   IncludesList,
+  PlacementsStrip,
   PricingTable,
   ProblemBlock,
   ProcessSteps,
@@ -116,12 +118,14 @@ export default async function ServicePage({
         tiers={service.pricing.tiers}
         footnote={service.pricing.footnote}
       />
+      <PlacementsStrip placements={service.placements} />
       <FaqList faqs={service.faqs} />
       <RelatedServices related={related} />
       <ClosingCta
         headline={`Ready to talk about ${service.name.toLowerCase()}?`}
         body="A 20-minute call. We'll tell you what we'd do, what it costs, and whether it's the right first move for where your show actually is."
       />
+      <DiyCrossLink diyLink={service.diyLink} />
     </>
   );
 }

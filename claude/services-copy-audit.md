@@ -54,3 +54,14 @@ polish (§7). All additive; services.ts copy stands.
 
 **Reply "approve S1–S3" (or subset) and they ship same-session; S4 is a check, not a
 rewrite.**
+
+## STATUS 2026-08-27: S1–S3 APPROVED by Joelle and SHIPPED
+- S1a hero pay-per-booking note + S1b named-placements strip (4 names, all
+  clearance-checked against placements-verified.md, linking /work) on booking.
+- S2 monetization-lockout wedge leads the "How many downloads" FAQ on sponsorship.
+- S3 DIY cross-links: editing→/features/show-notes, clips→/features/clips-and-social,
+  growth→/features/download-analytics (3 links as specced; sponsorship/advertising/
+  booking skipped per the audit).
+- Implementation: additive Service fields (heroNote/placements/diyLink) + PlacementsStrip
+  and DiyCrossLink components; renders only where content exists.
+- S4 (31M-views evidence recheck) still HOLD — unchanged.

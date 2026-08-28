@@ -70,6 +70,19 @@ export interface Service {
   faqs: Faq[];
   /** Services to cross-link at the bottom. Order matters. */
   relatedSlugs: ServiceSlug[];
+  /** Optional one-liner under the hero subhead (e.g. pay-per-booking). */
+  heroNote?: string;
+  /**
+   * Optional named-placements strip above the FAQ. Names must come from
+   * claude/placements-verified.md ONLY (clearance-gated).
+   */
+  placements?: {
+    intro: string;
+    names: string[];
+    workLink: { label: string; href: string };
+  };
+  /** Optional DIY cross-link, one line above the footer. */
+  diyLink?: { prompt: string; label: string; href: string };
   /** SEO. */
   metaTitle: string;
   metaDescription: string;
@@ -191,6 +204,11 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-clips", "podcast-growth", "podcast-sponsorship"],
+    diyLink: {
+      prompt: "Rather do it yourself?",
+      label: "AI show notes and episode templates",
+      href: "/features/show-notes",
+    },
     metaTitle: "Podcast Editing & Production | Podlink",
     metaDescription:
       "Full-service podcast editing, mixing, show notes, video and publishing. You record — we handle everything after. From $275 per episode.",
@@ -304,6 +322,11 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-editing", "podcast-growth", "get-booked-on-podcasts"],
+    diyLink: {
+      prompt: "Rather do it yourself?",
+      label: "The AI clip tools",
+      href: "/features/clips-and-social",
+    },
     metaTitle: "Podcast Clips & Short-Form Video | Podlink",
     metaDescription:
       "Two branded, captioned short-form clips per episode in portrait and landscape, with social copy written to post. From $250 per episode.",
@@ -520,7 +543,7 @@ export const services: Service[] = [
     faqs: [
       {
         q: "How many downloads do I need before I can sell ads?",
-        a: "Fewer than you think, and downloads are the wrong gate anyway. A show doing a few thousand downloads with an engaged, specific audience and real short-form reach is more sellable than a bigger, vaguer one. What matters is whether we can describe your listener precisely enough that a brand recognizes their customer.",
+        a: "Most podcast ad agencies won't work with you until you're doing 10–20,000 downloads an episode. The median show does about 28. We exist for everyone the industry locks out — you don't need 20,000 downloads to be sponsorable; you need the right audience, proven. A show doing a few thousand downloads with an engaged, specific audience and real short-form reach is more sellable than a bigger, vaguer one. What matters is whether we can describe your listener precisely enough that a brand recognizes their customer.",
       },
       {
         q: "What's my show actually worth?",
@@ -562,6 +585,13 @@ export const services: Service[] = [
     subhead:
       "Strategy, media training, booking and — the part that changes the maths — social clips from every appearance, so the interview reaches the audience the show alone never had.",
     heroProof: { value: "134%", label: "lift in sign-ups from a booking campaign" },
+    heroNote:
+      "Pay-per-booking pricing — $750 to start, then $449 only when a show you approved says yes.",
+    placements: {
+      intro: "Recent placements",
+      names: ["Crypto 101", "Edge of NFT", "New to Crypto", "Outlier Ventures"],
+      workLink: { label: "21 verified episodes", href: "/work" },
+    },
     problem: {
       title: "The podcast isn't the most important part of the appearance",
       body: "Here's the myth: you need top-tier shows, because top-tier shows have millions of listeners. Here's the reality: the top 1% of podcasts average about 4,000 downloads an episode. Chasing show size is chasing the wrong number. What actually determines reach is what happens to the interview after it airs — which is why every appearance we book comes with clips built to travel on social.",
@@ -777,6 +807,11 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-clips", "podcast-sponsorship", "get-booked-on-podcasts"],
+    diyLink: {
+      prompt: "Rather do it yourself?",
+      label: "The download analytics",
+      href: "/features/download-analytics",
+    },
     metaTitle: "Podcast Growth — Audience, SEO & Paid Distribution | Podlink",
     metaDescription:
       "Podcast growth built as a system: positioning, topic strategy, SEO and AEO, paid distribution and monthly KPI reporting. From $750 per campaign.",
