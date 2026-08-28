@@ -41,6 +41,19 @@ $noInput = [
     'additionalProperties' => false,
 ];
 
+/**
+ * Annotations (MCP ToolAnnotations, protocol 2025-03-26+): every v1 tool is
+ * read-only by design (the file-header rule), so readOnlyHint is true across
+ * the board and openWorldHint is false — tools only touch Podlink's own data
+ * for the authenticated account. Declaring it lets clients (claude.ai shows
+ * these) skip write-confirmation prompts and mark the connector as safe.
+ */
+$readOnly = static fn (string $title) => \PhpMcp\Schema\ToolAnnotations::make(
+    title: $title,
+    readOnlyHint: true,
+    openWorldHint: false,
+);
+
 Mcp::tool(GetShowOverviewTool::class)
     ->name('get_show_overview')
     ->description(
@@ -50,6 +63,7 @@ Mcp::tool(GetShowOverviewTool::class)
         . 'Returns a structured "not connected" state instead of numbers when no show is connected '
         . 'or OP3 has no data yet.'
     )
+    ->annotations($readOnly('Show overview'))
     ->inputSchema($noInput);
 
 Mcp::tool(GetTopAppsTool::class)
@@ -59,6 +73,7 @@ Mcp::tool(GetTopAppsTool::class)
         . '(Apple Podcasts, Spotify, Overcast, ...) over the last three calendar months: absolute '
         . 'download counts plus each app\'s percentage share, highest first.'
     )
+    ->annotations($readOnly('Top listening apps'))
     ->inputSchema($noInput);
 
 Mcp::tool(ListEpisodesTool::class)
@@ -67,6 +82,7 @@ Mcp::tool(ListEpisodesTool::class)
         'List the signed-in Podlink user\'s most recent podcast episodes (newest first) with id, '
         . 'title and publication date.'
     )
+    ->annotations($readOnly('Recent episodes'))
     ->inputSchema([
         'type' => 'object',
         'properties' => [
@@ -88,4 +104,5 @@ Mcp::tool(GetPodlinkPageTool::class)
         'Get the public URL of the signed-in Podlink user\'s Podlink page, plus the dashboard URL '
         . 'for editing it.'
     )
+    ->annotations($readOnly('Podlink page'))
     ->inputSchema($noInput);
