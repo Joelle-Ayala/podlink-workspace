@@ -57,6 +57,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     // { url: absoluteUrl("/pricing"), ... } — see note above.
+    // MCP setup docs: indexable and live (server deployed + e2e-verified
+    // 2026-08-27; documents the working custom-connector path). The MARKETING
+    // page /features/mcp stays out until its index-flip checklist clears.
+    {
+      url: absoluteUrl("/features/mcp/setup"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
   ];
 
   // One entry per feature. These are the deepest genuinely useful pages on

@@ -18,10 +18,12 @@ import { siteUrl } from "@/lib/site";
  * spec in claude/pricing-and-personalization-spec.md §4 (tool surface, tier
  * gates, composability, entitlements).
  *
- * TODO(mcp): REMOVE the noindex below when the MCP server actually ships to
- * users. The server exists in the codebase (magicai/app/Mcp/) but is
- * uncommitted and unreleased — this page must not rank for a capability
- * users can't turn on yet. Same pattern as /pricing and the resources page.
+ * TODO(mcp): REMOVE the noindex below per the index-flip checklist in
+ * claude/mcp-directory-launch-plan.md (listing live · claims-truth verified ·
+ * present-tense copy pass · GA4 annotation). STATUS 2026-08-27: the server IS
+ * live on app.podlink.ai and e2e-verified — users can connect today via
+ * custom connector; /features/mcp/setup documents it and is indexable. This
+ * marketing page's flip waits on the checklist, not the server.
  */
 export const metadata: Metadata = {
   title: mcpFeature.metaTitle,
