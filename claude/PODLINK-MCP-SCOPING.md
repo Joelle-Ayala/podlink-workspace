@@ -215,3 +215,48 @@ CLAIM UPDATE: "first podcast MCP" (unscoped) RETIRED - competitors shipped (Spri
 Transistor, Descript, Riverside, Castmagic). The claim is now "the podcast analytics
 connector" (nobody owns analytics; hosting/editing actions are covered). Directory-scoped
 first-claims only if re-verified on listing day. Voice-guide updated.
+
+## Amendment 2026-08-27b - BIOLINK BRIDGE spec task (founder question: "can the MCP do
+things on the Biolink side?")
+Current state (what Joelle was told): v1 is MagicAI-side only. Biolink click stats are
+the existing v1.1 `get_page_stats` + open question O1 above. This amendment turns O1
+into a formal spec task with a read/write split. SLOT: after the current launch-critical
+work (rate limits, demo account, setup-docs, submission prep); not on the critical path.
+
+**(1) READ path - Biolink click/page stats into MCP tools ("how did my page do this
+week").** Same access path the aggregate-dashboard Pro feature needs anyway - build the
+stats access ONCE, dashboard and MCP both consume it; the MCP tool rides whenever that
+lands. Spec task must decide between:
+  (a) read-only shared-DB connection from the Laravel app to the `biolink` MySQL
+      database (both live on the same Railway MySQL) - pragmatic, no vendor-code fork,
+      but couples us to Altum's schema: every 66biolinks vendor update can silently
+      break the read. If chosen: pin the exact tables/columns read, add a schema-drift
+      check to the update runbook, and wrap in one repository class so a break is
+      one-file contained.
+  (b) internal API bridge - a small authenticated endpoint on the Biolink side the
+      Laravel app calls. Cleaner boundary, survives schema drift behind its own query,
+      but it IS a vendor-code modification (Altum PHP), so every 66biolinks update
+      requires re-applying/verifying the patch. Maintainability question = which
+      failure mode is cheaper: silent schema drift (a) or explicit merge conflict (b).
+      Spec should also re-audit option (a-original): whether Biolink v68's user-level
+      `api_key` exposes any stats scope natively (would beat both).
+  Decision criteria recorded in the spec; default lean (a) with the drift guard, since
+  silent-read breakage is detectable by tests and forking vendor code has burned this
+  stack before.
+
+**(2) WRITE path - "add/update a link on my page" management tools. ASSESS SEPARATELY,
+CONSERVATIVELY.** Write tools flip the least-privilege/read-only marketing story
+(amendment 2026-08-27 criterion 6) and the directory annotations profile (first
+destructiveHint/non-readOnly tools). Per the research finding: v1.2+ AT EARLIEST,
+behind explicit granular scopes (page:write requested separately from the default
+read-only grant, user re-consents), never bundled with read tools, and only after the
+read bridge is proven in production. The directory listing stays read-only until this
+ships deliberately - do not let a write tool slide in as a convenience.
+
+**(3) TENANT MAPPING - the multi-tenant safety core.** SSO already binds the two apps'
+user identities (Biolink Admin API SSO surface, per §1.1 note above). The spec MUST
+document the exact mapping (MagicAI user id <-> biolink user id <-> page id), assert it
+server-side on every bridge read (the ResolvesMcpUser pattern extends across the
+bridge - no identity params, ever), and add a two-account cross-read test on the
+BRIDGE path specifically (R1 discipline applies to the second database exactly as it
+did to the first).
