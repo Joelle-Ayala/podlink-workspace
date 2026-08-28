@@ -134,6 +134,9 @@ return [
 
     'rate_limits' => [
         'tool_calls_per_minute' => (int) env('MCP_RATE_LIMIT_PER_MINUTE', 60),
+        // Daily hard cap per user (growth-research criterion 3: an agent loop
+        // must never burn more than a bounded day's worth of calls).
+        'tool_calls_per_day' => (int) env('MCP_RATE_LIMIT_PER_DAY', 2000),
         'registrations_per_hour' => (int) env('MCP_DCR_RATE_LIMIT_PER_HOUR', 10),
     ],
 
