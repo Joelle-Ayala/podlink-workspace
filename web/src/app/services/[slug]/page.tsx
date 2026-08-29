@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getService, services, serviceSlugs } from "@/content/services";
-import { caseStudiesFor, testimonialFor } from "@/content/proof";
+import {
+  caseStudiesFor,
+  testimonialFor,
+  visibleBrands,
+  visibleShows,
+} from "@/content/proof";
 import {
   ClosingCta,
   DiyCrossLink,
   FaqList,
+  FitQualifier,
   IncludesList,
   PlacementsStrip,
   PricingTable,
@@ -14,6 +20,8 @@ import {
   ProofSection,
   RelatedServices,
   ServiceHero,
+  TrustStrip,
+  WhyPodlink,
 } from "@/components/services";
 import { siteUrl } from "@/lib/site";
 
@@ -109,21 +117,41 @@ export default async function ServicePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      {/* Services-template v1 section order (claude/services-page-template.md). */}
       <ServiceHero service={service} />
+      <TrustStrip
+        intro={
+          service.slug === "podcast-advertising"
+            ? "Campaigns bought and sold for"
+            : "Shows we've produced, grown, or monetized"
+        }
+        names={(service.slug === "podcast-advertising"
+          ? visibleBrands()
+          : visibleShows()
+        ).slice(0, 9)}
+      />
       <ProblemBlock problem={service.problem} />
       <IncludesList items={service.includes} />
-      <ProcessSteps steps={service.process} />
-      <ProofSection caseStudies={cases} testimonial={testimonial} />
+      <ProcessSteps steps={service.process} variant="timeline" />
+      <ProofSection
+        caseStudies={cases}
+        testimonial={testimonial}
+        /* Growth stays non-huge until the 31M evidence recheck (S4 hold). */
+        hugeNumbers={service.slug !== "podcast-growth"}
+      />
+      <FitQualifier fit={service.fit} />
       <PricingTable
         tiers={service.pricing.tiers}
         footnote={service.pricing.footnote}
       />
+      <WhyPodlink whyPodlink={service.whyPodlink} />
       <PlacementsStrip placements={service.placements} />
       <FaqList faqs={service.faqs} />
       <RelatedServices related={related} />
       <ClosingCta
         headline={`Ready to talk about ${service.name.toLowerCase()}?`}
         body="A 20-minute call. We'll tell you what we'd do, what it costs, and whether it's the right first move for where your show actually is."
+        reassurance={service.reassurance}
       />
       <DiyCrossLink diyLink={service.diyLink} />
     </>

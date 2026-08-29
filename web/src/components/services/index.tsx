@@ -124,6 +124,9 @@ export function ServiceHero({ service }: { service: Service }) {
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <CtaButton href="/contact">Book a call</CtaButton>
+        <CtaButton href="/work" variant="secondary">
+          See the work
+        </CtaButton>
         <Link
           href="#pricing"
           className="text-base font-semibold underline underline-offset-4 opacity-80 hover:opacity-100"
@@ -144,6 +147,38 @@ export function ServiceHero({ service }: { service: Service }) {
         </span>
         <span className="mt-1 text-sm opacity-70">{service.heroProof.label}</span>
       </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Trust strip (§1) — clearance-gated names only (proof.ts selectors)          */
+/* -------------------------------------------------------------------------- */
+
+export function TrustStrip({
+  intro,
+  names,
+}: {
+  intro: string;
+  names: string[];
+}) {
+  if (names.length === 0) return null;
+
+  return (
+    <Section className="!py-8 border-b border-zinc-200">
+      <p className="flex flex-wrap items-baseline gap-x-4 gap-y-2 text-sm text-zinc-600">
+        <span
+          className="font-semibold uppercase tracking-widest"
+          style={{ color: ORANGE_700 }}
+        >
+          {intro}
+        </span>
+        {names.map((name) => (
+          <span key={name} className="font-medium text-zinc-800">
+            {name}
+          </span>
+        ))}
+      </p>
     </Section>
   );
 }
@@ -202,7 +237,47 @@ export function IncludesList({ items }: { items: string[] }) {
 /* Process                                                                     */
 /* -------------------------------------------------------------------------- */
 
-export function ProcessSteps({ steps }: { steps: ProcessStep[] }) {
+export function ProcessSteps({
+  steps,
+  variant = "columns",
+}: {
+  steps: ProcessStep[];
+  /** "timeline" = services-template §4 vertical timeline styling. */
+  variant?: "columns" | "timeline";
+}) {
+  if (variant === "timeline") {
+    return (
+      <Section>
+        <Eyebrow>How it works</Eyebrow>
+        <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+          The actual process, not a diagram.
+        </h2>
+        <ol className="mt-12 max-w-3xl">
+          {steps.map((step, i) => (
+            <li key={step.title} className="relative flex gap-6 pb-10 last:pb-0">
+              {i < steps.length - 1 && (
+                <span
+                  aria-hidden
+                  className="absolute left-[15px] top-8 bottom-0 w-px bg-zinc-200"
+                />
+              )}
+              <span
+                className="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums"
+                style={{ backgroundColor: ORANGE, color: INK }}
+              >
+                {i + 1}
+              </span>
+              <div>
+                <h3 className="text-lg font-semibold leading-8">{step.title}</h3>
+                <p className="mt-2 leading-relaxed text-zinc-700">{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Section>
+    );
+  }
+
   return (
     <Section>
       <Eyebrow>How it works</Eyebrow>
@@ -223,6 +298,86 @@ export function ProcessSteps({ steps }: { steps: ProcessStep[] }) {
           </li>
         ))}
       </ol>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Fit qualifier (§6) — honest two-column lead qualification                   */
+/* -------------------------------------------------------------------------- */
+
+export function FitQualifier({ fit }: { fit?: Service["fit"] }) {
+  if (!fit) return null;
+
+  return (
+    <Section>
+      <Eyebrow>Is this for you?</Eyebrow>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+        We&rsquo;d rather tell you now.
+      </h2>
+      <div className="mt-10 grid gap-8 lg:grid-cols-2">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-7">
+          <h3 className="text-lg font-semibold" style={{ color: ORANGE_700 }}>
+            This is for you if
+          </h3>
+          <ul className="mt-5 space-y-4">
+            {fit.forYou.map((item) => (
+              <li key={item} className="flex gap-3 text-zinc-800">
+                <span
+                  aria-hidden
+                  className="mt-2 h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: ORANGE }}
+                />
+                <span className="leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-7">
+          <h3 className="text-lg font-semibold text-zinc-600">
+            It isn&rsquo;t if
+          </h3>
+          <ul className="mt-5 space-y-4">
+            {fit.notForYou.map((item) => (
+              <li key={item} className="flex gap-3 text-zinc-700">
+                <span
+                  aria-hidden
+                  className="mt-2 h-2 w-2 shrink-0 rounded-full bg-zinc-400"
+                />
+                <span className="leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Why Podlink (§8) — the hybrid differentiator                                */
+/* -------------------------------------------------------------------------- */
+
+export function WhyPodlink({
+  whyPodlink,
+}: {
+  whyPodlink?: Service["whyPodlink"];
+}) {
+  if (!whyPodlink) return null;
+
+  return (
+    <Section className="bg-zinc-50">
+      <div className="grid gap-10 lg:grid-cols-12">
+        <div className="lg:col-span-5">
+          <Eyebrow>Why Podlink</Eyebrow>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+            {whyPodlink.headline}
+          </h2>
+        </div>
+        <p className="text-lg leading-relaxed text-zinc-700 lg:col-span-7 lg:self-end">
+          {whyPodlink.body}
+        </p>
+      </div>
     </Section>
   );
 }
@@ -310,9 +465,16 @@ export function PricingTable({
 export function ProofSection({
   caseStudies,
   testimonial,
+  hugeNumbers = false,
 }: {
   caseStudies: CaseStudy[];
   testimonial?: Testimonial;
+  /**
+   * Services-template §5: "the number is the visual". Opt-in per page —
+   * the growth page keeps it OFF until the 31M evidence recheck (S4 hold,
+   * services-copy-audit.md).
+   */
+  hugeNumbers?: boolean;
 }) {
   if (caseStudies.length === 0 && !testimonial) return null;
 
@@ -346,7 +508,13 @@ export function ProofSection({
                 {cs.metrics.map((m) => (
                   <div key={m.label}>
                     <dt className="sr-only">{m.label}</dt>
-                    <dd className="text-xl font-bold tabular-nums">{m.value}</dd>
+                    <dd
+                      className={`font-bold tabular-nums ${
+                        hugeNumbers ? "text-4xl lg:text-5xl" : "text-xl"
+                      }`}
+                    >
+                      {m.value}
+                    </dd>
                     <dd className="text-xs leading-snug opacity-60">{m.label}</dd>
                   </div>
                 ))}
@@ -506,10 +674,13 @@ export function ClosingCta({
   headline,
   body,
   cta = "Book a call",
+  reassurance,
 }: {
   headline: string;
   body: string;
   cta?: string;
+  /** §11: one line of reassurance, only claims true per docs. */
+  reassurance?: string;
 }) {
   return (
     <Section dark>
@@ -521,6 +692,9 @@ export function ClosingCta({
         <div className="mt-8">
           <CtaButton href="/contact">{cta}</CtaButton>
         </div>
+        {reassurance && (
+          <p className="mt-6 text-sm opacity-70">{reassurance}</p>
+        )}
       </div>
     </Section>
   );

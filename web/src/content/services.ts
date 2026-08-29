@@ -83,6 +83,15 @@ export interface Service {
   };
   /** Optional DIY cross-link, one line above the footer. */
   diyLink?: { prompt: string; label: string; href: string };
+  /** §6 fit qualifier — honest two-column lead qualification. */
+  fit?: { forYou: string[]; notForYou: string[] };
+  /**
+   * §8 why-Podlink — the hybrid differentiator. Present-tense claims ONLY
+   * for what exists; loop/report language stays future-tense.
+   */
+  whyPodlink?: { headline: string; body: string };
+  /** §11 reassurance line under the final CTA — only claims true per docs. */
+  reassurance?: string;
   /** SEO. */
   metaTitle: string;
   metaDescription: string;
@@ -204,6 +213,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-clips", "podcast-growth", "podcast-sponsorship"],
+    fit: {
+      forYou: [
+        "You publish (or want to publish) on a fixed day every week, and post-production is the bottleneck",
+        "You have recorded episodes sitting unpublished right now",
+        "You want one team on audio, video, notes and publishing — not four vendors",
+      ],
+      notForYou: [
+        "You want a one-off edit of a single episode — we're built for a publishing cadence",
+        "You want to learn to edit yourself — the DIY tools below are the better buy",
+        "You need same-day turnaround as the norm — our standard is three business days, held reliably",
+      ],
+    },
+    whyPodlink: {
+      headline: "The editors run on the same platform we sell",
+      body: "Show notes and titles are drafted with the same AI tools in your Podlink dashboard, and every episode we publish is measured with OP3 — independent download numbers you can check yourself, not a vendor's report card about its own work.",
+    },
+    reassurance:
+      "You own everything — masters, project files and assets live in a shared drive you keep access to.",
     diyLink: {
       prompt: "Rather do it yourself?",
       label: "AI show notes and episode templates",
@@ -322,6 +349,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-editing", "podcast-growth", "get-booked-on-podcasts"],
+    fit: {
+      forYou: [
+        "You publish consistently but have no real short-form presence",
+        "You know clips matter and can't sustain the per-episode cadence yourself",
+        "You want branded, captioned clips sized for every feed — with the copy written to post",
+      ],
+      notForYou: [
+        "You're expecting a viral clip on a schedule — nobody honest sells that",
+        "You'd rather batch-cut clips yourself — the AI clip tools below are the better buy",
+        "Your show publishes rarely — clips compound with cadence, and there's nothing to compound",
+      ],
+    },
+    whyPodlink: {
+      headline: "Cut by the team that also runs growth",
+      body: "Your templates and brand kit are set up once and reused every episode, and the people cutting your clips are the same team running growth campaigns for shows — so clip choices come from what travels, not what's easy to cut.",
+    },
+    reassurance:
+      "The launch clip ships the day the episode drops — the cadence is the deliverable.",
     diyLink: {
       prompt: "Rather do it yourself?",
       label: "The AI clip tools",
@@ -444,6 +489,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-sponsorship", "podcast-growth", "podcast-clips"],
+    fit: {
+      forYou: [
+        "You have a proven offer and a landing page ready for high-intent traffic",
+        "You can commit a real test budget across at least eight weeks — testing is the strategy, not a delay",
+        "You want spend tied to tracked conversions, not an impression count and a shrug",
+      ],
+      notForYou: [
+        "You need positive ROAS in week one — host-read trust compounds, it doesn't spike",
+        "You want one spot on one famous show — that's a brand splash, not a campaign",
+        "You can't tolerate cutting underperformers — optimization means some shows get dropped",
+      ],
+    },
+    whyPodlink: {
+      headline: "We sit on both sides of this market",
+      body: "We sell sponsorships for shows and buy placements for brands. That means we negotiate from real rate knowledge, read audience data the way sellers present it, and know which numbers survive checking — because on the other side of the table, we're the ones being checked.",
+    },
+    reassurance:
+      "Tracked URLs, codes and UTMs on every placement — the monthly report shows what we see.",
     metaTitle: "Podcast Advertising Agency — Managed Ad Campaigns | Podlink",
     metaDescription:
       "Managed podcast ad campaigns for brands, with tracked attribution on every placement. Host-read audio plus social video. From $2,500 per month.",
@@ -571,6 +634,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-growth", "podcast-clips", "podcast-advertising"],
+    fit: {
+      forYou: [
+        "Your audience is engaged and specific — even if your download number is modest",
+        "You publish consistently and can keep publishing through a sponsorship term",
+        "You want sponsors who renew, which means sharing real audience data and proving return",
+      ],
+      notForYou: [
+        "You want to sell one 30-second read at whatever the buyer offers — you don't need an agency for that",
+        "You're not willing to share audience data — the data pack is what makes the rate card credible",
+        "Your show is on pause — sponsors buy a running show, not a back catalog",
+      ],
+    },
+    whyPodlink: {
+      headline: "The rate card stands on checkable numbers",
+      body: "Download data in your data pack comes from OP3 — an open, independent measurement standard a sponsor can verify themselves. A rate card a buyer can check is a rate card a buyer can approve, and it's why the renewal conversation starts from proof instead of promises.",
+    },
+    reassurance:
+      "Renewal management is in every engagement — the whole point is the second contract.",
     metaTitle: "Podcast Sponsorship Sales — Monetize Your Show | Podlink",
     metaDescription:
       "We build your rate card from real audience data, sell your podcast sponsorship, and manage renewals. 20% of revenue sourced, nothing up front.",
@@ -693,6 +774,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-clips", "podcast-growth", "podcast-advertising"],
+    fit: {
+      forYou: [
+        "You're a founder or expert with a clear offer and a point of view worth interviewing",
+        "You'll put in the prep — media training and a sharp one-pager are part of the process",
+        "You care what happens after the interview airs — clips and amplification are why the maths works",
+      ],
+      notForYou: [
+        "You want the longest possible list of bookings regardless of fit — we don't run a spray list",
+        "You only want top-1% shows — the reality is reach comes from what travels after, not show size",
+        "You can't commit to actually showing up consistently — bookings without appearances burn hosts",
+      ],
+    },
+    whyPodlink: {
+      headline: "The appearance is the start, not the deliverable",
+      body: "Every appearance we book comes with social clips built to travel — cut by the same team that sells clips as a service. The show's own audience is the floor; the clips are how an interview reaches the audience the show alone never had.",
+    },
+    reassurance:
+      "Pay-per-booking available: $449 only when a show you approved says yes.",
     metaTitle: "Get Booked on Podcasts — Guest Booking & Digital PR | Podlink",
     metaDescription:
       "Podcast guest booking with strategy, media training, vetted placements and social clips from every appearance. From $750 to start plus $449 per booking.",
@@ -807,6 +906,24 @@ export const services: Service[] = [
       },
     ],
     relatedSlugs: ["podcast-clips", "podcast-sponsorship", "get-booked-on-podcasts"],
+    fit: {
+      forYou: [
+        "Your show is good and plateaued — the boring reasons are fixable and we look for them first",
+        "You're ready to treat the show like a channel: benchmarks, monthly KPIs, decisions from data",
+        "You're on video, or willing to be — it's the single highest-leverage change most shows can make",
+      ],
+      notForYou: [
+        "You want growth without changing anything about the show — positioning is usually part of the fix",
+        "You judge only by downloads — the audience has split across feeds, YouTube and short-form, and we report it all",
+        "You publish irregularly — distribution can't compound on an unpredictable cadence",
+      ],
+    },
+    whyPodlink: {
+      headline: "Growth judged like a channel, on measured data",
+      body: "The reporting runs on the platform's own measurement: OP3 downloads that anyone can check, YouTube views on the same episodes, plus visits, leads and cost per each. When we say something worked, you can see it in numbers you don't have to take from us.",
+    },
+    reassurance:
+      "Monthly KPI reporting is in the scope — judged the way you judge every other channel.",
     diyLink: {
       prompt: "Rather do it yourself?",
       label: "The download analytics",
