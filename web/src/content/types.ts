@@ -46,6 +46,15 @@ export interface Feature {
   /** Path under /public once real product shots exist. */
   image?: string;
   imageAlt?: string;
+  /**
+   * Template v1.1 §3 — persona-language problem statement, rendered as a
+   * typography-only contrast moment. Voice-of-customer phrasing.
+   */
+  problem?: string;
+  /**
+   * Template v1.1 §4 — exactly 3 verb-first steps, snippet/AEO-friendly.
+   */
+  steps?: { title: string; body: string }[];
 }
 
 export interface FeatureSection {

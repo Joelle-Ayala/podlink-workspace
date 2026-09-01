@@ -73,6 +73,22 @@ export const FEATURES: Feature[] = [
     tagline: "Know which episodes actually got downloaded",
     group: "understand",
     icon: "chart",
+    problem:
+      "Your host says one number, Spotify says another, and the sponsor's spreadsheet doesn't believe either. Every podcaster eventually gets asked \"how do you know?\" — and answers with a screenshot of their own dashboard.",
+    steps: [
+      {
+        title: "Connect your feed",
+        body: "Paste your RSS feed URL. Nothing migrates and nothing changes about how you publish.",
+      },
+      {
+        title: "Add the OP3 prefix once",
+        body: "One copy-paste setting in your podcast host puts the open measurement prefix in front of your audio.",
+      },
+      {
+        title: "Read numbers anyone can check",
+        body: "Downloads per episode, apps and countries chart in your dashboard — measured by OP3, not by us.",
+      },
+    ],
     summary:
       "Podlink reads your download data from OP3, the open podcast prefix — not from a counter we run ourselves. You get downloads and unique listeners per episode, a breakdown by listening app and country, and a trend line across the whole show. When a sponsor asks how you measure, you have an answer that stands up.",
     bullets: [
@@ -112,6 +128,10 @@ export const FEATURES: Feature[] = [
     ],
     faq: [
       {
+        q: "What should a podcast analytics dashboard show?",
+        a: "Downloads per episode, unique listeners, which apps your audience uses, which countries they're in, and the trend across the show — plus the one thing most dashboards skip: who measured the numbers. Podlink's answer is OP3, an open source anyone can check, which is what makes the dashboard usable in a sponsor conversation.",
+      },
+      {
         q: "Where do the download numbers come from?",
         a: "From OP3, an open, independently operated podcast analytics prefix. You add the prefix once in your host, OP3 measures the downloads, and Podlink reads them back and charts them. It is not our own counter, which is exactly why it is worth having.",
       },
@@ -133,34 +153,50 @@ export const FEATURES: Feature[] = [
   {
     slug: "transcripts",
     name: "Automatic transcripts",
-    tagline: "Every word you said, searchable",
+    tagline: "Every episode, one click from text",
     group: "understand",
     icon: "transcript",
+    problem:
+      "The moment you half-remember is somewhere in eighty published hours, and the only search tool you have is scrubbing. Meanwhile everything you want written about an episode starts with knowing what was said in it.",
+    steps: [
+      {
+        title: "Connect your feed",
+        body: "Your episode list syncs from the RSS feed you already publish — every episode, with its audio.",
+      },
+      {
+        title: "Press transcribe on an episode",
+        body: "One click per episode. Transcription is metered like the rest of your credits — nothing runs or bills without you asking.",
+      },
+      {
+        title: "Get editable text minutes later",
+        body: "A clean transcript you can correct, copy, publish on your episode page, or generate the content kit from.",
+      },
+    ],
     summary:
-      "Upload an episode and get a clean, editable transcript with speaker labels and timestamps. Search your archive to find the moment you half-remember, quote yourself correctly, and give search engines something to actually index. The transcript is also what every other draft in Podlink is written from.",
+      "Press transcribe on any episode and get clean, editable text a few minutes later — you choose which episodes, and credits are metered like everything else. The transcript is what your show notes and social copy are written from, and every transcript you create is stored and indexed, which is what the archive-search tools on the roadmap are built on.",
     bullets: [
-      "Speaker labels and timestamps, not a wall of text",
-      "Search across every episode you have published, not just the last one",
+      "One click per episode — you pick what gets transcribed, never surprise billing",
+      "Editable text: fix a name once, use the corrected version everywhere",
       "Quote a guest accurately without scrubbing through the audio",
-      "The source your show notes, clips and social copy are generated from",
+      "The source your show notes and social copy are generated from",
     ],
     sections: [
       {
-        heading: "Transcribed on arrival, not on request",
-        body: "You don't queue anything. When an episode shows up in your feed, Podlink transcribes it and the text is waiting when you open the episode. Speakers are separated and every line is timestamped, so jumping from a sentence to the moment in the audio is one click rather than a hunt.",
+        heading: "One click per episode, minutes to text",
+        body: "Your episodes are already listed in Podlink, synced from your feed. Press transcribe on the one you want and clean, editable text is waiting a few minutes later. It is deliberately per-episode: transcription costs credits, so you decide what gets transcribed — the new episode every week, or the one old episode you actually need — and nothing ever bills on its own.",
         bullets: [
-          "Speaker labels for hosts and guests",
-          "Timestamps down to the line",
-          "Ready before you have finished writing the episode title",
+          "Works on any episode in your feed, new or years old",
+          "Metered against your plan credits, like Speech to Text",
+          "You choose which episodes — never automatic billing",
         ],
       },
       {
-        heading: "Your back catalogue becomes searchable",
-        body: "Two years of episodes is a research archive you cannot currently read. Search the transcript archive and the answer to \"which episode was that story in?\" takes seconds. It changes what you can do with old work: pull a callback, find the clip you always meant to cut, check whether you have already covered a topic before you book the guest.",
+        heading: "Your back catalogue is becoming searchable",
+        body: "Two years of episodes is a research archive you cannot currently read. Every transcript you create in Podlink is stored and full-text indexed — that index is the foundation the archive-search tools on the roadmap are built on, including asking your own AI assistant what you said in episode 12. Transcribe as you go and the archive is ready when the search is.",
         bullets: [
-          "Search names, topics and phrases across the whole show",
-          "Land on the exact line, with the timestamp attached",
-          "Useful the day you connect your feed, because the back catalogue imports with it",
+          "Every transcript stored against its episode, permanently",
+          "Full-text indexed from day one",
+          "Archive search and assistant access are on the roadmap — no dates, per house rules",
         ],
       },
       {
@@ -174,6 +210,10 @@ export const FEATURES: Feature[] = [
       },
     ],
     faq: [
+      {
+        q: "Does transcription use my credits?",
+        a: "Yes — it is metered exactly like the Speech to Text tool, by the length of what comes back, and only when you press transcribe. Episodes over 90 minutes are outside the cap, and nothing is ever transcribed (or billed) automatically.",
+      },
       {
         q: "How accurate is the transcription?",
         a: "Good enough to publish after a skim, and reliably good on ordinary conversation. Unusual names, product names and heavy crosstalk are where any transcription tool struggles, so those are the lines worth a glance before you post it.",
@@ -202,6 +242,22 @@ export const FEATURES: Feature[] = [
     tagline: "Hit publish with the notes already written",
     group: "create",
     icon: "notes",
+    problem:
+      "It's eleven at night, the episode is exported, and the show notes are still a blank box. That's the night publishing slips to tomorrow — and tomorrow is how weekly shows quietly become monthly ones.",
+    steps: [
+      {
+        title: "Transcribe the episode",
+        body: "One click. The notes are written from the transcript, so they reflect what was actually said.",
+      },
+      {
+        title: "Set your format once",
+        body: "Your sections, your headings, your tone — described one time in templates and brand voice.",
+      },
+      {
+        title: "Review the draft and publish",
+        body: "Summary, chapters, takeaways, links and title options arrive in your shape. You read, adjust, and paste into your host.",
+      },
+    ],
     summary:
       "Podlink writes your show notes from the transcript, so the summary reflects what was actually said. You get a structured set of notes with chapter timestamps, takeaways and every link and name that came up — plus title options and a description sized to fit the directories. It arrives in your format, because you set that once.",
     bullets: [
@@ -243,6 +299,10 @@ export const FEATURES: Feature[] = [
     ],
     faq: [
       {
+        q: "How does an AI show notes generator work?",
+        a: "The honest ones work from the transcript: the episode is transcribed, then the summary, chapters, takeaways and resource list are written from what was actually said — in the structure you set once. The ones to avoid work from the title and a guess. You can tell them apart by whether a takeaway can be traced back to a line in the episode.",
+      },
+      {
         q: "Is the AI going to make things up about my episode?",
         a: "Summaries, takeaways and timestamps are generated from the transcript, so they are anchored in what was said. Nothing publishes on its own either — Podlink drafts, you approve. Give the resource list a glance before you post it, the same way you would check a link you typed yourself.",
       },
@@ -267,6 +327,22 @@ export const FEATURES: Feature[] = [
     tagline: "Set your format once, stop rewriting the output",
     group: "create",
     icon: "template",
+    problem:
+      "The output was fine, but it was never your format — so every draft became a rewrite, and the AI tool became a tab you stopped opening. The fix was never a better model. It was telling the tool how your show writes, once.",
+    steps: [
+      {
+        title: "Paste notes you were happy with",
+        body: "The fastest setup is an example: show Podlink an episode's notes you liked and the structure follows.",
+      },
+      {
+        title: "Set the voice",
+        body: "Dry or warm, first or third person, exclamation marks or never — ten minutes, set at the show level.",
+      },
+      {
+        title: "Generate in your shape from then on",
+        body: "Notes, newsletter and social copy all inherit the format and voice. No re-prompting every week.",
+      },
+    ],
     summary:
       "Tell Podlink how your show writes — the structure, the section headings, the tone — and every episode after that arrives in that shape. On top of your own format there are over 100 ready-made templates for the writing that isn't an episode: the launch post, the sponsor pitch, the blog version, the ad copy.",
     bullets: [
@@ -330,6 +406,22 @@ export const FEATURES: Feature[] = [
     tagline: "Publish in the languages your audience listens in",
     group: "create",
     icon: "globe",
+    problem:
+      "Half your audience doesn't read the language you publish in — and paying a translator every single week was never going to happen, so the second-language listeners just never got anything written for them.",
+    steps: [
+      {
+        title: "Transcribe in the recording language",
+        body: "The episode is transcribed in the language it was actually recorded in.",
+      },
+      {
+        title: "Pick the output language",
+        body: "Generate the notes, description and social copy in the language you want to publish in.",
+      },
+      {
+        title: "Publish both versions",
+        body: "Same structure, same tone settings, different language — put each where its audience reads.",
+      },
+    ],
     summary:
       "Your show can be in English and half your audience still not be. Podlink transcribes across the major podcasting languages and generates a second-language version of an episode's notes, description and social copy in one pass — in the same format and voice as the original.",
     bullets: [
@@ -387,11 +479,27 @@ export const FEATURES: Feature[] = [
     tagline: "One episode, a week of things to post",
     group: "grow",
     icon: "clip",
+    problem:
+      "Growing the show meant two extra hours per episode of finding moments, cutting, captioning and writing posts. Nobody has the two hours — so the clips just don't get made, and the episode's reach stops at the feed.",
+    steps: [
+      {
+        title: "Transcribe the episode",
+        body: "Clip work starts from the transcript — the moments live in what was said.",
+      },
+      {
+        title: "Get the moments and the copy",
+        body: "Podlink surfaces the moments worth clipping, with timestamps, and writes the per-platform post copy for each.",
+      },
+      {
+        title: "Cut, then post it yourself",
+        body: "Jump your editor to the timestamp, cut the clip, paste the caption. Nothing posts without you.",
+      },
+    ],
     summary:
-      "The reason most shows don't grow isn't the audio — it's that nobody had two spare hours to cut clips and write posts. Podlink finds the moments worth clipping, cuts them vertical with captions burned in, and writes the copy that goes around each one, per platform.",
+      "The reason most shows don't grow isn't the audio — it's that nobody had two spare hours to find clip moments and write posts. Podlink reads the transcript, surfaces the moments worth clipping with their timestamps, and writes the copy that goes around each one, per platform. Automatic vertical cuts with burned-in captions are on the roadmap; today, the finding and the writing are done for you.",
     bullets: [
       "Clip suggestions ranked by how well the moment stands on its own",
-      "Vertical cuts with captions, ready for the platforms that want them",
+      "Timestamps for every suggestion, so your editor jumps straight to the cut",
       "Post copy written per platform, because LinkedIn and TikTok don't read alike",
       "Enough material from one episode to cover the week",
     ],
@@ -401,8 +509,8 @@ export const FEATURES: Feature[] = [
         body: "Finding a clip means listening back to an hour you have already heard. Podlink reads the transcript and surfaces the moments that work out of context — the sharp answer, the story with a beginning and an end, the line a guest will want to share. You listen to a handful of candidates instead of the whole episode.",
         bullets: [
           "Candidates ranked, so the best one is near the top",
-          "Cut to start and end on a complete thought",
-          "Vertical format with captions burned in",
+          "Suggested to start and end on a complete thought",
+          "Each with its timestamp, so the cut takes seconds in your editor",
         ],
       },
       {
@@ -416,25 +524,29 @@ export const FEATURES: Feature[] = [
       },
       {
         heading: "Publishing stays yours",
-        body: "Podlink writes and cuts. You post. That means no connected accounts to re-authorise every few weeks, no scheduler quietly failing at 6am, and no chance of something going out that you hadn't read. Copy, download, publish — from the platform you were going to open anyway.",
+        body: "Podlink finds and writes. You cut and post. That means no connected accounts to re-authorise every few weeks, no scheduler quietly failing at 6am, and no chance of something going out that you hadn't read. Automatic vertical cutting with burned-in captions is on the roadmap — the posting will stay yours even then.",
         bullets: [
           "Nothing posts without you",
-          "Download the clip, copy the caption, publish",
+          "Cut at the timestamp, copy the caption, publish",
           "No social account connections required to get value out of it",
         ],
       },
     ],
     faq: [
       {
+        q: "How does an AI podcast clip generator pick the moments?",
+        a: "From the transcript, not the waveform. A moment that works as a clip is one that stands on its own — a complete answer, a story with an ending, a line worth quoting — and that's a property of the words. Podlink reads what was said, ranks the candidates, and hands you each one with its timestamp.",
+      },
+      {
         q: "Does Podlink post to my social accounts for me?",
-        a: "No. It writes the posts and cuts the clips; you publish them. Plenty of tools will schedule for you and most podcasters end up turning that off — the failure mode of an automated post is worse than the two minutes it saves.",
+        a: "No. It finds the moments and writes the posts; you cut and publish. Plenty of tools will schedule for you and most podcasters end up turning that off — the failure mode of an automated post is worse than the two minutes it saves.",
       },
       {
-        q: "My show is audio only. Can I still get clips?",
-        a: "Yes. Clips are cut from the episode with the words on screen, so an audio-only show still has something postable on the platforms that expect video.",
+        q: "Does Podlink cut the video file itself?",
+        a: "Not yet — that's on the roadmap. Today you get the moment, the exact timestamps, and the platform copy, and you make the cut in the editor you already use. The two hours the clip workflow used to take were mostly finding and writing, and those are the parts that are done for you.",
       },
       {
-        q: "How many clips come out of one episode?",
+        q: "How many clip suggestions come out of one episode?",
         a: "Enough to post through the week from a normal-length episode. How many are worth posting is your call — that's why they come ranked rather than dumped in a folder.",
       },
       {
@@ -450,6 +562,22 @@ export const FEATURES: Feature[] = [
     tagline: "The issue that goes with the episode, already drafted",
     group: "grow",
     icon: "mail",
+    problem:
+      "\"New episode is out\" is the email that trains people to stop opening. Writing a real issue takes an hour you don't have on publish day — which is why the newsletter is the job that slips first and stays slipped.",
+    steps: [
+      {
+        title: "Transcribe the episode",
+        body: "The issue is written from the transcript, so it says what the episode said.",
+      },
+      {
+        title: "Generate the issue",
+        body: "The hook, three things worth knowing, the links that came up and a listen button — in your voice and format.",
+      },
+      {
+        title: "Paste and send from your own tool",
+        body: "Your list, your deliverability, your archive stay exactly where they are. Podlink drafts; you send.",
+      },
+    ],
     summary:
       "A ready-to-send issue for every episode: the hook, the three things worth knowing, the links that came up and a listen button. It is written from the transcript in your voice, so sending the newsletter stops being the job you skip when the week gets busy.",
     bullets: [
@@ -490,6 +618,10 @@ export const FEATURES: Feature[] = [
     ],
     faq: [
       {
+        q: "What should a podcast newsletter include?",
+        a: "A reason to keep reading, a few things a subscriber gets even without pressing play, the links from the conversation, and one obvious listen button. That's the shape Podlink drafts for every episode — useful on its own, so opening it never feels like a chore.",
+      },
+      {
         q: "Does Podlink send the newsletter for me?",
         a: "No, and that's deliberate. It writes the issue and you send it from the tool that already has your subscribers, your sender reputation and your archive. Moving a list to a podcast tool is a much bigger decision than getting a draft written.",
       },
@@ -514,6 +646,22 @@ export const FEATURES: Feature[] = [
     tagline: "One link that points at every place your show lives",
     group: "grow",
     icon: "link",
+    problem:
+      "\"Listen on Apple, Spotify, YouTube or Pocket Casts\" is four links, and your bio has room for one. So the guest shares nothing, the listener gives up at the directory, and the bio link points at whatever you set it to in 2023.",
+    steps: [
+      {
+        title: "Connect your feed",
+        body: "Artwork, show details and episodes come across from the RSS feed you already publish.",
+      },
+      {
+        title: "Get podlink.fm/yourshow",
+        body: "One short page with every listening app, your latest episodes, and room for what matters this week.",
+      },
+      {
+        title: "Put the one link everywhere",
+        body: "Bios, comments, the episode itself. The page keeps itself current from your feed.",
+      },
+    ],
     summary:
       "Every podcast needs a link to put in a bio, and \"listen on Apple, Spotify, Pocket Casts, YouTube\" doesn't fit in one. Your podlink.fm/yourshow page holds every listening app, your latest episodes and whatever you are pointing people at this week — and it updates itself from your feed.",
     bullets: [
