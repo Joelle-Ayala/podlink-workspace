@@ -12,6 +12,7 @@ import {
   DiyCrossLink,
   FaqList,
   FitQualifier,
+  FromPriceCard,
   IncludesList,
   PlacementsStrip,
   PricingTable,
@@ -140,11 +141,14 @@ export default async function ServicePage({
         hugeNumbers={service.slug !== "podcast-growth"}
       />
       <FitQualifier fit={service.fit} />
+      {/* Hybrid pricing (founder-delegated 2026-08-31): from-card in the
+          reading flow; full tier detail collapsed-but-in-DOM below. */}
+      <FromPriceCard pricing={service.pricing} />
+      <WhyPodlink whyPodlink={service.whyPodlink} />
       <PricingTable
         tiers={service.pricing.tiers}
         footnote={service.pricing.footnote}
       />
-      <WhyPodlink whyPodlink={service.whyPodlink} />
       <PlacementsStrip placements={service.placements} />
       <FaqList faqs={service.faqs} />
       <RelatedServices related={related} />

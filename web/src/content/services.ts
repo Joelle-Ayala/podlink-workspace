@@ -183,6 +183,10 @@ export const services: Service[] = [
     },
     faqs: [
       {
+        q: "How much does podcast editing cost?",
+        a: "Podcast editing costs from $275 per episode for full audio production — editing, mixing, show notes and publishing. Video episodes are priced separately, and add-ons like episode art and social graphics are itemized on this page. Episode length, revision count and cadence move the number; we put a precise figure on it in one call.",
+      },
+      {
         q: "What's included in audio episode editing?",
         a: "Dialogue editing and clean-up, noise reduction, levelling and mixing, music placement, intro and outro, ad insertion, correct ID3 tagging, and one round of revisions. Up to 60 minutes per episode as standard.",
       },
@@ -322,6 +326,10 @@ export const services: Service[] = [
         "Clip templates are built once against your brand and reused, so cost per clip drops as volume goes up. Two-episode and eight-clip minimums apply to monthly plans.",
     },
     faqs: [
+      {
+        q: "How much do podcast clips cost?",
+        a: "Podcast clips cost from $250 per episode for two branded, captioned clips in portrait and landscape, with the social copy written to post. Templates are built once against your brand and reused, so the cost per clip drops as volume goes up. Monthly plans carry two-episode and eight-clip minimums.",
+      },
       {
         q: "Do clips work if my show is audio-only?",
         a: "They work best with video, because the moment you're clipping is a person saying something. For audio-only shows we build motion-graphic treatments with captions and b-roll — effective, but if you're serious about clips, start recording video.",
@@ -464,6 +472,10 @@ export const services: Service[] = [
     },
     faqs: [
       {
+        q: "How much does podcast advertising cost?",
+        a: "Managed podcast advertising starts at $2,500 per month for campaign management, plus your ad budget. The retainer scales with spend; voice talent and celebrity reads are billed separately, and six-month terms are standard — host-read advertising compounds over quarters, not weeks.",
+      },
+      {
         q: "How is a podcast ad tracked?",
         a: "Vanity URLs with UTM parameters, unique promo codes, and post-purchase survey questions where the client can run one. Every placement gets its own identifier so you can see which show produced the conversion.",
       },
@@ -604,6 +616,10 @@ export const services: Service[] = [
         "Rate card work credits against the first months of managed sales. Sponsorship rates on shows we currently represent run $3,000–$8,000 per episode with a four-episode minimum, and 20% off an eight-week commitment.",
     },
     faqs: [
+      {
+        q: "How much does podcast sponsorship representation cost?",
+        a: "20% of the sponsorship revenue we bring in — you pay nothing up front. Rate card work credits against the first months of managed sales. For scale: shows we represent sell packages from $3,000 to $8,000 per episode, with a four-episode minimum.",
+      },
       {
         q: "How many downloads do I need before I can sell ads?",
         a: "Most podcast ad agencies won't work with you until you're doing 10–20,000 downloads an episode. The median show does about 28. We exist for everyone the industry locks out — you don't need 20,000 downloads to be sponsorable; you need the right audience, proven. A show doing a few thousand downloads with an engaged, specific audience and real short-form reach is more sellable than a bigger, vaguer one. What matters is whether we can describe your listener precisely enough that a brand recognizes their customer.",
@@ -749,6 +765,10 @@ export const services: Service[] = [
     },
     faqs: [
       {
+        q: "How much does podcast guest booking cost?",
+        a: "Podcast guest booking costs $750 to start — strategy, positioning, media training and the pitch materials — then $449 per booking, charged only when a show you approved says yes. Add-ons like paid social promotion of your clips are itemized on this page.",
+      },
+      {
         q: "How long until I'm booked on something?",
         a: "Roughly three weeks from kickoff to the first opportunities landing, based on how our campaigns have actually run. Booking rates then depend on your category and how distinctive your angle is.",
       },
@@ -884,6 +904,10 @@ export const services: Service[] = [
         "Full engagements carry a one-time strategy and setup fee and typically run six months, which is the shortest window where compounding is visible.",
     },
     faqs: [
+      {
+        q: "How much does podcast growth marketing cost?",
+        a: "Podcast growth campaigns start at $750. Full engagements carry a one-time strategy and setup fee and typically run six months — the shortest window where compounding is visible — with monthly KPI reporting included in the scope.",
+      },
       {
         q: "How do I know if my show is actually underperforming?",
         a: "By percentile, not vanity numbers. In the first seven days: 26+ downloads is the top 50%, 72+ is the top 25%, 231+ is the top 10%, 539+ is the top 5%, and 3,062+ is the top 1%. Most hosts are doing better than they think and distributing worse than they think.",

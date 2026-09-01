@@ -386,6 +386,79 @@ export function WhyPodlink({
 /* Pricing                                                                     */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * §7 primary pricing surface: the "from" price + what moves it + the call
+ * CTA. Founder-delegated hybrid (2026-08-31): this card is the reading-flow
+ * pricing; the full tier detail stays in the DOM lower on the page
+ * (PricingDetail) for the transparency signal and cost-query SEO.
+ */
+export function FromPriceCard({
+  pricing,
+}: {
+  pricing: Service["pricing"];
+}) {
+  /* tiers[0] is the "from" anchor (interface contract) — its inclusions are
+     what the from-price actually buys, so they're what renders here. */
+  const anchor = pricing.tiers[0];
+
+  return (
+    <Section className="bg-zinc-50">
+      <div id="pricing" className="scroll-mt-24">
+        <Eyebrow>Pricing</Eyebrow>
+        <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+          Real numbers, not &ldquo;contact us&rdquo;.
+        </h2>
+        <div className="mt-10 grid gap-8 lg:grid-cols-12">
+          <div className="rounded-2xl border-2 bg-white p-8 lg:col-span-7" style={{ borderColor: ORANGE }}>
+            <p className="text-4xl font-bold tabular-nums lg:text-5xl">
+              {pricing.fromLabel}
+            </p>
+            <p className="mt-4 max-w-xl text-lg text-zinc-700">
+              Scope moves the number — episode length, cadence, and what
+              you&rsquo;re adding on. We&rsquo;ll tell you which way, with a
+              real figure, on the call.
+            </p>
+            {anchor && (
+              <ul className="mt-6 space-y-3">
+                {anchor.includes.slice(0, 5).map((inc) => (
+                  <li key={inc} className="flex gap-2.5 text-sm text-zinc-800">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: ORANGE }}
+                    />
+                    <span className="leading-relaxed">{inc}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-8 flex flex-wrap items-center gap-5">
+              <CtaButton href="/contact">Book a call</CtaButton>
+              <Link
+                href="#pricing-detail"
+                className="text-base font-semibold underline underline-offset-4"
+                style={{ color: ORANGE_700 }}
+              >
+                See the full pricing detail &darr;
+              </Link>
+            </div>
+          </div>
+          <p className="text-sm leading-relaxed text-zinc-600 lg:col-span-5 lg:self-center">
+            Every price on this page is real and listed in the full detail
+            below — tiers, inclusions and add-ons. We publish numbers because
+            &ldquo;contact us&rdquo; pricing wastes everyone&rsquo;s time.
+          </p>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/**
+ * §7 secondary pricing surface: the full tier detail, native <details> so it
+ * reads collapsed in the flow but every price and inclusion stays in the DOM
+ * (transparency signal + "how much does X cost" queries). No client JS.
+ */
 export function PricingTable({
   tiers,
   footnote,
@@ -394,18 +467,28 @@ export function PricingTable({
   footnote?: string;
 }) {
   return (
-    <Section className="bg-zinc-50">
-      <div id="pricing" className="scroll-mt-24">
-        <Eyebrow>Pricing</Eyebrow>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
-          Real numbers, not &ldquo;contact us&rdquo;.
-        </h2>
+    <Section className="!py-10">
+      <details id="pricing-detail" className="scroll-mt-24 group">
+        <summary className="cursor-pointer list-none">
+          <span
+            className="text-sm font-semibold uppercase tracking-widest"
+            style={{ color: ORANGE_700 }}
+          >
+            Full pricing detail
+          </span>
+          <span className="ml-3 text-sm text-zinc-600 underline underline-offset-4 group-open:hidden">
+            expand
+          </span>
+          <span className="ml-3 hidden text-sm text-zinc-600 underline underline-offset-4 group-open:inline">
+            collapse
+          </span>
+        </summary>
         <p className="mt-4 max-w-2xl text-lg text-zinc-700">
           Starting points based on what this work actually costs to do well.
           Scope moves the number; we&rsquo;ll tell you which way on the call.
         </p>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -453,7 +536,7 @@ export function PricingTable({
             {footnote}
           </p>
         )}
-      </div>
+      </details>
     </Section>
   );
 }

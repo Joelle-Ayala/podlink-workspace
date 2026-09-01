@@ -63,6 +63,9 @@ links to feature pages with keyword-intent anchors (Cluster B anchor text).
 MCP cluster assets ride the submission-prep work (setup docs, /claude page).
 
 ## 5. Weekly GSC pull (ops cadence — the scoreboard)
+**MANUAL Monday item — founder decision 2026-08-31: NO scheduled task, ever
+(the scheduler tool stalls the app; two documented freezes). Whoever runs the
+Monday session executes this section by hand.**
 Weekly, from the verified Search Console property (podlink.ai + podlink.fm):
 queries + pages + positions, broken out by cluster A/B/C + branded. Track:
 (a) impressions-by-page against what shipped that week — the measurable form
