@@ -132,6 +132,8 @@ Route::middleware(['auth', 'updateUserActivity'])
                 // Podcast Analytics — OP3 (op3.dev) download stats for the user's show
                 Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
                 Route::post('analytics/connect', [AnalyticsController::class, 'connect'])->name('analytics.connect');
+                // Transcript pipeline (spec §3): user-triggered, credit-gated.
+                Route::post('analytics/episodes/{episode}/transcribe', [AnalyticsController::class, 'transcribe'])->name('analytics.transcribe');
 
                 // YouTube channel connect (ML2-lite) — per-episode video views
                 // alongside downloads. Inert until YOUTUBE_CLIENT_ID/SECRET are set.

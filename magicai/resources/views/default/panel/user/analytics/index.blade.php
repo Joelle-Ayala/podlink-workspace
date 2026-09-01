@@ -362,6 +362,12 @@
                                 @php
                                     $episodeVideoId = data_get($episode, 'youtube_video_id');
                                     $episodeViews = $episodeVideoId ? ($youtubeViews[$episodeVideoId] ?? null) : null;
+                                    // Transcript pipeline (spec §3): only DB-backed
+                                    // episodes (models with an id) can transcribe;
+                                    // the OP3-fallback array rows cannot.
+                                    $episodeId = data_get($episode, 'id');
+                                    $episodeTranscript = $episodeId ? data_get($episode, 'transcript') : null;
+                                    $transcriptStatus = $episodeTranscript?->status;
                                 @endphp
                                 <li class="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
                                     <span class="min-w-0 truncate text-2xs font-medium text-heading-foreground">
@@ -373,6 +379,26 @@
                                                 <x-tabler-brand-youtube class="size-3" />
                                                 {{ number_format($episodeViews) }}
                                             </span>
+                                        @endif
+                                        @if ($episodeId)
+                                            @if ($transcriptStatus === \App\Models\EpisodeTranscript::STATUS_COMPLETED)
+                                                <span class="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-3xs font-medium text-primary">
+                                                    {{ __('Transcribed') }}
+                                                </span>
+                                            @elseif ($transcriptStatus === \App\Models\EpisodeTranscript::STATUS_PENDING || $transcriptStatus === \App\Models\EpisodeTranscript::STATUS_PROCESSING)
+                                                <span class="inline-flex items-center rounded-full bg-foreground/10 px-2 py-0.5 text-3xs font-medium text-foreground/60">
+                                                    {{ __('Transcribing…') }}
+                                                </span>
+                                            @elseif (filled(data_get($episode, 'audio_url')))
+                                                <form method="POST" action="{{ route('dashboard.user.analytics.transcribe', $episodeId) }}" class="m-0 inline">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="inline-flex items-center rounded-full border border-foreground/20 px-2 py-0.5 text-3xs font-medium text-foreground/70 hover:border-primary hover:text-primary"
+                                                        title="{{ $transcriptStatus === \App\Models\EpisodeTranscript::STATUS_FAILED ? __('Last attempt failed — retry. Uses credits like Speech to Text.') : __('Uses credits like Speech to Text.') }}">
+                                                        {{ $transcriptStatus === \App\Models\EpisodeTranscript::STATUS_FAILED ? __('Retry transcript') : __('Transcribe') }}
+                                                    </button>
+                                                </form>
+                                            @endif
                                         @endif
                                         <span class="text-3xs text-foreground/50">
                                             {{ $formatDate(data_get($episode, 'pub_date')) ?? '—' }}

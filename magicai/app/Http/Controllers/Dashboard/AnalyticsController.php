@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TranscribeEpisodeJob;
+use App\Models\Episode;
+use App\Models\EpisodeTranscript;
 use App\Models\PodcastShow;
 use App\Models\YoutubeConnection;
 use App\Services\EpisodeSyncService;
@@ -123,6 +126,49 @@ class AnalyticsController extends Controller
             'youtubeVideos'     => $youtubeVideos,
             'youtubeViews'      => $youtubeViews,
         ]);
+    }
+
+    /**
+     * User-triggered transcription of a single episode (spec §3: backfill
+     * is per-episode and credit-gated, never automatic). Tenancy: the
+     * episode must belong to the requesting user's own show.
+     */
+    public function transcribe(Request $request, Episode $episode): RedirectResponse
+    {
+        $user = $request->user();
+
+        $ownsEpisode = PodcastShow::query()
+            ->where('user_id', $user->id)
+            ->where('id', $episode->podcast_show_id)
+            ->exists();
+
+        abort_unless($ownsEpisode, 404);
+
+        if (blank($episode->audio_url)) {
+            return back()->with('error', __('This episode has no audio file to transcribe.'));
+        }
+
+        $transcript = EpisodeTranscript::query()->firstOrCreate(
+            ['episode_id' => $episode->id],
+            ['status' => EpisodeTranscript::STATUS_PENDING],
+        );
+
+        if ($transcript->isCompleted()) {
+            return back()->with('message', __('This episode is already transcribed.'));
+        }
+
+        if ($transcript->status === EpisodeTranscript::STATUS_PROCESSING) {
+            return back()->with('message', __('Transcription is already running for this episode.'));
+        }
+
+        // Re-queue failed rows; leave already-pending rows queued once.
+        if ($transcript->status === EpisodeTranscript::STATUS_FAILED) {
+            $transcript->update(['status' => EpisodeTranscript::STATUS_PENDING, 'error' => null]);
+        }
+
+        TranscribeEpisodeJob::dispatch($transcript->id);
+
+        return back()->with('message', __('Transcription queued — it appears here when it finishes. Credits are metered like Speech to Text.'));
     }
 
     public function connect(Request $request, Op3Service $op3, EpisodeSyncService $episodeSync): RedirectResponse

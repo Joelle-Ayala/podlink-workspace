@@ -81,9 +81,11 @@ class EpisodeSyncService
 
         $synced = 0;
 
+        $autoTranscribe = (bool) config('podlink.auto_transcribe_new', false);
+
         foreach ($items as $item) {
             try {
-                Episode::query()->updateOrCreate(
+                $episode = Episode::query()->updateOrCreate(
                     [
                         'podcast_show_id' => $show->id,
                         'guid'            => $item['guid'],
@@ -96,6 +98,21 @@ class EpisodeSyncService
                         'duration_seconds' => $item['duration_seconds'],
                     ],
                 );
+
+                // Spec §3: queue transcription for NEW episodes only, and
+                // only when the opt-in flag is on (it bills owner credits —
+                // default OFF, see config/podlink.php). Backfill is never
+                // automatic.
+                if ($autoTranscribe && $episode->wasRecentlyCreated && filled($episode->audio_url)) {
+                    $transcript = \App\Models\EpisodeTranscript::query()->firstOrCreate(
+                        ['episode_id' => $episode->id],
+                        ['status' => \App\Models\EpisodeTranscript::STATUS_PENDING],
+                    );
+
+                    if ($transcript->wasRecentlyCreated) {
+                        \App\Jobs\TranscribeEpisodeJob::dispatch($transcript->id);
+                    }
+                }
 
                 $synced++;
             } catch (\Throwable $e) {
@@ -126,6 +143,7 @@ class EpisodeSyncService
     public function recent(PodcastShow $show, int $limit = 10)
     {
         return $show->episodes()
+            ->with('transcript')
             ->orderByDesc('pub_date')
             ->orderByDesc('id')
             ->limit(max(1, $limit))

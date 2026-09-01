@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * A single published episode of a connected show, parsed from its RSS feed.
@@ -34,5 +35,10 @@ class Episode extends Model
     public function show(): BelongsTo
     {
         return $this->belongsTo(PodcastShow::class, 'podcast_show_id');
+    }
+
+    public function transcript(): HasOne
+    {
+        return $this->hasOne(EpisodeTranscript::class);
     }
 }

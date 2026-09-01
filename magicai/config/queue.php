@@ -66,7 +66,10 @@ return [
             'driver'       => 'redis',
             'connection'   => 'default',
             'queue'        => env('REDIS_QUEUE', 'default'),
-            'retry_after'  => 90,
+            // Must exceed the longest job runtime (TranscribeEpisodeJob can
+            // legitimately run minutes on a 90-min episode) or a second
+            // worker would re-pick the job mid-flight. Env-tunable.
+            'retry_after'  => (int) env('REDIS_QUEUE_RETRY_AFTER', 960),
             'block_for'    => null,
             'after_commit' => false,
         ],
