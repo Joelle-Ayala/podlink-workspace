@@ -51,8 +51,10 @@ productized." (already voice-guide canon, P3)
 ---
 
 ## Open slots that get stronger with verification
-- [ ] Wolf's Den named explicitly? (currently "one of the biggest business
-      podcasts of the era" — naming it is HER call; show is in proof.ts)
+- [x] Wolf's Den naming: APPROVED 2026-09-02 (Q1 resolved — "share what
+      actually happened"). Paragraph 2 may read "…running marketing for
+      Jordan Belfort's Wolf's Den podcast…". Overall page still HELD for her
+      full sign-off.
 - [ ] "I turned down Andrew Tate" — belongs in the LinkedIn 1-pager or an
       interview answer more than /about; needs verbatim confirmation
 - [ ] Guest-booking name-drops (Holiday/Brunson/Patel/Siu/Asprey) — add ONLY

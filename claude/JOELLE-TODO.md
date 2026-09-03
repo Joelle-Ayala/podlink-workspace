@@ -37,9 +37,13 @@ concat("https://podlink.ai", http.request.uri.path) → Deploy.
 Log into app.podlink.ai → sidebar → Podcast Analytics → confirm downloads render by
 episode/app/country → reply "verified". Claude publishes the changelog entry same hour.
 
-## 7. Podcast Index API key — 3 min 📱 (Claude can't create accounts)
+## 7. Podcast Index API key — 3 min — NOW THE ONLY GATE ON THE NEXT NEW FEATURE
 api.podcastindex.org → sign up → verify email → dashboard → copy API Key + Secret → paste
-to Claude. Unlocks the producer-universe count that sizes Studio.
+to Claude. UPGRADED FRAMING (2026-09-02): contact-discovery P1 — find shows by niche
++ show contact cards, the free no-vendor layer of the booking feature YOU can uniquely
+sell ("the method I ran by hand for five years, productized") — is sequenced as the
+named next NEW feature, and this key is its only blocker. It also still unlocks the
+producer-universe count that sizes Studio. Three minutes buys a feature.
 
 ## 8. Cold-email sending domains — 30 min 🖥 — 75-DAY CLOCK, every day waits costs a day
 Buy 2 fresh domains (NOT podlink.ai/fm — e.g. getpodlink.com, podlinkhq.com). Google

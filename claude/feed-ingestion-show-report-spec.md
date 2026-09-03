@@ -96,3 +96,12 @@ copy constraint stands until the transcript pipeline ships).
 - Pipeline scoring adds four signal triggers: YouTube-upload/RSS cross-match (dual-publisher flag - also the ML2 beta waitlist source), OP3 threshold crossings, sponsor mentions, competitor-complaint signals.
 - Show Report + every generated artifact: public share link + "Powered by podlink.ai" one-click-signup badge + anonymized cohort benchmark line ("top X% for YouTube conversion among shows your size") - the switching-cost layer.
 - Activation instrumentation: week-1 activation event chain (feed connected -> YouTube connected -> first report viewed) tracked from day one; gates outbound automation per gtm-plan 4c.
+
+## AMENDMENT 2026-09-02 - Show Report ELEVATED to hero deliverable
+Per gtm-plan positioning amendment (validated founder pain, founder-story-raw.md 1b):
+the Show Report is no longer one artifact among several - it IS the hero use case
+("the report is the product"). Build priority within this spec rises accordingly:
+Show Report page next after contact-discovery P1 slots (WORK-CANON sequencing note),
+composing OP3 downloads + YouTube views (both live) with graceful absent-channel
+states; social/website columns join as ML3/GA4-read land. Media-kit spec rides the
+same surface. Percentile badge ships on it (gate: verify the benchmark table first).

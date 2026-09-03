@@ -192,3 +192,30 @@ plan, no fork):
 automated Pro motion · "Config C" = the Studio motion · "Routes A–E" = the
 five email lanes in §2 · "S1–S5 / P1–P4" = the personas in
 `buyer-personas-messaging.md`.
+
+## AMENDMENT 2026-09-02 - POSITIONING SPINE (founder-directed; validated)
+Source: founder-story-raw.md 1b (her verbatim) + cross-channel-report-validation.md.
+No fork - this amends the master plan in place.
+1. HERO USE CASE: the unified cross-channel report. "The report that took a day of
+   API wizardry and spreadsheet stitching - generated from your connected accounts."
+   Audio vs video vs social vs clips vs website, woven, as a LIVE page (Show Report /
+   media-kit line; never a PDF). Positioning line: the dashboard is table stakes;
+   THE REPORT IS THE PRODUCT. (Contested-dashboard caveat + differentiators in the
+   validation doc: OP3 independence, shareable report artifact, AI-woven, clips+SEO scope.)
+2. SECOND ACT: "talk to your podcast" (MCP; live today as custom connector).
+3. SUPPORTING CAST, framed exactly in her cadence: "oh, bonus - it has a clipping
+   tool, it has all these other great tools."
+4. TWO-DOOR RECONCILIATION (no homepage fork): same hero through both doors -
+   producer/agency door: "client reports without the API wizardry" (the acute weekly
+   form of the pain); creator door: "the sponsor report that proves your whole
+   audience" (the high-stakes form). Personas doc gains this nuance, S3/Studio leads
+   the acute form.
+5. FOUNDER-TRUTH FEATURES (the two features she can uniquely testify to):
+   (a) the unified report - built to kill her own agency''s worst chore (launch post
+   #1 material, founder-voice-guide sample D); (b) guest booking / contact-discovery -
+   "the method I ran by hand for five years, productized" (Happy Returns discovery,
+   Dropbox/DocSend first client, cold email as craft, 106 deals; she is the proof;
+   "which shows, specifically" answers with /work). Feature copy plans name her as proof.
+6. CLAIMS GATE unchanged: full cross-channel weave is PARTIAL (OP3+YouTube live;
+   social/website pending ML3) - hero copy ships in future-tense-safe forms until the
+   report page exists.

@@ -39,6 +39,32 @@ voice-of-customer) remains open.
   (NOTE: Minting House stays OUT of user-facing copy per standing rule — the
   story can say "my agency" publicly; the name stays internal/legal.)
 
+## 1b. VERBATIM ADDENDUM (2026-09-02 — her words, quoted directly)
+"One thing that's always taken a lot of time is making reports — for clients,
+about their show, how they're growing across the channels: video compared to
+audio compared to social compared to clips, compared to their website if
+they're repurposing content for SEO. Every time I have to do these reports,
+you got to go in each one and either be a wizard with APIs, or you got to add
+all these things into a spreadsheet and paste it all together and figure it
+out. And now how I could use AI to weave all that in — that's really one of
+the stronger use cases right now of Podlink. It's definitely a big pain... I
+really want to elaborate, validate, make sure that's true, make sure a lot of
+people are experiencing that in some capacity, and show that we've solved that
+problem with Podlink. And you could talk to your podcast, get content insights
+from your podcast. And then, oh bonus, it has a clipping tool, it has all
+these other great tools to help grow your podcast."
+→ Validated externally 2026-09-02: claude/cross-channel-report-validation.md.
+→ THE FOUNDER THROUGHLINE: she built the product to kill her own agency's
+worst chore. Paired founder-truth features: (1) the unified report (this
+quote) and (2) guest booking (Happy Returns discovery + Dropbox/DocSend first
+client + 106 deals + cold email as craft — "the method I ran by hand for five
+years, productized"). She IS the proof for both; copy answers "which shows,
+specifically" with /work.
+
+## Q1 RESOLVED (2026-09-02): Belfort era is front-and-center approved — "I
+don't mind sharing what actually happened at Jordan Belfort, so you can go
+ahead and share that." Per-surface judgment still applies; default is open.
+
 ## 2. Evidence status per claim (rule: NOTHING public before verification)
 | Claim | Status | Verification path |
 |---|---|---|

@@ -79,5 +79,16 @@ VENDOR PURCHASES: ALL ON HOLD (podcast-data-vendors.md header) - approved-to-buy
 
 STATUS 2026-08-27 on item 4: branch was obsolete; MCP is live on MAIN, e2e-verified on prod (OAuth 2.1/DCR/PKCE + all 4 tools; annotations added in 75b1a80fe). See mcp-branch-review.md. Remaining for directory: setup-docs page + Joelle's Team org purchase + privacy policy URL.
 
+## SEQUENCING NOTE 2026-09-02 - next NEW feature named (founder directive)
+Contact-discovery P1 (contact-discovery-spec.md free layer: Podcast Index search by
+niche + RSS/site-crawl contact cards - no vendor, no gate) is the NAMED NEXT NEW
+FEATURE. Capacity check passed: transcript pipeline v1 SHIPPED and MCP submission
+prep is code-complete (waiting only on Joelle's taps), so P1 slots WITHOUT delaying
+either. ONLY GATE: her Podcast Index API key (JOELLE-TODO #7, bumped). Sequence once
+key lands: P1 build -> Show Report page (now hero deliverable per gtm-plan amendment)
+-> ML2 YouTube demographics -> TikTok/Meta prep. P1 is also the genuine-new-entry
+drip slot flagged in the calendar, with founder-voice sample E as its announcement
+spine (she is the proof: Dropbox first client, 106 deals, /work).
+
 ## Standing rule - frontend/backend lockstep (founder directive 2026-08-27)
 The front end of the site progresses as the backend does, and vice versa. No frontend copy, page, or index flip may claim a capability the deployed backend cannot do (claims-truth rules apply), and no backend capability ships without its frontend surface scheduled in the same cycle. Every feature commit names its counterpart (or states why none is needed).

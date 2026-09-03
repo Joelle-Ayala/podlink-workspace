@@ -85,6 +85,31 @@ appearance was never the point. What travels afterward is.
 That's still how we book guests at PodLink — every appearance ships with
 clips built to travel. The show's audience is the floor, not the ceiling."
 
+**D. LinkedIn — the reports chore (LAUNCH POST #1 candidate; validated pain,
+cross-channel-report-validation.md):**
+"Every month, for years, I built the same report. Client's show: audio
+downloads from the host, YouTube views from Studio, clips numbers from three
+apps, website traffic if we were repurposing for SEO. Different logins,
+different definitions of a 'play,' one spreadsheet, paste, stitch, pray.
+You either become a wizard with APIs or you lose a day to copy-paste. I did
+both, monthly, for every client. [✓ her verbatim telling, validated: agencies
+literally sell spreadsheet templates for this chore]
+That report is the first thing I made PodLink build. Numbers from OP3 — open,
+checkable by the sponsor you send it to — woven together across the channels,
+as a live page, not a PDF attachment. And because it's all connected, you can
+just ask: 'how did my show do this week?' Your assistant answers with your
+real numbers.
+Oh, and bonus — it finds your clip moments and writes the posts too. But the
+report is why it exists. I built it to kill my own worst chore."
+
+**E. Booking-feature spine (for the contact-discovery P1 drip — the SECOND
+founder-truth feature):** the Happy Returns discovery + Dropbox/DocSend first
+client + cold email as craft + 106 deals. Register: "I booked podcasts by
+hand for five years — related-shows on Apple, find the email, write the cold
+email myself. The feature is that method, productized. Which shows,
+specifically? Here's the list: /work." [Dropbox cleared; DocSend specifics +
+106-deals framing pass founder-story-raw.md §2 before publishing]
+
 ## 4. Composition with existing systems
 - The Gott LinkedIn launch system (launch-plan §7) supplies the MECHANICS
   (gates, allies, 2-hour reply window); this guide supplies the SOUND.
@@ -113,11 +138,9 @@ LinkedIn cross-check still pending her lent session (two Chromes connected —
 needs her pick).
 
 ## 6. QUESTIONS FOR JOELLE (only she can answer — see report)
-Q1 Belfort prominence: front-and-center ("I ran marketing for Jordan
-   Belfort's Wolf's Den") vs oblique ("one of the biggest business podcasts
-   of the era")? Positioning judgment: the era is her strongest proof AND
-   carries brand association risk. Her call per surface (LinkedIn bio vs
-   /about vs launch post).
+Q1 ✅ RESOLVED 2026-09-02: front-and-center APPROVED ("I don't mind sharing
+   what actually happened at Jordan Belfort"). Default = open; per-surface
+   judgment retained. Sample A un-gated; /about may name Wolf's Den.
 Q2 Which claims is she comfortable making publicly even where verification
    is soft: revenue figures? internship employer names? HBO?
 Q3 Dates: years at Happy Returns, years on Wolf's Den/Sales School, when
