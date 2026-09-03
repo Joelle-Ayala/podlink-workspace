@@ -90,5 +90,16 @@ key lands: P1 build -> Show Report page (now hero deliverable per gtm-plan amend
 drip slot flagged in the calendar, with founder-voice sample E as its announcement
 spine (she is the proof: Dropbox first client, 106 deals, /work).
 
+## HARD RULE - LAUNCH GATE (founder directive 2026-09-02)
+NOTHING LAUNCHES WITHOUT JOELLE'S EXPLICIT FINAL GO after her verified-done
+review. Specifically held behind the gate: directory submissions (Claude,
+ChatGPT, AND the aggregator listings - they publish), launch posts (LinkedIn/
+X, founder-voice or brand), and index flips that constitute launching
+(/pricing, /features/mcp). Prep CONTINUES at full speed - drafts, checklists,
+code, demo data - but the submit/post/flip actions wait. The review artifact
+is claude/launch/README.md (the definitive launch checklist with statuses);
+she verifies at a glance, then says GO. Ordinary drip entries for real
+shipped features continue per the drip calendar's own checklist.
+
 ## Standing rule - frontend/backend lockstep (founder directive 2026-08-27)
 The front end of the site progresses as the backend does, and vice versa. No frontend copy, page, or index flip may claim a capability the deployed backend cannot do (claims-truth rules apply), and no backend capability ships without its frontend surface scheduled in the same cycle. Every feature commit names its counterpart (or states why none is needed).

@@ -100,3 +100,10 @@ show's content, not in another tab."
 - Every claim survivable by a screenshot — same rule as the case studies.
 - Announcement copy stays in the buyer's language (personas doc §3): time back,
   in-your-voice, prove-it. Never "revolutionary AI."
+
+## STATUS AMENDMENT 2026-09-02 (post-SSD recovery - current state)
+- Drip #1 (Download Analytics) PUBLISHED (2026-08-25, changelog live - verified by the desktop thread).
+- SHIPPED SINCE, queued as drip candidates (verify-then-ship per the checklist): episode transcripts (one-click, credit-metered - pipeline live 09-01) - "talk to your podcast" MCP connector incl. transcript search (v1.1 live 09-02; announcement carries directory-scoped claims ONLY per voice-guide, and its TENTPOLE version waits on the directory listing).
+- NEXT GENUINE NEW ENTRY: contact-discovery P1 (find shows by niche + contact cards) - named next new feature (WORK-CANON 09-02); only gate = Joelle''s Podcast Index key; announcement spine = founder-voice sample E.
+- TENTPOLES UPDATE: Show Report is now the HERO deliverable (gtm-plan positioning amendment 09-02) - its launch interrupts the drip when it ships. MCP directory listing remains the other tentpole.
+- LAUNCH GATE (09-02, binding): tentpole announcements, launch posts, directory submission and launch-constituting index flips ALL wait on Joelle''s verified-done final go (claude/launch/README.md). Ordinary drip entries (real shipped features, honestly announced) continue on cadence.
