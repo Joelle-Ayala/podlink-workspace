@@ -50,8 +50,17 @@ Approved, citable stories — use them where a section needs weight:
   brands" (live services copy, evidence-gated); 700+ clips across 20+ shows; 68+ episodes
   for a single client; a 17-month continuous ad campaign; 21 verified placements on /work.
 - **Demand proof:** 106 booking deals of proven demand (contact-discovery spec §8).
-- `TODO(voice):` any origin story in Joelle's own first person (why she started, the
-  Megaphone years) — needs her telling; do not draft one for her.
+- **Origin story: DELIVERED 2026-09-02** (voice memo → claude/founder-story-raw.md;
+  relayed arc filed, VERBATIM transcript still pending attachment). The two narrative
+  spines now available: (a) the clips-as-ads flywheel from the Wolf's Den years — clips
+  funded growth instead of costing money; PodLink is that playbook productized; (b) the
+  Happy Returns booking discovery — bookings drove backlinks/SEO/referrals/demos.
+  Texture lines: "I cut sports highlights for Fox before AI could" (paraphrase-grade,
+  internships unverified) and "I turned down Andrew Tate" (her first person only, after
+  verbatim confirmation). EVERY factual claim gates through founder-story-raw.md §2
+  before public use — the Oracle-NetSuite-sponsor claim especially (do NOT conflate with
+  the dead "Oracle 3x" case-study claim).
+- `TODO(voice):` client emails / voice-of-customer threads — still open (her tap).
 
 ### P4 — Proprietary data as voice
 Numbers ARE the register. The download-percentile benchmark (26/72/231/539/3,062 —
