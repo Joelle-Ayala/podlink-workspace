@@ -1,9 +1,12 @@
 # PODLINK LAUNCH — the one folder (2026-09-02)
-**HARD RULE (WORK-CANON): nothing launches without Joelle's explicit final GO
-after she verifies this checklist done.** Held behind the gate: directory
-submissions (Claude + ChatGPT + aggregators), launch posts, and
-launch-constituting index flips (/pricing, /features/mcp). Prep continues;
-the submit/post/flip actions wait.
+**HARD RULE (WORK-CANON, narrowed per Joelle same day): the gate covers
+EXTERNAL COMMS ONLY.** Held for her explicit GO: directory submissions
+(Claude + ChatGPT + aggregators — they publish a public listing), launch
+posts (LinkedIn/X), PR/outreach, and anything framed as a launch
+announcement. NOT gated: code deploys, site updates, feature ships, and
+index flips — /pricing flips when its own 5 conditions clear (B5 admin
+ladder is the outstanding one), /features/mcp on its own 4-condition list.
+Ordinary drip changelog entries continue as before.
 
 This folder REFERENCES the canonical docs rather than duplicating them
 (founder instruction: no drift). Every launch-marketing doc lives at exactly
@@ -53,9 +56,11 @@ one path, indexed below.
 Also standing (GTM, not launch-gating): sending domains (75-day clock, #8) ·
 cPanel rotation · Spotify payout · TikTok/Meta identity fields.
 
-**When B1–B4 + B8 are done → directory submission same day. B5 additionally
-unlocks the /pricing flip track. Launch posts fire on the listing-live day
-per the launch plan cascade — all behind B8.**
+**When B1–B4 + B8 are done → directory submission same day. Launch posts
+fire on the listing-live day per the launch plan cascade — behind B8.
+The /pricing flip is NOT behind B8: it proceeds on its own 5-condition
+checklist (pricing-page-template.md) the moment B5's admin ladder lands and
+the remaining TODO(pricing)/claims/sitemap checks clear.**
 
 ---
 
