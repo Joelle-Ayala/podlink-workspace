@@ -136,3 +136,33 @@ propaganda") · synergy-anything · reach multipliers (CVS lesson, personas §3)
 - `TODO(voice)`: confirm the "five years" delivery span phrasing against the evidence
   brief's date range (Canva job numbers run Dec 2021–Sep 2023; "since 2021" is the safe form).
 
+## 7. Founder texture in PRODUCT copy (added 2026-09-02, from the origin story)
+Where the brand voice may borrow from the founder story — sparingly, as origin
+notes rather than autobiography:
+- **War stories as feature origin notes.** One line per surface, max: the clips
+  feature can carry "the moment is found by judgment — our founder cut sports
+  highlights by hand before AI could" ONCE the internship facts clear §-gates
+  (founder-story-raw.md §2). Never more than one war story per page.
+- **The flywheel as product thesis.** "Clips funded the show's growth instead of
+  costing money — that loop is what this productizes" is now canon for
+  why-Podlink surfaces (verified against the shows' public existence; revenue
+  numbers stay OUT).
+- **The by-hand register.** "Built from five years of doing this by hand" family
+  of phrasings — already P3 canon ("booked podcasts by hand… productized"),
+  now extended to clips and measurement.
+
+## 8. DIVERGENCE RULES — founder voice vs brand voice (binding on future sessions)
+Two registers, deliberately different. See claude/founder-voice-guide.md for hers.
+| | Founder voice (her feed) | Brand voice (podlink.ai, product, docs) |
+|---|---|---|
+| Person | First person singular, "I/my" | "We/Podlink"; never fake-first-person for her |
+| Opinions | Allowed — judgments, asides, "I turned down X" | Not allowed — evidence-gated claims only |
+| Numbers | Plot points in stories; same verification gates | Proof displayed HUGE; sourced; universe stated |
+| Casing/typos | Lowercase/casual OK on X | House style always |
+| Belfort era | Her call per surface (founder-voice Q1) | Referenced obliquely if at all; never in headlines |
+| CTAs | DM-register asks, comment gates | Start free / Book a call, orange-CTA law |
+| Who writes | Drafts for HER edit; she sends everything | Ships through the audit/sign-off process |
+NEVER blur them: no first-person-Joelle sentences in site copy; no
+product-voice hedging flattening her feed. A post that quotes the site, or a
+page that quotes her, does so with attribution, not by voice-mixing.
+
