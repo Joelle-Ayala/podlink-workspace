@@ -5,7 +5,9 @@ declare(strict_types=1);
 use App\Mcp\Tools\GetPodlinkPageTool;
 use App\Mcp\Tools\GetShowOverviewTool;
 use App\Mcp\Tools\GetTopAppsTool;
+use App\Mcp\Tools\GetTranscriptTool;
 use App\Mcp\Tools\ListEpisodesTool;
+use App\Mcp\Tools\SearchTranscriptsTool;
 use PhpMcp\Laravel\Facades\Mcp;
 
 /*
@@ -29,8 +31,12 @@ use PhpMcp\Laravel\Facades\Mcp;
 |   via App\Mcp\Concerns\ResolvesMcpUser. Reviewers: if you see an identity
 |   field in an inputSchema here, reject the change.
 |
-| v1.1 (get_page_stats) and v1.2 (generate_content, list_templates) are NOT
-| built. Do not add them here without the credit-metering work they depend on.
+| v1.1 transcript tools (search_transcripts, get_transcript) are BUILT
+| (2026-09-01, pipeline landed). Gate tier: transcript READS are free — the
+| metered step was creating the transcript. `episode_ref` is a content
+| locator resolved strictly inside the token's own show, not an identity
+| parameter. v1.1 get_page_stats and v1.2 (generate_content, list_templates)
+| remain NOT built — do not add them without their gating work.
 |
 */
 
@@ -106,3 +112,62 @@ Mcp::tool(GetPodlinkPageTool::class)
     )
     ->annotations($readOnly('Podlink page'))
     ->inputSchema($noInput);
+
+Mcp::tool(SearchTranscriptsTool::class)
+    ->name('search_transcripts')
+    ->description(
+        'Search the signed-in Podlink user\'s OWN episode transcripts for a word or phrase. '
+        . 'Returns matching episodes with a text snippet around the match and an episode_ref '
+        . 'usable with get_transcript. Only episodes the user has transcribed are searchable; '
+        . 'a structured no_transcripts state explains how to transcribe when none exist.'
+    )
+    ->annotations($readOnly('Search your transcripts'))
+    ->inputSchema([
+        'type' => 'object',
+        'properties' => [
+            'query' => [
+                'type' => 'string',
+                'description' => 'The word or phrase to search for across episode transcripts.',
+                'minLength' => 1,
+                'maxLength' => 200,
+            ],
+            'limit' => [
+                'type' => 'integer',
+                'description' => 'Max matching episodes to return.',
+                'minimum' => 1,
+                'maximum' => 20,
+                'default' => 5,
+            ],
+        ],
+        'required' => ['query'],
+        'additionalProperties' => false,
+    ]);
+
+Mcp::tool(GetTranscriptTool::class)
+    ->name('get_transcript')
+    ->description(
+        'Get the full transcript of one of the signed-in Podlink user\'s OWN episodes, by the '
+        . 'episode_ref returned from list_episodes or search_transcripts. Long transcripts are '
+        . 'returned in parts; the response says how many parts exist. Episodes that are not '
+        . 'transcribed yet return a structured state explaining how to transcribe them.'
+    )
+    ->annotations($readOnly('Get an episode transcript'))
+    ->inputSchema([
+        'type' => 'object',
+        'properties' => [
+            'episode_ref' => [
+                'type' => 'string',
+                'description' => 'The episode id from list_episodes or search_transcripts. Refers only to episodes on your own show.',
+                'minLength' => 1,
+                'maxLength' => 200,
+            ],
+            'part' => [
+                'type' => 'integer',
+                'description' => 'Which part of a long transcript to return, starting at 1.',
+                'minimum' => 1,
+                'default' => 1,
+            ],
+        ],
+        'required' => ['episode_ref'],
+        'additionalProperties' => false,
+    ]);
