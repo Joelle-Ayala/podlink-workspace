@@ -134,6 +134,8 @@ Route::middleware(['auth', 'updateUserActivity'])
                 Route::post('analytics/connect', [AnalyticsController::class, 'connect'])->name('analytics.connect');
                 // Transcript pipeline (spec §3): user-triggered, credit-gated.
                 Route::post('analytics/episodes/{episode}/transcribe', [AnalyticsController::class, 'transcribe'])->name('analytics.transcribe');
+                // Show Report share toggle (opt-in public link).
+                Route::post('analytics/report-toggle', [AnalyticsController::class, 'toggleReport'])->name('analytics.report-toggle');
 
                 // YouTube channel connect (ML2-lite) — per-episode video views
                 // alongside downloads. Inert until YOUTUBE_CLIENT_ID/SECRET are set.

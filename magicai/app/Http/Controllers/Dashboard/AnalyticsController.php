@@ -171,6 +171,36 @@ class AnalyticsController extends Controller
         return back()->with('message', __('Transcription queued — it appears here when it finishes. Credits are metered like Speech to Text.'));
     }
 
+    /**
+     * Show Report share toggle (spec §4): opt-in public link, default off.
+     * Enabling mints an unguessable hash once; disabling kills the URL
+     * (and the 30-min cache entry) immediately.
+     */
+    public function toggleReport(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $show = PodcastShow::query()->where('user_id', $user->id)->first();
+
+        if ($show === null) {
+            return back()->with('error', __('Connect your podcast first.'));
+        }
+
+        if ($show->reportEnabled()) {
+            \Illuminate\Support\Facades\Cache::forget('public-report:' . $show->report_share_hash);
+            $show->update(['report_enabled_at' => null]);
+
+            return back()->with('message', __('Public report link disabled. The URL no longer works.'));
+        }
+
+        $show->update([
+            'report_share_hash' => $show->report_share_hash ?: bin2hex(random_bytes(20)),
+            'report_enabled_at' => now(),
+        ]);
+
+        return back()->with('message', __('Public report link enabled — share it with a sponsor or client.'));
+    }
+
     public function connect(Request $request, Op3Service $op3, EpisodeSyncService $episodeSync): RedirectResponse
     {
         $data = $request->validate([

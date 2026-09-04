@@ -15,11 +15,19 @@ class PodcastShow extends Model
         'rss_feed_url',
         'op3_show_uuid',
         'episodes_last_synced_at',
+        'report_share_hash',
+        'report_enabled_at',
     ];
 
     protected $casts = [
         'episodes_last_synced_at' => 'datetime',
+        'report_enabled_at'       => 'datetime',
     ];
+
+    public function reportEnabled(): bool
+    {
+        return $this->report_enabled_at !== null && filled($this->report_share_hash);
+    }
 
     public function user(): BelongsTo
     {

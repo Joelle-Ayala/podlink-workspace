@@ -413,6 +413,37 @@
                         </p>
                     @endif
                 </x-card>
+
+                {{-- Show Report v1 — opt-in public share link (spec §4).
+                     The report is a LIVE page, never an attachment. --}}
+                <x-card class:body="p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <h3 class="m-0 text-sm font-semibold text-heading-foreground">
+                                {{ __('Public Show Report') }}
+                            </h3>
+                            <p class="m-0 mt-1 text-2xs text-foreground/60">
+                                @if ($show->reportEnabled())
+                                    {{ __('Live — share this link with a sponsor or client. It always shows current numbers, measured by OP3.') }}
+                                @else
+                                    {{ __('Off by default. Turn it on to get a shareable live page of your downloads, apps and episodes — numbers a sponsor can check.') }}
+                                @endif
+                            </p>
+                            @if ($show->reportEnabled())
+                                <p class="m-0 mt-2 select-all break-all font-mono text-2xs text-primary">
+                                    https://podlink.ai/report/{{ $show->report_share_hash }}
+                                </p>
+                            @endif
+                        </div>
+                        <form method="POST" action="{{ route('dashboard.user.analytics.report-toggle') }}" class="m-0 shrink-0">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center rounded-full border px-3 py-1 text-2xs font-medium {{ $show->reportEnabled() ? 'border-foreground/20 text-foreground/70' : 'border-primary text-primary' }}">
+                                {{ $show->reportEnabled() ? __('Disable link') : __('Enable public report') }}
+                            </button>
+                        </form>
+                    </div>
+                </x-card>
             </div>
 
             {{-- ── YouTube (ML2-lite) ───────────────────────────────────── --}}

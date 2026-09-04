@@ -25,6 +25,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('health', HealthController::class);
 
+// Show Report v1 (public, opt-in via unguessable hash; 30-min cached;
+// throttled by the api group). podlink.ai/report/{hash} consumes this.
+Route::get('public/report/{hash}', [\App\Http\Controllers\PublicReportController::class, 'show'])
+    ->where('hash', '[A-Za-z0-9]{16,64}')
+    ->name('public.report');
+
 Route::prefix('auth')
     ->group(function () {
         Route::post('register', 'App\Http\Controllers\Api\AuthController@register');
