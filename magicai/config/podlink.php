@@ -20,4 +20,14 @@ return [
     */
     'auto_transcribe_new' => (bool) env('PODLINK_AUTO_TRANSCRIBE_NEW', false),
 
+    /*
+    | Podcast Index (contact-discovery P1 search). Free tier; the feature is
+    | built and inert until these land (Joelle's 3-min signup —
+    | api.podcastindex.org). Attribution shown in the UI per their terms.
+    */
+    'podcastindex' => [
+        'key'    => env('PODCASTINDEX_KEY'),
+        'secret' => env('PODCASTINDEX_SECRET'),
+    ],
+
 ];

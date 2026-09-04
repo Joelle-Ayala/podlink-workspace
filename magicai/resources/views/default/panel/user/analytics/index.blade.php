@@ -446,6 +446,21 @@
                 </x-card>
             </div>
 
+            {{-- Contact-discovery P1 cross-link (sidebar menu is DB-managed;
+                 until an admin menu entry exists this is the discoverable path). --}}
+            <x-card class:body="flex flex-wrap items-center justify-between gap-3 p-5">
+                <div class="min-w-0">
+                    <h3 class="m-0 text-sm font-semibold text-heading-foreground">{{ __('Find shows to get booked on') }}</h3>
+                    <p class="m-0 mt-1 text-2xs text-foreground/60">
+                        {{ __('Search podcasts by niche and get contact cards from their own public feeds and sites.') }}
+                    </p>
+                </div>
+                <a href="{{ route('dashboard.user.discovery.index') }}"
+                    class="inline-flex shrink-0 items-center rounded-full border border-primary px-4 py-2 text-2xs font-medium text-primary">
+                    {{ __('Find Shows') }}
+                </a>
+            </x-card>
+
             {{-- ── YouTube (ML2-lite) ───────────────────────────────────── --}}
             @include('panel.user.analytics.partials.youtube')
         @endif

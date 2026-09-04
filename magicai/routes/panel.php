@@ -137,6 +137,10 @@ Route::middleware(['auth', 'updateUserActivity'])
                 // Show Report share toggle (opt-in public link).
                 Route::post('analytics/report-toggle', [AnalyticsController::class, 'toggleReport'])->name('analytics.report-toggle');
 
+                // Contact-discovery P1 — Find Shows (free layer; search inert
+                // until PODCASTINDEX_KEY/SECRET; contact cards work keyless).
+                Route::get('discovery', [\App\Http\Controllers\Dashboard\DiscoveryController::class, 'index'])->name('discovery.index');
+
                 // YouTube channel connect (ML2-lite) — per-episode video views
                 // alongside downloads. Inert until YOUTUBE_CLIENT_ID/SECRET are set.
                 Route::prefix('analytics/youtube')
