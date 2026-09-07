@@ -29,6 +29,14 @@ interface ReportEpisode {
   transcribed: boolean;
 }
 
+interface ReportDemographics {
+  source: string;
+  window_days: number;
+  by_age: Record<string, number>;
+  by_gender: Record<string, number>;
+  top_countries: { country: string; views: number }[];
+}
+
 interface Report {
   show_title: string | null;
   measured_by: string;
@@ -36,6 +44,7 @@ interface Report {
   downloads: unknown;
   top_apps: unknown;
   youtube_connected: boolean;
+  demographics: ReportDemographics | null;
   episodes: ReportEpisode[];
   generated_at: string;
   shared_since: string | null;
@@ -147,6 +156,74 @@ export default async function ShowReportPage({
               </li>
             ))}
           </ul>
+        </Section>
+      )}
+
+      {report.demographics && (
+        <Section>
+          <Eyebrow>Audience</Eyebrow>
+          <p className="mt-3 max-w-2xl text-sm text-zinc-600">
+            Share of watch audience over the last{" "}
+            {report.demographics.window_days} days — from the show&rsquo;s own{" "}
+            {report.demographics.source}.
+          </p>
+          <div className="mt-8 grid max-w-3xl gap-10 sm:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-500">
+                By age
+              </h3>
+              <ul className="mt-4 grid gap-2">
+                {Object.entries(report.demographics.by_age).map(([age, pct]) => (
+                  <li key={age} className="flex items-center gap-3">
+                    <span className="w-14 shrink-0 text-sm text-zinc-700">{age}</span>
+                    <span
+                      className="h-2.5 rounded-full bg-zinc-800"
+                      style={{ width: `${Math.min(100, Math.max(2, pct))}%` }}
+                    />
+                    <span className="shrink-0 text-sm tabular-nums text-zinc-600">
+                      {pct}%
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-500">
+                By gender
+              </h3>
+              <ul className="mt-4 grid gap-2">
+                {Object.entries(report.demographics.by_gender).map(
+                  ([gender, pct]) => (
+                    <li key={gender} className="flex items-baseline justify-between gap-4 border-b border-zinc-200 pb-1">
+                      <span className="text-sm capitalize text-zinc-700">
+                        {gender.replace(/_/g, " ")}
+                      </span>
+                      <span className="text-sm tabular-nums text-zinc-600">
+                        {pct}%
+                      </span>
+                    </li>
+                  ),
+                )}
+              </ul>
+              {report.demographics.top_countries.length > 0 && (
+                <>
+                  <h3 className="mt-6 text-sm font-semibold uppercase tracking-widest text-zinc-500">
+                    Top countries
+                  </h3>
+                  <ul className="mt-4 grid gap-2">
+                    {report.demographics.top_countries.map((row) => (
+                      <li key={row.country} className="flex items-baseline justify-between gap-4 border-b border-zinc-200 pb-1">
+                        <span className="text-sm text-zinc-700">{row.country}</span>
+                        <span className="text-sm tabular-nums text-zinc-600">
+                          {row.views.toLocaleString()} views
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          </div>
         </Section>
       )}
 

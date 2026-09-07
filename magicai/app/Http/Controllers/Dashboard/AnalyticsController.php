@@ -94,12 +94,17 @@ class AnalyticsController extends Controller
         $youtubeVideos = [];
         $youtubeViews = [];
 
+        $youtubeDemographics = null;
+
         if ($youtubeConfigured) {
             $youtubeConnection = YoutubeConnection::query()->where('user_id', $user->id)->first();
 
             if ($youtubeConnection !== null) {
                 $youtubeVideos = $youtubeAnalytics->videos($youtubeConnection);
                 $youtubeViews = $youtubeAnalytics->viewsByVideoId($youtubeVideos);
+
+                // ML2 expanded: channel audience demographics (age/gender/geo).
+                $youtubeDemographics = $youtubeAnalytics->demographics($youtubeConnection);
 
                 // Naive title pairing — writes episodes.youtube_video_id only
                 // where it is still null, and logs every match.
@@ -125,6 +130,7 @@ class AnalyticsController extends Controller
             'youtubeConnection' => $youtubeConnection,
             'youtubeVideos'     => $youtubeVideos,
             'youtubeViews'      => $youtubeViews,
+            'youtubeDemographics' => $youtubeDemographics,
         ]);
     }
 

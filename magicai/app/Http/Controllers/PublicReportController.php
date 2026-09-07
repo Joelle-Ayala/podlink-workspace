@@ -85,6 +85,7 @@ class PublicReportController extends Controller
         // Cross-channel: YouTube views per paired episode, when the owner
         // has a connection. Degrades to audio-only silently.
         $views = [];
+        $demographics = null;
 
         try {
             $connection = YoutubeConnection::query()->where('user_id', $show->user_id)->first();
@@ -92,9 +93,26 @@ class PublicReportController extends Controller
             if ($connection !== null) {
                 $videos = $this->youtubeAnalytics->videos($connection);
                 $views = $this->youtubeAnalytics->viewsByVideoId($videos);
+
+                // ML2 expanded — the media-kit line on the hero artifact:
+                // consented, channel-level audience demographics. Only the
+                // 'ok' shape is published; reconnect/no-data states stay
+                // private to the dashboard.
+                $demo = $this->youtubeAnalytics->demographics($connection);
+
+                if (($demo['status'] ?? null) === 'ok') {
+                    $demographics = [
+                        'source'        => 'YouTube Analytics (owner-consented, read-only)',
+                        'window_days'   => $demo['window_days'] ?? 90,
+                        'by_age'        => $demo['by_age'] ?? [],
+                        'by_gender'     => $demo['by_gender'] ?? [],
+                        'top_countries' => array_slice($demo['top_countries'] ?? [], 0, 5),
+                    ];
+                }
             }
         } catch (\Throwable) {
             $views = [];
+            $demographics = null;
         }
 
         return [
@@ -104,6 +122,7 @@ class PublicReportController extends Controller
             'downloads' => $downloads,
             'top_apps' => $topApps,
             'youtube_connected' => $views !== [],
+            'demographics' => $demographics,
             'episodes' => $episodes->map(function ($episode) use ($views): array {
                 $videoId = $episode->youtube_video_id;
 

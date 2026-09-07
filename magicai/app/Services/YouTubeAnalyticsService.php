@@ -182,6 +182,135 @@ class YouTubeAnalyticsService
     }
 
     /**
+     * ML2 expanded scope — audience demographics from the YouTube ANALYTICS
+     * API v2 (channel-level; trailing 90 days). Verified at build time:
+     * metrics=viewerPercentage, dimensions=ageGroup,gender (totals ≈100%
+     * because we do NOT add subscribedStatus, which would double-count).
+     *
+     * Returns one of three honest shapes:
+     *   ['status' => 'ok', 'age_gender' => [...], 'by_age' => [...], 'by_gender' => [...], 'top_countries' => [...]]
+     *   ['status' => 'needs_reconnect']  — connection predates the analytics scope (403)
+     *   ['status' => 'no_data']          — scope fine, channel too small/new for the report
+     *
+     * @return array<string, mixed>
+     */
+    public function demographics(YoutubeConnection $connection): array
+    {
+        $cacheKey = 'youtube:demographics:' . $connection->id;
+
+        $result = Cache::remember($cacheKey, 6 * 3600, function () use ($connection): array {
+            $window = [
+                'startDate' => now()->subDays(90)->toDateString(),
+                'endDate'   => now()->toDateString(),
+            ];
+
+            [$status, $json] = $this->getAnalytics($connection, [
+                'ids'        => 'channel==MINE',
+                'metrics'    => 'viewerPercentage',
+                'dimensions' => 'ageGroup,gender',
+                'sort'       => '-viewerPercentage',
+            ] + $window);
+
+            if ($status === 401 || $status === 403) {
+                return ['status' => 'needs_reconnect'];
+            }
+
+            $rows = is_array($json['rows'] ?? null) ? $json['rows'] : [];
+
+            $ageGender = [];
+            $byAge = [];
+            $byGender = [];
+
+            foreach ($rows as $row) {
+                if (! is_array($row) || count($row) < 3 || ! is_numeric($row[2])) {
+                    continue;
+                }
+
+                $age = str_replace('age', '', (string) $row[0]);
+                $gender = (string) $row[1];
+                $percent = round((float) $row[2], 1);
+
+                $ageGender[] = ['age_group' => $age, 'gender' => $gender, 'percent' => $percent];
+                $byAge[$age] = round(($byAge[$age] ?? 0) + $percent, 1);
+                $byGender[$gender] = round(($byGender[$gender] ?? 0) + $percent, 1);
+            }
+
+            // Geography: views by country, same window, top 10.
+            [, $geoJson] = $this->getAnalytics($connection, [
+                'ids'        => 'channel==MINE',
+                'metrics'    => 'views',
+                'dimensions' => 'country',
+                'sort'       => '-views',
+                'maxResults' => 10,
+            ] + $window);
+
+            $countries = [];
+
+            foreach ((is_array($geoJson['rows'] ?? null) ? $geoJson['rows'] : []) as $row) {
+                if (is_array($row) && count($row) >= 2 && is_numeric($row[1])) {
+                    $countries[] = ['country' => (string) $row[0], 'views' => (int) $row[1]];
+                }
+            }
+
+            if ($ageGender === [] && $countries === []) {
+                return ['status' => 'no_data'];
+            }
+
+            arsort($byAge);
+            arsort($byGender);
+
+            return [
+                'status'        => 'ok',
+                'window_days'   => 90,
+                'age_gender'    => $ageGender,
+                'by_age'        => $byAge,
+                'by_gender'     => $byGender,
+                'top_countries' => $countries,
+            ];
+        });
+
+        return is_array($result) ? $result : ['status' => 'no_data'];
+    }
+
+    /**
+     * GET against the YouTube ANALYTICS API v2 (different host from the Data
+     * API), returning [statusCode, json] so callers can tell a scope problem
+     * (401/403 → reconnect) from an empty report.
+     *
+     * @return array{0: int, 1: array<string, mixed>}
+     */
+    private function getAnalytics(YoutubeConnection $connection, array $query): array
+    {
+        $token = $this->accessToken($connection);
+
+        if ($token === null) {
+            return [401, []];
+        }
+
+        try {
+            $response = Http::withToken($token)
+                ->acceptJson()
+                ->timeout(self::TIMEOUT)
+                ->get('https://youtubeanalytics.googleapis.com/v2/reports', $query);
+
+            $json = $response->json();
+
+            if (! $response->successful()) {
+                Log::warning('YouTube Analytics API request failed', [
+                    'status' => $response->status(),
+                    'body'   => mb_substr($response->body(), 0, 500),
+                ]);
+            }
+
+            return [$response->status(), is_array($json) ? $json : []];
+        } catch (\Throwable $e) {
+            Log::warning('YouTube Analytics API exception', ['message' => $e->getMessage()]);
+
+            return [0, []];
+        }
+    }
+
+    /**
      * @return list<string>
      */
     private function uploadIds(YoutubeConnection $connection, string $playlistId): array

@@ -31,6 +31,18 @@ class YouTubeOAuthService
     /** Read-only access to the signed-in user's channel and videos. */
     public const SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
 
+    /**
+     * ML2 expanded scope (media-kit-demographics-spec.md §1): the YouTube
+     * Analytics API scope that unlocks viewerPercentage by ageGroup/gender
+     * and geography. Verified against the v2 docs at build time (dimensions
+     * ageGroup/gender + metric viewerPercentage; endpoint
+     * youtubeanalytics.googleapis.com/v2/reports, ids=channel==MINE).
+     * Connections created BEFORE this scope was added can read videos but
+     * 403 on demographics — the UI offers a reconnect, which re-consents
+     * with both scopes.
+     */
+    public const ANALYTICS_SCOPE = 'https://www.googleapis.com/auth/yt-analytics.readonly';
+
     public function isConfigured(): bool
     {
         return filled(config('services.youtube.client_id'))
@@ -57,7 +69,7 @@ class YouTubeOAuthService
     public function redirect(): RedirectResponse
     {
         return $this->provider()
-            ->scopes([self::SCOPE])
+            ->scopes([self::SCOPE, self::ANALYTICS_SCOPE])
             ->with(['access_type' => 'offline', 'prompt' => 'consent'])
             ->redirect();
     }

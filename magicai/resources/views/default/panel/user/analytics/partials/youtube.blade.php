@@ -128,4 +128,67 @@
             </p>
         @endif
     </x-card>
+
+    {{-- ML2 expanded: channel audience demographics (age/gender/geo, 90d). --}}
+    @php $demo = $youtubeDemographics ?? null; @endphp
+    @if (is_array($demo))
+        <x-card class:body="p-5">
+            <h3 class="m-0 text-sm font-semibold text-heading-foreground">
+                {{ __('YouTube audience demographics') }}
+            </h3>
+            @if (($demo['status'] ?? null) === 'needs_reconnect')
+                <p class="m-0 mt-1 text-2xs text-foreground/60">
+                    {{ __('Your YouTube connection predates audience insights. Reconnect once to grant the read-only analytics permission — nothing else changes.') }}
+                </p>
+                <a href="{{ route('dashboard.user.analytics.youtube.connect') }}"
+                    class="mt-3 inline-flex items-center rounded-full border border-primary px-4 py-2 text-2xs font-medium text-primary">
+                    {{ __('Reconnect to enable demographics') }}
+                </a>
+            @elseif (($demo['status'] ?? null) === 'ok')
+                <p class="m-0 mt-1 text-3xs text-foreground/50">
+                    {{ __('Share of watch audience, last :days days — from your channel\'s own YouTube Analytics, read-only.', ['days' => $demo['window_days'] ?? 90]) }}
+                </p>
+                <div class="mt-4 grid gap-6 sm:grid-cols-2">
+                    <div>
+                        <p class="m-0 text-3xs font-semibold uppercase tracking-wide text-foreground/40">{{ __('By age') }}</p>
+                        <ul class="m-0 mt-2 flex list-none flex-col gap-1.5 p-0">
+                            @foreach (($demo['by_age'] ?? []) as $age => $percent)
+                                <li class="flex items-center gap-2 text-2xs">
+                                    <span class="w-14 shrink-0 text-foreground/70">{{ $age }}</span>
+                                    <span class="h-2 rounded-full bg-primary/70" style="width: {{ min(100, max(2, $percent)) }}%"></span>
+                                    <span class="shrink-0 tabular-nums text-foreground/60">{{ $percent }}%</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="m-0 text-3xs font-semibold uppercase tracking-wide text-foreground/40">{{ __('By gender') }}</p>
+                        <ul class="m-0 mt-2 flex list-none flex-col gap-1.5 p-0">
+                            @foreach (($demo['by_gender'] ?? []) as $gender => $percent)
+                                <li class="flex items-center justify-between gap-2 text-2xs">
+                                    <span class="text-foreground/70">{{ ucfirst(str_replace('_', ' ', $gender)) }}</span>
+                                    <span class="tabular-nums text-foreground/60">{{ $percent }}%</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        @if (filled($demo['top_countries'] ?? []))
+                            <p class="m-0 mt-4 text-3xs font-semibold uppercase tracking-wide text-foreground/40">{{ __('Top countries (views)') }}</p>
+                            <ul class="m-0 mt-2 flex list-none flex-col gap-1 p-0">
+                                @foreach (array_slice($demo['top_countries'], 0, 5) as $row)
+                                    <li class="flex items-center justify-between gap-2 text-2xs">
+                                        <span class="text-foreground/70">{{ $row['country'] }}</span>
+                                        <span class="tabular-nums text-foreground/60">{{ number_format($row['views']) }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <p class="m-0 mt-1 text-2xs text-foreground/60">
+                    {{ __('No demographics available yet — YouTube reports audience data once a channel has enough recent watch activity. It appears here automatically when it does.') }}
+                </p>
+            @endif
+        </x-card>
+    @endif
 @endif
