@@ -55,3 +55,13 @@ None of these touches the OP3/OAuth backbone.
   real connected account (Megaphone client shows + Joelle's channels are the test data).
 
 **2026-08-25 later:** full 12-vendor list consolidated in claude/podcast-data-vendors.md (canonical) - includes Pod Engine ($75/mo, the value pick), Taddy/Listen Notes/host APIs skipped, Spotify no-API finding confirmed.
+
+## AMENDMENT 2026-09-10 - TikTok verification result (build-time check done)
+The TikTok row above is CORRECTED: the official Display API has NO audience
+demographics (age/gender/territory) for standard commercial apps - verified vs
+developers.tiktok.com, 09-10. TikTok contributes follower/likes/view COUNTS only
+(user.info.basic + user.info.stats + video.list, requested day one). Instagram
+demographics VERIFIED REAL (instagram_manage_insights: age brackets, gender, top
+cities/countries; Business/Creator + FB Page + 100-follower minimum, owner-only).
+Full application packages + drafts: claude/tiktok-meta-app-review-prep.md (governs).
+Media-kit demographics stack = YouTube (SHIPPED) + Instagram (post-review) + OP3 geo.
