@@ -35,6 +35,29 @@ return [
 
     'connections' => [
 
+        /*
+        | Biolink READ bridge (PODLINK-MCP-SCOPING.md amendment 08-27b,
+        | option (a): shared-DB read with a drift guard). READ-ONLY BY
+        | CONVENTION AND BY CODE: only BiolinkStatsRepository may use this
+        | connection, and it issues SELECTs exclusively. Inert until the
+        | BIOLINK_DB_* env vars are set (Railway cross-service references to
+        | biolink-public's DATABASE_* values). Every table/column read is
+        | pinned in the repository — a 66biolinks update that drifts the
+        | schema degrades to an "unavailable" state, never an exception.
+        */
+        'biolink' => [
+            'driver'    => 'mysql',
+            'host'      => env('BIOLINK_DB_HOST'),
+            'port'      => env('BIOLINK_DB_PORT', '3306'),
+            'database'  => env('BIOLINK_DB_DATABASE'),
+            'username'  => env('BIOLINK_DB_USERNAME'),
+            'password'  => env('BIOLINK_DB_PASSWORD'),
+            'charset'   => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
         'sqlite' => [
             'driver'                  => 'sqlite',
             'url'                     => env('DATABASE_URL'),

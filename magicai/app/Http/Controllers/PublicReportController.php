@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\PodcastShow;
+use App\Models\User;
 use App\Models\YoutubeConnection;
+use App\Services\Biolink\BiolinkStatsRepository;
 use App\Services\EpisodeSyncService;
 use App\Services\Op3Service;
 use App\Services\YouTubeAnalyticsService;
@@ -32,6 +34,7 @@ class PublicReportController extends Controller
         private readonly Op3Service $op3,
         private readonly EpisodeSyncService $episodeSync,
         private readonly YouTubeAnalyticsService $youtubeAnalytics,
+        private readonly BiolinkStatsRepository $biolinkStats,
     ) {
     }
 
@@ -123,6 +126,7 @@ class PublicReportController extends Controller
             'top_apps' => $topApps,
             'youtube_connected' => $views !== [],
             'demographics' => $demographics,
+            'podlink_page' => $this->podlinkPage($show),
             'episodes' => $episodes->map(function ($episode) use ($views): array {
                 $videoId = $episode->youtube_video_id;
 
@@ -136,6 +140,38 @@ class PublicReportController extends Controller
             'generated_at' => now()->toIso8601String(),
             'shared_since' => $show->report_enabled_at?->toDateString(),
         ];
+    }
+
+    /**
+     * The report's Podlink-page column (Biolink bridge, amendment 08-27b).
+     * Only the aggregate ok-shape publishes; owner's link detail stays in
+     * the dashboard.
+     *
+     * @return array{pageviews_30d: int, visitors_30d: int, page_url: ?string}|null
+     */
+    private function podlinkPage(PodcastShow $show): ?array
+    {
+        try {
+            $email = User::query()->whereKey($show->user_id)->value('email');
+
+            if (blank($email)) {
+                return null;
+            }
+
+            $stats = $this->biolinkStats->statsForEmail((string) $email);
+
+            if (($stats['status'] ?? null) !== 'ok') {
+                return null;
+            }
+
+            return [
+                'pageviews_30d' => (int) ($stats['pageviews_30d'] ?? 0),
+                'visitors_30d'  => (int) ($stats['visitors_30d'] ?? 0),
+                'page_url'      => $stats['page_url'] ?? null,
+            ];
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     /** Feed-sourced text: strip tags, cap length (same R5 posture as MCP). */

@@ -10,6 +10,7 @@ use App\Models\Episode;
 use App\Models\EpisodeTranscript;
 use App\Models\PodcastShow;
 use App\Models\YoutubeConnection;
+use App\Services\Biolink\BiolinkStatsRepository;
 use App\Services\EpisodeSyncService;
 use App\Services\Op3Service;
 use App\Services\YouTubeAnalyticsService;
@@ -34,6 +35,7 @@ class AnalyticsController extends Controller
         EpisodeSyncService $episodeSync,
         YouTubeOAuthService $youtubeOauth,
         YouTubeAnalyticsService $youtubeAnalytics,
+        BiolinkStatsRepository $biolinkStats,
     ): View {
         $user = $request->user();
 
@@ -131,6 +133,11 @@ class AnalyticsController extends Controller
             'youtubeVideos'     => $youtubeVideos,
             'youtubeViews'      => $youtubeViews,
             'youtubeDemographics' => $youtubeDemographics,
+            // Biolink bridge (amendment 08-27b): page views + link clicks
+            // for the user's own Podlink page, keyed by the SSO email.
+            'biolinkStats' => $biolinkStats->configured()
+                ? $biolinkStats->statsForEmail((string) $user->email)
+                : null,
         ]);
     }
 

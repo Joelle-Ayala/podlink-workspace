@@ -446,6 +446,39 @@
                 </x-card>
             </div>
 
+            {{-- Biolink bridge (amendment 08-27b): the user's own Podlink
+                 page stats. Renders only when the bridge returns data;
+                 'unavailable' stays silent (never surface plumbing). --}}
+            @if (is_array($biolinkStats ?? null) && ($biolinkStats['status'] ?? null) === 'ok')
+                <x-card class:body="p-5">
+                    <h3 class="m-0 text-sm font-semibold text-heading-foreground">{{ __('Your Podlink page') }}</h3>
+                    <div class="mt-3 flex flex-wrap gap-8">
+                        <div>
+                            <p class="m-0 text-2xl font-bold tabular-nums text-heading-foreground">{{ number_format($biolinkStats['pageviews_30d'] ?? 0) }}</p>
+                            <p class="m-0 text-3xs text-foreground/50">{{ __('page views, last 30 days') }}</p>
+                        </div>
+                        <div>
+                            <p class="m-0 text-2xl font-bold tabular-nums text-heading-foreground">{{ number_format($biolinkStats['visitors_30d'] ?? 0) }}</p>
+                            <p class="m-0 text-3xs text-foreground/50">{{ __('unique visitors') }}</p>
+                        </div>
+                    </div>
+                    @if (filled($biolinkStats['top_links'] ?? []))
+                        <p class="m-0 mt-4 text-3xs font-semibold uppercase tracking-wide text-foreground/40">{{ __('Top links (lifetime clicks)') }}</p>
+                        <ul class="m-0 mt-1 flex list-none flex-col gap-1 p-0">
+                            @foreach ($biolinkStats['top_links'] as $link)
+                                <li class="flex items-baseline justify-between gap-3 text-2xs">
+                                    <span class="min-w-0 truncate text-foreground/70">{{ $link['url'] }}</span>
+                                    <span class="shrink-0 tabular-nums text-foreground/60">{{ number_format($link['clicks']) }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                    @if (filled($biolinkStats['page_url'] ?? null))
+                        <p class="m-0 mt-3 text-3xs"><a href="{{ $biolinkStats['page_url'] }}" target="_blank" rel="noopener" class="text-primary">{{ $biolinkStats['page_url'] }}</a></p>
+                    @endif
+                </x-card>
+            @endif
+
             {{-- Contact-discovery P1 cross-link (sidebar menu is DB-managed;
                  until an admin menu entry exists this is the discoverable path). --}}
             <x-card class:body="flex flex-wrap items-center justify-between gap-3 p-5">

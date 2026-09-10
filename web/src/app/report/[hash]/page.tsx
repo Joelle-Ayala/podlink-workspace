@@ -45,6 +45,11 @@ interface Report {
   top_apps: unknown;
   youtube_connected: boolean;
   demographics: ReportDemographics | null;
+  podlink_page: {
+    pageviews_30d: number;
+    visitors_30d: number;
+    page_url: string | null;
+  } | null;
   episodes: ReportEpisode[];
   generated_at: string;
   shared_since: string | null;
@@ -224,6 +229,40 @@ export default async function ShowReportPage({
               )}
             </div>
           </div>
+        </Section>
+      )}
+
+      {report.podlink_page && (
+        <Section className="bg-zinc-50">
+          <Eyebrow>Link page</Eyebrow>
+          <p className="mt-3 text-sm text-zinc-600">
+            The show&rsquo;s podlink.fm page, last 30 days.
+          </p>
+          <dl className="mt-6 flex flex-wrap gap-10">
+            <div>
+              <dd className="text-3xl font-bold tabular-nums">
+                {report.podlink_page.pageviews_30d.toLocaleString()}
+              </dd>
+              <dt className="mt-1 text-sm text-zinc-600">page views</dt>
+            </div>
+            <div>
+              <dd className="text-3xl font-bold tabular-nums">
+                {report.podlink_page.visitors_30d.toLocaleString()}
+              </dd>
+              <dt className="mt-1 text-sm text-zinc-600">unique visitors</dt>
+            </div>
+          </dl>
+          {report.podlink_page.page_url && (
+            <p className="mt-4 text-sm">
+              <a
+                href={report.podlink_page.page_url}
+                className="font-medium underline underline-offset-4"
+                rel="noopener nofollow"
+              >
+                {report.podlink_page.page_url}
+              </a>
+            </p>
+          )}
         </Section>
       )}
 
