@@ -104,3 +104,9 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 ## 2026-09-10b (episode page + app-review prep)
 - EPISODE DETAIL PAGE LIVE (db17bdc33): per-episode report v1 - metadata/duration/paired YouTube views + full transcript reader with copy affordance + transcribe/retry; titles in the analytics list link through; tenancy-checked.
 - TIKTOK/META PREP COMPLETE (Claude-side): claude/tiktok-meta-app-review-prep.md - verified scope lists, use-case texts, demo plans, redirect URIs, Joelle-only field list. KEY FINDING: TikTok Display API has NO audience demographics (spec assumption falsified at build-time check) - TikTok = reach counts only; Instagram demographics verified real (instagram_manage_insights, constraints noted). media-kit spec amended.
+
+## 2026-09-10c (LAUNCH PACKAGE FULLY STAGED)
+- /claude landing page LIVE + sitemapped (08ccaee37) - Cluster A hero, present-tense true, zero directory claims until listing day; verified in the sweep.
+- claude/launch/ completed: listings-and-rehearsal.md (ONE paste-ready metadata pack + per-directory field inventory; Claude portal itself walkable only after B2; ChatGPT needs terms page + OpenAI org + domain TXT; Glama/Smithery may be repo-leaning - skip-without-loss rule) - linkedin-one-pager.md (gate-A one-liner passes, 10 objection answers as her 2-hour crib) - launch-video-script.md (40s, real product only, records after her two data clicks) - go-day-runbook.md (Day 0 submission ~30min of her time, Day L cascade fully ordered, L+2..7 numbers post).
+- VERIFICATION: full sweep 26/26 surfaces HTTP 200; /claude content check passed; rate limiter confirmed counting unauth per-IP (x-ratelimit headers, 60/min) on top of authed per-user+daily - burst criterion PASS (earlier 70x401 was a sequential-test artifact, not a gap).
+- README updated: staged table replaces in-flight. CRITICAL PATH = her seven taps + GO, unchanged.

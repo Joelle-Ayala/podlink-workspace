@@ -33,14 +33,20 @@ one path, indexed below.
 | 12 | Growth-research patterns absorbed as acceptance criteria (free-read rule, submit-early logic, rejection pre-empts) | mcp-growth-research-podlink.md + launch-plan amendment |
 | 13 | Drip #1 (Download Analytics) published | changelog live, 08-25 |
 
-### 🔧 IN FLIGHT — mine, not launch-blocking
+### 🔧 STAGED — was in-flight, now DONE (2026-09-10 full-stage pass)
 | Item | State |
 |---|---|
-| Show Report page (HERO deliverable) | next build after contact-discovery P1 slots |
-| Contact-discovery P1 (next NEW feature) | gated only on her Podcast Index key |
-| Aggregator listing prep (PulseMCP/Glama/Smithery submissions) | copy preppable now; SUBMISSION waits on her GO (gate) |
-| LinkedIn 1-page doc assembly (Gott gate A) | positioning done; compiles from founder-voice + /features/mcp |
-| Launch video script + shot list | to draft; recording is hers |
+| Show Report (HERO) | ✅ LIVE — opt-in share, 4 cross-channel columns (OP3/YouTube views/demographics/Podlink page) |
+| Contact-discovery P1 | ✅ LIVE — keyless contact cards work; search lights on her key |
+| Episode detail page + transcripts + MCP v1.1 | ✅ LIVE |
+| /claude landing page | ✅ LIVE, indexable, zero directory claims until listing day |
+| Aggregator + directory listing pack | ✅ `listings-and-rehearsal.md` — one paste-ready metadata pack + per-directory field inventory (dress rehearsal walked to the portals' edges) |
+| LinkedIn one-pager (Gott gate A) | ✅ `linkedin-one-pager.md` — positioning + the 10 objection answers (her reply crib sheet) |
+| Launch video script + shot list | ✅ `launch-video-script.md` — recording is hers, after her two data clicks |
+| GO-day runbook | ✅ `go-day-runbook.md` — submission day + listing-live day + numbers post, fully ordered |
+| Rate limits under burst | ✅ verified counting per-IP unauth (60/min headers) + per-user/daily authed |
+| Full site sweep | ✅ 26/26 surfaces HTTP 200 (2026-09-10) |
+Still genuinely open on my side: TikTok/Meta submissions ride HER identity fields (prep doc done); ChatGPT-directory terms page (needed before THAT submission, not Claude's); brand-concept decision pending her pick (site swap is cheap when she chooses).
 
 ### 👤 HERS — the verified-done review list (the GO conditions)
 | # | Item | Time | Why it gates |
