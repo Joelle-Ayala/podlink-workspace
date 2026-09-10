@@ -142,6 +142,46 @@ class AnalyticsController extends Controller
     }
 
     /**
+     * Episode detail — the per-episode report v1 (spec: "the row that the
+     * episode report hangs off"). Metadata + paired YouTube views +
+     * transcript access, strictly for the requesting user's own show.
+     */
+    public function episode(
+        Request $request,
+        Episode $episode,
+        YouTubeOAuthService $youtubeOauth,
+        YouTubeAnalyticsService $youtubeAnalytics,
+    ): View {
+        $user = $request->user();
+
+        $ownsEpisode = PodcastShow::query()
+            ->where('user_id', $user->id)
+            ->where('id', $episode->podcast_show_id)
+            ->exists();
+
+        abort_unless($ownsEpisode, 404);
+
+        $episode->loadMissing('transcript');
+
+        $youtubeViews = null;
+
+        if (filled($episode->youtube_video_id) && $youtubeOauth->isConfigured()) {
+            $connection = YoutubeConnection::query()->where('user_id', $user->id)->first();
+
+            if ($connection !== null) {
+                $videos = $youtubeAnalytics->videos($connection);
+                $youtubeViews = $youtubeAnalytics->viewsByVideoId($videos)[$episode->youtube_video_id] ?? null;
+            }
+        }
+
+        return view('panel.user.analytics.episode', [
+            'episode'      => $episode,
+            'transcript'   => $episode->transcript,
+            'youtubeViews' => $youtubeViews,
+        ]);
+    }
+
+    /**
      * User-triggered transcription of a single episode (spec §3: backfill
      * is per-episode and credit-gated, never automatic). Tenancy: the
      * episode must belong to the requesting user's own show.

@@ -371,7 +371,13 @@
                                 @endphp
                                 <li class="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
                                     <span class="min-w-0 truncate text-2xs font-medium text-heading-foreground">
-                                        {{ data_get($episode, 'title') ?? __('Untitled episode') }}
+                                        @if ($episodeId)
+                                            <a href="{{ route('dashboard.user.analytics.episode', $episodeId) }}" class="text-heading-foreground hover:text-primary">
+                                                {{ data_get($episode, 'title') ?? __('Untitled episode') }}
+                                            </a>
+                                        @else
+                                            {{ data_get($episode, 'title') ?? __('Untitled episode') }}
+                                        @endif
                                     </span>
                                     <span class="flex shrink-0 items-center gap-3">
                                         @if ($episodeViews !== null)

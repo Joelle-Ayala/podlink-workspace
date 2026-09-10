@@ -136,6 +136,8 @@ Route::middleware(['auth', 'updateUserActivity'])
                 Route::post('analytics/episodes/{episode}/transcribe', [AnalyticsController::class, 'transcribe'])->name('analytics.transcribe');
                 // Show Report share toggle (opt-in public link).
                 Route::post('analytics/report-toggle', [AnalyticsController::class, 'toggleReport'])->name('analytics.report-toggle');
+                // Episode detail (per-episode report v1).
+                Route::get('analytics/episodes/{episode}', [AnalyticsController::class, 'episode'])->name('analytics.episode');
 
                 // Contact-discovery P1 — Find Shows (free layer; search inert
                 // until PODCASTINDEX_KEY/SECRET; contact cards work keyless).
