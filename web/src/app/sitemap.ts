@@ -66,6 +66,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    // /claude — the Cluster A landing page (live capability, no directory
+    // claims until listing day).
+    {
+      url: absoluteUrl("/claude"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
   ];
 
   // One entry per feature. These are the deepest genuinely useful pages on
