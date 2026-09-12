@@ -1,4 +1,6 @@
 import {
+  Badge,
+  Button,
   CtaBand,
   Faq,
   FeatureCard,
@@ -12,7 +14,7 @@ import {
 } from "@/components";
 import Link from "next/link";
 import { FEATURE_GROUPS, FEATURES, getFeaturesByGroup } from "@/content/features";
-import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS, TWO_DOORS } from "@/content/home";
+import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS, REPORT_BAND, TWO_DOORS } from "@/content/home";
 import {
   faqLd,
   jsonLd,
@@ -83,6 +85,39 @@ export default function HomePage() {
             </div>
           ))}
         </Grid>
+      </Section>
+
+      {/* Show Report band — the shipped hero, per lockstep. Claims here match
+          what's live: OP3-measured downloads, YouTube views + demographics,
+          link-page clicks, Claude connector over analytics + transcripts. */}
+      <Section tone="ink" id="show-report">
+        <div className="mx-auto max-w-3xl">
+          <Badge>{REPORT_BAND.eyebrow}</Badge>
+          <Heading level={2} className="mt-4 text-3xl sm:text-4xl">
+            {REPORT_BAND.headline}
+          </Heading>
+          <Prose className="mt-4">
+            <p>{REPORT_BAND.body}</p>
+          </Prose>
+          <ul className="mt-6 space-y-3">
+            {REPORT_BAND.bullets.map((bullet) => (
+              <li key={bullet} className="flex gap-3">
+                <span aria-hidden="true" className="text-accent-text">
+                  &#10003;
+                </span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Button href={REPORT_BAND.primaryCta.href} onInk>
+              {REPORT_BAND.primaryCta.label}
+            </Button>
+            <Button href={REPORT_BAND.secondaryCta.href} variant="secondary" onInk>
+              {REPORT_BAND.secondaryCta.label}
+            </Button>
+          </div>
+        </div>
       </Section>
 
       {/* Groups are framing, not a grid — `publish` deliberately has no

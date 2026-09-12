@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Mcp\Tools\GetPageStatsTool;
 use App\Mcp\Tools\GetPodlinkPageTool;
+use App\Mcp\Tools\GetRecentPerformanceTool;
 use App\Mcp\Tools\GetShowOverviewTool;
 use App\Mcp\Tools\GetTopAppsTool;
 use App\Mcp\Tools\GetTranscriptTool;
@@ -171,3 +173,24 @@ Mcp::tool(GetTranscriptTool::class)
         'required' => ['episode_ref'],
         'additionalProperties' => false,
     ]);
+
+Mcp::tool(GetPageStatsTool::class)
+    ->name('get_page_stats')
+    ->description(
+        'Get view and click statistics for the signed-in Podlink user\'s OWN podlink.fm page: '
+        . 'page views and unique visitors over the last 30 days, the page URL, and the '
+        . 'most-clicked links. Returns a structured no_page state when no page exists yet.'
+    )
+    ->annotations($readOnly('Podlink page stats'))
+    ->inputSchema($noInput);
+
+Mcp::tool(GetRecentPerformanceTool::class)
+    ->name('get_recent_performance')
+    ->description(
+        'Get a zero-setup performance summary of the signed-in Podlink user\'s last 5 episodes: '
+        . 'per-episode YouTube views where available, show-level downloads, transcript coverage, '
+        . 'and short computed observations about anything unusual in the set (view outliers, '
+        . 'publishing gaps). The best first call after connecting.'
+    )
+    ->annotations($readOnly('Recent performance summary'))
+    ->inputSchema($noInput);

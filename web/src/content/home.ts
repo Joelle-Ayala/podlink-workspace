@@ -141,6 +141,25 @@ export const TWO_DOORS: Door[] = [
   },
 ];
 
+/**
+ * Positioning-amendment band (gtm-plan 09-02: hero = the report, second act
+ * = talk to your podcast, tools = the bonus). Added 09-12 now that BOTH
+ * capabilities are SHIPPED — lockstep rule: the frontend expresses what the
+ * backend does. Every claim here is live and screenshot-survivable.
+ */
+export const REPORT_BAND = {
+  eyebrow: "New",
+  headline: "The report that used to take a day, on a link",
+  body: "Turn on your Show Report and get a live, shareable page of your whole audience — downloads measured by OP3 (a source a sponsor can check), YouTube views and audience demographics, and your link-page clicks. And because it's all connected, you can just ask: connect Claude and say \"how did my show do this week?\" — your assistant answers from your real numbers and your own transcripts.",
+  bullets: [
+    "A live page, not a PDF — always current, off with one click",
+    "Numbers from OP3: open, independent, checkable by anyone you send it to",
+    "Talk to your podcast: analytics and transcripts from your own AI assistant",
+  ],
+  primaryCta: { label: "Start free", href: appUrl("/register") },
+  secondaryCta: { label: "Connect Claude", href: "/claude" },
+};
+
 export const CTA_BAND: CtaBand = {
   heading: "Your next episode deserves the full week of attention",
   body: "Connect your feed, bring the episode, and the show notes, newsletter and social copy are done before your coffee is.",
