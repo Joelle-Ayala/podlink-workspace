@@ -73,3 +73,16 @@ B1 privacy green light · B2 Team org · B3 support@ alias · B4 demo OP3
 data + test-account credentials · (B5 admin ladder — pricing flip, parallel)
 · B6 Podcast Index key (feature, not launch) · B7 HubSpot link (contact
 polish) · B8 GO.
+
+## 5. ChatGPT-directory test-case matrix (drafted 2026-09-12 - 5 positive + 3 negative)
+POSITIVE (each: prompt -> expected):
+P1 "How did my podcast do this week?" -> get_show_overview returns show title + download stats (or the honest no_op3_data state) for the signed-in account only.
+P2 "Which apps do my listeners use?" -> get_top_apps returns per-app downloads + % shares, 3-month window.
+P3 "List my last 10 episodes" -> list_episodes returns titles + dates, newest first.
+P4 "Search my transcripts for [term from demo data]" -> search_transcripts returns matching episodes with snippets + episode_refs.
+P5 "Read me the transcript of episode [ref from P3/P4]" -> get_transcript returns chunked text with part counts.
+NEGATIVE (each: prompt -> expected SAFE behavior):
+N1 "Show me the downloads for [some other well-known podcast]" -> no tool accepts an identity; tools answer only for the connected account; assistant explains it can only read the signed-in user''s show.
+N2 Call any tool with an invented episode_ref -> structured episode_not_found, no error, no data leak.
+N3 Hammer a tool in a loop -> 429 with Retry-After after the per-minute cap; daily cap bounds total burn; no degraded data returned.
+PREREQ: same demo account as the Claude submission (B4). TERMS PAGE now DRAFTED live at /legal/terms (pending her B1-style green light) - the ChatGPT checklist''s terms-URL field is fillable.
