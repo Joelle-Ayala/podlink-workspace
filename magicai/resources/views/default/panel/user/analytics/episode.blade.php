@@ -41,6 +41,80 @@
             @endif
         </x-card>
 
+        {{-- YouTube pairing (sprint C): show, set, correct or remove the
+             episode↔video link. Manual decisions stick; auto never overrides. --}}
+        @if ($youtubeConnected)
+            <x-card class:body="p-5">
+                <h3 class="m-0 text-sm font-semibold text-heading-foreground">{{ __('YouTube video pairing') }}</h3>
+
+                @if (filled($episode->youtube_video_id))
+                    <p class="m-0 mt-2 text-2xs text-foreground/70">
+                        {{ __('Paired to') }}
+                        <a href="https://www.youtube.com/watch?v={{ $episode->youtube_video_id }}" target="_blank" rel="noopener" class="text-primary">
+                            {{ collect($youtubeVideos)->firstWhere('video_id', $episode->youtube_video_id)['title'] ?? $episode->youtube_video_id }}
+                        </a>
+                        @if ($episode->youtube_paired_manually)
+                            · <span class="text-foreground/50">{{ __('set by you') }}</span>
+                        @elseif ($episode->youtube_match_confidence !== null)
+                            · <span class="text-foreground/50">{{ __('matched automatically') }} ({{ $episode->youtube_match_confidence }}%)</span>
+                        @else
+                            · <span class="text-foreground/50">{{ __('matched automatically') }}</span>
+                        @endif
+                    </p>
+                @else
+                    <p class="m-0 mt-2 text-2xs text-foreground/60">
+                        @if ($episode->youtube_paired_manually)
+                            {{ __('Marked as audio-only — automatic matching leaves this episode alone.') }}
+                        @else
+                            {{ __('No video paired yet. Pick the matching upload below, or mark the episode audio-only.') }}
+                        @endif
+                    </p>
+                @endif
+
+                <div class="mt-4 flex flex-wrap items-end gap-3">
+                    <form method="POST" action="{{ route('dashboard.user.analytics.youtube-pair', $episode->id) }}" class="m-0 flex flex-wrap items-end gap-2">
+                        @csrf
+                        <input type="hidden" name="mode" value="manual">
+                        <label class="block">
+                            <span class="mb-1 block text-3xs text-foreground/50">{{ __('Pair with') }}</span>
+                            <select name="video_id" class="rounded-lg border border-foreground/20 bg-background px-3 py-1.5 text-2xs" required>
+                                <option value="" disabled selected>{{ __('Choose a video…') }}</option>
+                                @foreach (array_slice($youtubeVideos, 0, 50) as $video)
+                                    <option value="{{ $video['video_id'] }}" @selected($video['video_id'] === $episode->youtube_video_id)>
+                                        {{ \Illuminate\Support\Str::limit($video['title'] ?? $video['video_id'], 70) }}
+                                        @if (filled($video['published_at'])) ({{ \Illuminate\Support\Carbon::parse($video['published_at'])->format('M j, Y') }}) @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                        <button type="submit" class="inline-flex items-center rounded-full border border-primary px-4 py-1.5 text-2xs font-medium text-primary">
+                            {{ filled($episode->youtube_video_id) ? __('Change pairing') : __('Pair') }}
+                        </button>
+                    </form>
+
+                    @if (filled($episode->youtube_video_id) || ! $episode->youtube_paired_manually)
+                        <form method="POST" action="{{ route('dashboard.user.analytics.youtube-pair', $episode->id) }}" class="m-0">
+                            @csrf
+                            <input type="hidden" name="mode" value="clear">
+                            <button type="submit" class="inline-flex items-center rounded-full border border-foreground/20 px-4 py-1.5 text-2xs font-medium text-foreground/60">
+                                {{ filled($episode->youtube_video_id) ? __('Remove pairing') : __('Mark audio-only') }}
+                            </button>
+                        </form>
+                    @endif
+
+                    @if ($episode->youtube_paired_manually)
+                        <form method="POST" action="{{ route('dashboard.user.analytics.youtube-pair', $episode->id) }}" class="m-0">
+                            @csrf
+                            <input type="hidden" name="mode" value="auto">
+                            <button type="submit" class="inline-flex items-center rounded-full border border-foreground/20 px-4 py-1.5 text-2xs font-medium text-foreground/60">
+                                {{ __('Use automatic matching') }}
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </x-card>
+        @endif
+
         {{-- Transcript --}}
         <x-card class:body="p-5">
             <div class="flex flex-wrap items-center justify-between gap-3">

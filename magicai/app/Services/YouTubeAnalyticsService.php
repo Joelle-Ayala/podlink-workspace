@@ -104,14 +104,25 @@ class YouTubeAnalyticsService
         return is_array($videos) ? $videos : [];
     }
 
+    /** Minimum score an automatic match must reach before it is written. */
+    private const PAIR_MIN_CONFIDENCE = 70;
+
     /**
-     * Naive episode↔video pairing (spec: "log matches, don't force").
+     * Confidence-aware episode↔video pairing (sprint C).
      *
-     * Exact normalized-title match first, then a prefix match in either
-     * direction with a minimum length so short generic titles cannot pair
-     * wrongly. Only writes to episodes that have no youtube_video_id yet.
+     * Signals: normalized title (exact = decisive; prefix/fuzzy = supporting),
+     * publish-date proximity, and duration proximity when both sides know it.
+     * Rules:
+     *  - NEVER touches an episode with youtube_paired_manually = true — a
+     *    human decision (including "no video") is final until a human
+     *    changes it.
+     *  - Only fills episodes whose youtube_video_id is still NULL.
+     *  - A video already paired to another episode of this show is not a
+     *    candidate (no duplicate pairings).
+     *  - Writes only at >= PAIR_MIN_CONFIDENCE, and records the score in
+     *    youtube_match_confidence so the UI can show how sure we were.
      *
-     * @param  list<array{video_id: string, title: ?string, published_at: ?string, views: ?int}>  $videos
+     * @param  list<array{video_id: string, title: ?string, published_at: ?string, views: ?int, duration_seconds?: ?int}>  $videos
      * @return int number of episodes newly paired
      */
     public function pairEpisodes(PodcastShow $show, array $videos): int
@@ -120,20 +131,42 @@ class YouTubeAnalyticsService
             return 0;
         }
 
-        $episodes = $show->episodes()->whereNull('youtube_video_id')->get();
+        $episodes = $show->episodes()
+            ->whereNull('youtube_video_id')
+            ->where('youtube_paired_manually', false)
+            ->get();
 
         if ($episodes->isEmpty()) {
             return 0;
         }
 
-        $byTitle = [];
+        $taken = $show->episodes()
+            ->whereNotNull('youtube_video_id')
+            ->pluck('youtube_video_id')
+            ->flip()
+            ->all();
+
+        $candidates = [];
 
         foreach ($videos as $video) {
+            $videoId = $video['video_id'] ?? null;
+
+            if (blank($videoId) || isset($taken[$videoId])) {
+                continue;
+            }
+
             $key = $this->normalizeTitle($video['title'] ?? null);
 
-            if ($key !== null && ! isset($byTitle[$key])) {
-                $byTitle[$key] = $video['video_id'];
+            if ($key === null) {
+                continue;
             }
+
+            $candidates[] = [
+                'video_id'         => (string) $videoId,
+                'key'              => $key,
+                'published_at'     => $video['published_at'] ?? null,
+                'duration_seconds' => $video['duration_seconds'] ?? null,
+            ];
         }
 
         $paired = 0;
@@ -145,23 +178,103 @@ class YouTubeAnalyticsService
                 continue;
             }
 
-            $videoId = $byTitle[$key] ?? $this->prefixMatch($key, $byTitle);
+            $best = null;
+            $bestScore = 0;
+            $runnerUp = 0;
 
-            if ($videoId === null) {
+            foreach ($candidates as $candidate) {
+                if (isset($taken[$candidate['video_id']])) {
+                    continue;
+                }
+
+                $score = $this->matchScore($key, $episode->pub_date, $episode->duration_seconds, $candidate);
+
+                if ($score > $bestScore) {
+                    $runnerUp = $bestScore;
+                    $bestScore = $score;
+                    $best = $candidate;
+                } elseif ($score > $runnerUp) {
+                    $runnerUp = $score;
+                }
+            }
+
+            // Ambiguity guard: two near-equal candidates means we are not
+            // actually sure — leave it for the manual pairing UI.
+            if ($best === null || $bestScore < self::PAIR_MIN_CONFIDENCE || ($bestScore - $runnerUp) < 10) {
                 continue;
             }
 
-            $episode->forceFill(['youtube_video_id' => $videoId])->save();
+            $episode->forceFill([
+                'youtube_video_id'         => $best['video_id'],
+                'youtube_match_confidence' => min(100, $bestScore),
+            ])->save();
+
+            $taken[$best['video_id']] = true;
             $paired++;
 
             Log::info('Episode paired to YouTube video', [
                 'episode_id' => $episode->id,
-                'video_id'   => $videoId,
+                'video_id'   => $best['video_id'],
                 'title'      => $episode->title,
+                'confidence' => $bestScore,
             ]);
         }
 
         return $paired;
+    }
+
+    /**
+     * 0–100 match score. Title carries most of the weight (exact normalized
+     * match alone clears the pairing threshold); date and duration proximity
+     * can lift a strong fuzzy title over the line but can never pair two
+     * unrelated titles on their own.
+     *
+     * @param  array{video_id: string, key: string, published_at: ?string, duration_seconds: ?int}  $candidate
+     */
+    private function matchScore(string $episodeKey, mixed $episodePubDate, ?int $episodeDuration, array $candidate): int
+    {
+        $videoKey = $candidate['key'];
+
+        // Title component (max 70).
+        if ($episodeKey === $videoKey) {
+            $title = 70;
+        } elseif (
+            mb_strlen($episodeKey) >= 15
+            && mb_strlen($videoKey) >= 15
+            && (str_starts_with($videoKey, $episodeKey) || str_starts_with($episodeKey, $videoKey))
+        ) {
+            $title = 55;
+        } else {
+            similar_text($episodeKey, $videoKey, $percent);
+            $title = $percent >= 70 ? (int) round($percent / 2) : 0;
+        }
+
+        if ($title === 0) {
+            return 0;
+        }
+
+        // Publish-date proximity (max 20).
+        $date = 0;
+
+        try {
+            if ($episodePubDate !== null && filled($candidate['published_at'])) {
+                $diffDays = abs(\Illuminate\Support\Carbon::parse($candidate['published_at'])
+                    ->diffInDays(\Illuminate\Support\Carbon::parse($episodePubDate)));
+                $date = $diffDays <= 2 ? 20 : ($diffDays <= 7 ? 10 : 0);
+            }
+        } catch (\Throwable) {
+            $date = 0;
+        }
+
+        // Duration proximity (max 10) — only when BOTH sides know it.
+        $duration = 0;
+
+        if ($episodeDuration !== null && $episodeDuration > 0 && ($candidate['duration_seconds'] ?? null) !== null) {
+            $diff = abs($episodeDuration - (int) $candidate['duration_seconds']);
+            $duration = $diff <= 120 ? 10 : ($diff <= 300 ? 5 : 0);
+        }
+
+        return $title + $date + $duration;
     }
 
     /**
@@ -361,7 +474,7 @@ class YouTubeAnalyticsService
 
         foreach (array_chunk($ids, 50) as $chunk) {
             $json = $this->get($connection, '/videos', [
-                'part' => 'snippet,statistics',
+                'part' => 'snippet,statistics,contentDetails',
                 'id'   => implode(',', $chunk),
             ]);
 
@@ -375,10 +488,12 @@ class YouTubeAnalyticsService
                 $views = $item['statistics']['viewCount'] ?? null;
 
                 $videos[] = [
-                    'video_id'     => (string) $videoId,
-                    'title'        => $item['snippet']['title'] ?? null,
-                    'published_at' => $item['snippet']['publishedAt'] ?? null,
-                    'views'        => is_numeric($views) ? (int) $views : null,
+                    'video_id'         => (string) $videoId,
+                    'title'            => $item['snippet']['title'] ?? null,
+                    'published_at'     => $item['snippet']['publishedAt'] ?? null,
+                    'views'            => is_numeric($views) ? (int) $views : null,
+                    // Sprint C: ISO-8601 duration → seconds, a pairing signal.
+                    'duration_seconds' => $this->isoDurationToSeconds($item['contentDetails']['duration'] ?? null),
                 ];
             }
         }
@@ -502,5 +617,21 @@ class YouTubeAnalyticsService
         }
 
         return null;
+    }
+
+    /** "PT1H2M3S" → 3723. Null in, null out; malformed in, null out. */
+    private function isoDurationToSeconds(?string $iso): ?int
+    {
+        if (blank($iso)) {
+            return null;
+        }
+
+        try {
+            $interval = new \DateInterval($iso);
+
+            return ($interval->d * 86400) + ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }

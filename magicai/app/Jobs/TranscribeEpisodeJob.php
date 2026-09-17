@@ -127,6 +127,18 @@ class TranscribeEpisodeJob implements ShouldQueue
                 'completed_at'    => now(),
             ]);
 
+            // Sprint B: retain verbose_json segment timing. Best-effort — a
+            // segment write problem must never fail an otherwise completed
+            // (and already credit-metered) transcript.
+            try {
+                $this->storeSegments($transcript, $response->segments ?? []);
+            } catch (\Throwable $e) {
+                Log::warning('Transcript segments not stored', [
+                    'transcript_id' => $transcript->id,
+                    'reason'        => mb_substr($e->getMessage(), 0, 500),
+                ]);
+            }
+
             Log::info('Episode transcribed', [
                 'episode_id' => $episode->id,
                 'words'      => countWords($text),
@@ -137,6 +149,50 @@ class TranscribeEpisodeJob implements ShouldQueue
             if ($path !== null && is_file($path)) {
                 @unlink($path);
             }
+        }
+    }
+
+    /**
+     * Persist Whisper verbose_json segments (sprint B). Idempotent: clears
+     * any prior rows for this transcript (failed→retried case) and bulk
+     * inserts in chunks. Millisecond ints, monotonically sequenced.
+     *
+     * @param iterable<mixed> $segments
+     */
+    private function storeSegments(EpisodeTranscript $transcript, iterable $segments): void
+    {
+        $rows = [];
+        $seq = 0;
+
+        foreach ($segments as $segment) {
+            // openai-php returns segment value objects; be tolerant of arrays.
+            $start = is_array($segment) ? ($segment['start'] ?? null) : ($segment->start ?? null);
+            $end = is_array($segment) ? ($segment['end'] ?? null) : ($segment->end ?? null);
+            $segText = trim((string) (is_array($segment) ? ($segment['text'] ?? '') : ($segment->text ?? '')));
+
+            if ($segText === '' || $start === null || $end === null) {
+                continue;
+            }
+
+            $rows[] = [
+                'episode_transcript_id' => $transcript->id,
+                'seq'                   => $seq++,
+                'start_ms'              => max(0, (int) round(((float) $start) * 1000)),
+                'end_ms'                => max(0, (int) round(((float) $end) * 1000)),
+                'text'                  => mb_substr($segText, 0, 2000),
+            ];
+        }
+
+        if ($rows === []) {
+            return;
+        }
+
+        \App\Models\TranscriptSegment::query()
+            ->where('episode_transcript_id', $transcript->id)
+            ->delete();
+
+        foreach (array_chunk($rows, 500) as $chunk) {
+            \App\Models\TranscriptSegment::query()->insert($chunk);
         }
     }
 

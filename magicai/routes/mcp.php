@@ -33,12 +33,17 @@ use PhpMcp\Laravel\Facades\Mcp;
 |   via App\Mcp\Concerns\ResolvesMcpUser. Reviewers: if you see an identity
 |   field in an inputSchema here, reject the change.
 |
-| v1.1 transcript tools (search_transcripts, get_transcript) are BUILT
-| (2026-09-01, pipeline landed). Gate tier: transcript READS are free — the
-| metered step was creating the transcript. `episode_ref` is a content
-| locator resolved strictly inside the token's own show, not an identity
-| parameter. v1.1 get_page_stats and v1.2 (generate_content, list_templates)
-| remain NOT built — do not add them without their gating work.
+| CURRENT SURFACE (v1.2-lite, 2026-09-12): 8 tools, all read-only —
+| get_show_overview, get_top_apps, list_episodes, get_podlink_page,
+| search_transcripts, get_transcript, get_page_stats, get_recent_performance.
+| Gate tiers: ALL FREE (analytics/transcript reads; declared per tool in
+| claude/PODLINK-MCP-SCOPING.md + the 2026-09-12 amendment). Transcript READS
+| are free — the metered step was creating the transcript. `episode_ref` is a
+| content locator resolved strictly inside the token's own show, not an
+| identity parameter. v1.2 WRITE/generation tools (generate_content,
+| list_templates, page writes) remain NOT built — do not add them without
+| their gating work (explicit granular scopes + re-consent, never bundled
+| with reads).
 |
 */
 

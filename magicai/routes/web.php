@@ -23,11 +23,16 @@ use RachidLaasri\LaravelInstaller\Middleware\ApplicationStatus;
 
 Route::get('language/{lang}/change', LocaleController::class)->name('language.change');
 
-Route::any('test', [TestController::class, 'test'])->name('test');
-Route::post('test', [TestController::class, 'test'])->name('test.post');
-Route::get('test/stream/{model}', [TestController::class, 'stream'])->name('test.stream');
+// PODLINK (launch sprint 1, safety): upstream test harness routes were registered
+// unconditionally. Gated to non-production; nothing references these route names
+// (verified by repo grep). Wrapped rather than deleted for vendor-upgrade tolerance.
+if (! app()->environment('production')) {
+    Route::any('test', [TestController::class, 'test'])->name('test');
+    Route::post('test', [TestController::class, 'test'])->name('test.post');
+    Route::get('test/stream/{model}', [TestController::class, 'stream'])->name('test.stream');
 
-Route::view('test/chatbot', 'default.chatbot');
+    Route::view('test/chatbot', 'default.chatbot');
+}
 Route::get('default', static function () {
     return response()->noContent(
 
@@ -74,7 +79,12 @@ Route::controller(InstallationController::class)
 Route::get('clear-log', [ClearController::class, 'clearLog'])->name('clearLog');
 Route::get('cache-clear', [ClearController::class, 'cacheClear'])->name('cache.clear');
 Route::get('update-fonts', [FontsController::class, 'updateFontsCache']);
-Route::get('debug/{token?}', DebugModeController::class)->name('debug');
+// PODLINK (launch sprint 1, safety): upstream debug-mode toggle rewrites .env /
+// APP_DEBUG at runtime. Gated to non-production; no references to route('debug')
+// exist (verified by repo grep).
+if (! app()->environment('production')) {
+    Route::get('debug/{token?}', DebugModeController::class)->name('debug');
+}
 Route::get('sys/{tk}', [SystemSlotController::class, 'index'])->middleware(['auth', 'admin', 'throttle:10,1']);
 Route::post('sys/{slot}', [SystemSlotController::class, 'record'])->middleware(['auth', 'admin', 'throttle:10,1']);
 Route::get('check-subscription-end', CheckSubscriptionEndController::class)->name('check-subscription-end');

@@ -118,9 +118,16 @@ class AnalyticsController extends Controller
             }
         }
 
+        // Sprint E: one cheap EXISTS to drive the "Next steps" ladder card.
+        $hasCompletedTranscript = $show !== null && EpisodeTranscript::query()
+            ->where('status', EpisodeTranscript::STATUS_COMPLETED)
+            ->whereIn('episode_id', $show->episodes()->select('id'))
+            ->exists();
+
         return view('panel.user.analytics.index', [
             'show'              => $show,
             'showTitle'         => $showTitle,
+            'hasCompletedTranscript' => $hasCompletedTranscript,
             'op3Configured'     => $op3->isConfigured(),
             'prefixDetected'    => (bool) ($feedInfo['prefix_detected'] ?? false),
             'downloads'         => $downloads,
@@ -164,21 +171,120 @@ class AnalyticsController extends Controller
         $episode->loadMissing('transcript');
 
         $youtubeViews = null;
+        $youtubeVideos = [];
+        $youtubeConnected = false;
 
-        if (filled($episode->youtube_video_id) && $youtubeOauth->isConfigured()) {
+        if ($youtubeOauth->isConfigured()) {
             $connection = YoutubeConnection::query()->where('user_id', $user->id)->first();
 
             if ($connection !== null) {
-                $videos = $youtubeAnalytics->videos($connection);
-                $youtubeViews = $youtubeAnalytics->viewsByVideoId($videos)[$episode->youtube_video_id] ?? null;
+                $youtubeConnected = true;
+                // Cached (1h) — also feeds the manual pairing UI (sprint C).
+                $youtubeVideos = $youtubeAnalytics->videos($connection);
+
+                if (filled($episode->youtube_video_id)) {
+                    $youtubeViews = $youtubeAnalytics->viewsByVideoId($youtubeVideos)[$episode->youtube_video_id] ?? null;
+                }
             }
         }
 
         return view('panel.user.analytics.episode', [
-            'episode'      => $episode,
-            'transcript'   => $episode->transcript,
-            'youtubeViews' => $youtubeViews,
+            'episode'          => $episode,
+            'transcript'       => $episode->transcript,
+            'youtubeViews'     => $youtubeViews,
+            'youtubeVideos'    => $youtubeVideos,
+            'youtubeConnected' => $youtubeConnected,
         ]);
+    }
+
+    /**
+     * Manual episode↔YouTube pairing (sprint C). Three explicit modes:
+     *  - manual: pair this episode to a chosen video from the user's own
+     *    connected channel (validated against the channel's video list).
+     *  - clear: record "this episode has no video" — sticky; automatic
+     *    matching will not re-pair it.
+     *  - auto: hand the episode back to automatic matching.
+     * A manual decision is never overwritten by the automatic matcher.
+     */
+    public function youtubePair(
+        Request $request,
+        Episode $episode,
+        YouTubeOAuthService $youtubeOauth,
+        YouTubeAnalyticsService $youtubeAnalytics,
+    ): RedirectResponse {
+        $user = $request->user();
+
+        $ownsEpisode = PodcastShow::query()
+            ->where('user_id', $user->id)
+            ->where('id', $episode->podcast_show_id)
+            ->exists();
+
+        abort_unless($ownsEpisode, 404);
+
+        $data = $request->validate([
+            'mode'     => 'required|in:manual,clear,auto',
+            'video_id' => 'nullable|string|max:32',
+        ]);
+
+        if ($data['mode'] === 'clear') {
+            $episode->forceFill([
+                'youtube_video_id'         => null,
+                'youtube_paired_manually'  => true,
+                'youtube_match_confidence' => null,
+            ])->save();
+
+            return back()->with('message', __('Pairing removed. Automatic matching will leave this episode alone.'));
+        }
+
+        if ($data['mode'] === 'auto') {
+            $episode->forceFill([
+                'youtube_video_id'         => null,
+                'youtube_paired_manually'  => false,
+                'youtube_match_confidence' => null,
+            ])->save();
+
+            return back()->with('message', __('Episode returned to automatic matching. It re-pairs on the next analytics visit.'));
+        }
+
+        // mode = manual: the chosen video must exist on the user's own channel.
+        if (blank($data['video_id'] ?? null)) {
+            return back()->with('error', __('Pick a video to pair.'));
+        }
+
+        if (! $youtubeOauth->isConfigured()) {
+            return back()->with('error', __('YouTube is not configured.'));
+        }
+
+        $connection = YoutubeConnection::query()->where('user_id', $user->id)->first();
+
+        if ($connection === null) {
+            return back()->with('error', __('Connect your YouTube channel first.'));
+        }
+
+        $videos = collect($youtubeAnalytics->videos($connection));
+        $video = $videos->firstWhere('video_id', $data['video_id']);
+
+        if ($video === null) {
+            return back()->with('error', __('That video was not found on your connected channel.'));
+        }
+
+        $alreadyOn = Episode::query()
+            ->where('podcast_show_id', $episode->podcast_show_id)
+            ->where('id', '!=', $episode->id)
+            ->where('youtube_video_id', $data['video_id'])
+            ->first();
+
+        if ($alreadyOn !== null) {
+            return back()->with('error', __('That video is already paired to ":title". Remove that pairing first.', ['title' => (string) $alreadyOn->title]));
+        }
+
+        $episode->forceFill([
+            'youtube_video_id'         => $data['video_id'],
+            'youtube_paired_manually'  => true,
+            'youtube_match_confidence' => null,
+        ])->save();
+
+        return back()->with('message', __('Episode paired to the selected video.'));
     }
 
     /**

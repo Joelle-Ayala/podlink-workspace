@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * A single episode's transcript (spec §3). One row per episode; the status
@@ -44,6 +45,12 @@ class EpisodeTranscript extends Model
     public function episode(): BelongsTo
     {
         return $this->belongsTo(Episode::class);
+    }
+
+    /** Timed segments (sprint B). Empty for transcripts created pre-2026-09-16. */
+    public function segments(): HasMany
+    {
+        return $this->hasMany(TranscriptSegment::class)->orderBy('seq');
     }
 
     public function isCompleted(): bool

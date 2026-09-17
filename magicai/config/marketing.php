@@ -245,6 +245,15 @@ return [
     |
     | *** EVERY LIMIT AND FEATURE SPLIT BELOW IS A PLACEHOLDER. ***
     |
+    | *** SUPERSEDED (launch sprint 1, 2026-09-16): this page is no longer
+    | reachable — RedirectLegacyMarketing 301s app-host /pricing (and
+    | /features) to podlink.ai. The pricing SOURCE OF TRUTH is
+    | claude/podlink-pricing-v2.md §7 (founder-approved: Free / Pro / Studio,
+    | 14-day reverse trial, Studio $2/ep past 40 hard-capped) as rendered by
+    | web/src/content/pricing.ts. The Creator-$19/Pro-$49 ladder below is the
+    | OLD draft — do NOT copy numbers from here into anything. This array is
+    | kept only because the Blade template still references its structure. ***
+    |
     | The page STRUCTURE is final; the tier CONTENT is not. Nothing here is
     | wired to a real plan: no Stripe price IDs, no `plans` table rows, no
     | checkout. The CTAs point at registration, exactly like every other

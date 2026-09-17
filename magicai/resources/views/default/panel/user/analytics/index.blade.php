@@ -145,6 +145,44 @@
                 @enderror
             </x-card>
 
+            {{-- Next steps (sprint E): the activation ladder in order —
+                 YouTube → Show Report → Claude. Only unfinished steps show;
+                 the card disappears once the ladder is climbed. --}}
+            @php
+                $nextSteps = [];
+
+                if ($youtubeConfigured && ! $youtubeConnected) {
+                    $nextSteps[] = ['label' => __('Connect YouTube'), 'hint' => __('see video views next to downloads'), 'href' => route('dashboard.user.analytics.youtube.connect'), 'external' => false];
+                }
+
+                if ($hasOp3Show && ! $show->reportEnabled()) {
+                    $nextSteps[] = ['label' => __('Turn on your Show Report'), 'hint' => __('a live page a sponsor can check'), 'href' => '#show-report-card', 'external' => false];
+                }
+
+                if ($hasEpisodes && ! ($hasCompletedTranscript ?? false)) {
+                    $nextSteps[] = ['label' => __('Transcribe an episode'), 'hint' => __('the text your notes and clips come from'), 'href' => '#episodes-card', 'external' => false];
+                }
+
+                if ($hasOp3Show || ($hasCompletedTranscript ?? false)) {
+                    $nextSteps[] = ['label' => __('Connect Claude'), 'hint' => __('ask "how did my show do this week?"'), 'href' => 'https://podlink.ai/features/mcp/setup', 'external' => true];
+                }
+            @endphp
+
+            @if ($nextSteps !== [])
+                <x-card class:body="p-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <p class="m-0 shrink-0 text-3xs font-semibold uppercase tracking-wide text-foreground/40">{{ __('Next steps') }}</p>
+                        @foreach ($nextSteps as $step)
+                            <a href="{{ $step['href'] }}" @if ($step['external']) target="_blank" rel="noopener" @endif
+                                class="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 px-3 py-1.5 text-2xs font-medium text-heading-foreground hover:border-primary hover:text-primary">
+                                {{ $step['label'] }}
+                                <span class="font-normal text-foreground/50">— {{ $step['hint'] }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                </x-card>
+            @endif
+
             @if (!$prefixDetected)
                 {{-- Onboarding callout: prefix not on the feed's enclosure URLs yet --}}
                 <x-card
@@ -344,7 +382,7 @@
 
                 {{-- Recent episodes — read from the episodes table, kept in
                      sync from the RSS feed (hourly, on page load). --}}
-                <x-card class:body="p-5">
+                <x-card id="episodes-card" class:body="p-5">
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <h3 class="m-0 text-sm font-semibold text-heading-foreground">
                             {{ __('Recent episodes') }}
@@ -422,7 +460,7 @@
 
                 {{-- Show Report v1 — opt-in public share link (spec §4).
                      The report is a LIVE page, never an attachment. --}}
-                <x-card class:body="p-5">
+                <x-card id="show-report-card" class:body="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div class="min-w-0">
                             <h3 class="m-0 text-sm font-semibold text-heading-foreground">

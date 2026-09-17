@@ -31,6 +31,13 @@ Route::get('public/report/{hash}', [\App\Http\Controllers\PublicReportController
     ->where('hash', '[A-Za-z0-9]{16,64}')
     ->name('public.report');
 
+// Pre-signup podcast analyzer (sprint E): read-only feed preview + OP3
+// status for podlink.ai/analyze. Hard per-IP throttle on top of the api
+// group; result cached 1h per URL; never modifies feeds.
+Route::get('public/feed-inspect', [\App\Http\Controllers\PublicFeedInspectController::class, 'show'])
+    ->middleware('throttle:15,1')
+    ->name('public.feed-inspect');
+
 Route::prefix('auth')
     ->group(function () {
         Route::post('register', 'App\Http\Controllers\Api\AuthController@register');

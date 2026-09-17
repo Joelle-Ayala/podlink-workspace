@@ -138,6 +138,8 @@ Route::middleware(['auth', 'updateUserActivity'])
                 Route::post('analytics/report-toggle', [AnalyticsController::class, 'toggleReport'])->name('analytics.report-toggle');
                 // Episode detail (per-episode report v1).
                 Route::get('analytics/episodes/{episode}', [AnalyticsController::class, 'episode'])->name('analytics.episode');
+                // Manual YouTube pairing (sprint C): pair / clear / back-to-auto.
+                Route::post('analytics/episodes/{episode}/youtube-pair', [AnalyticsController::class, 'youtubePair'])->name('analytics.youtube-pair');
 
                 // Contact-discovery P1 — Find Shows (free layer; search inert
                 // until PODCASTINDEX_KEY/SECRET; contact cards work keyless).
