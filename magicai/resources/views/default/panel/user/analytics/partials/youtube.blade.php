@@ -89,6 +89,31 @@
             </form>
         </div>
 
+        {{-- Sprint 2: channel watch metrics (90d) — same honest states as
+             demographics; renders only on 'ok', reconnect is handled by the
+             demographics card below so we don't nag twice. --}}
+        @php $watch = $youtubeWatchStats ?? null; @endphp
+        @if (is_array($watch) && ($watch['status'] ?? null) === 'ok')
+            <div class="mt-4 flex flex-wrap gap-8 rounded-lg border border-foreground/10 p-4">
+                <div>
+                    <p class="m-0 text-lg font-bold tabular-nums text-heading-foreground">{{ number_format($watch['views']) }}</p>
+                    <p class="m-0 text-3xs text-foreground/50">{{ __('views, 90 days') }}</p>
+                </div>
+                <div>
+                    <p class="m-0 text-lg font-bold tabular-nums text-heading-foreground">{{ number_format(intdiv($watch['watch_minutes'], 60)) }}h</p>
+                    <p class="m-0 text-3xs text-foreground/50">{{ __('watch time') }}</p>
+                </div>
+                <div>
+                    <p class="m-0 text-lg font-bold tabular-nums text-heading-foreground">{{ gmdate($watch['avg_view_duration_seconds'] >= 3600 ? 'G:i:s' : 'i:s', $watch['avg_view_duration_seconds']) }}</p>
+                    <p class="m-0 text-3xs text-foreground/50">{{ __('avg view duration') }}</p>
+                </div>
+                <div>
+                    <p class="m-0 text-lg font-bold tabular-nums text-heading-foreground">{{ $watch['subscribers_net'] >= 0 ? '+' : '' }}{{ number_format($watch['subscribers_net']) }}</p>
+                    <p class="m-0 text-3xs text-foreground/50">{{ __('subscribers, net') }}</p>
+                </div>
+            </div>
+        @endif
+
         @if ($youtubeVideoCount > 0)
             <div class="mt-4 overflow-x-auto">
                 <table class="w-full border-collapse text-start">

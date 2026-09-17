@@ -118,6 +118,18 @@ class SnapshotAnalyticsCommand extends Command
         }
 
         if ($counted > 0) {
+            $showMetrics = ['total_views_paired' => $totalViews, 'paired_episodes' => $counted];
+
+            // Sprint 2: channel watch metrics ride along when available
+            // (6h-cached read; 'ok' shape only — states are not history).
+            $watch = $youtube->watchStats($connection);
+
+            if (($watch['status'] ?? null) === 'ok') {
+                $showMetrics['watch_minutes_90d'] = $watch['watch_minutes'];
+                $showMetrics['avg_view_duration_seconds_90d'] = $watch['avg_view_duration_seconds'];
+                $showMetrics['subscribers_net_90d'] = $watch['subscribers_net'];
+            }
+
             AnalyticsSnapshot::query()->updateOrCreate(
                 [
                     'podcast_show_id' => $show->id,
@@ -126,7 +138,7 @@ class SnapshotAnalyticsCommand extends Command
                     'scope'           => 'show',
                     'episode_id'      => null,
                 ],
-                ['metrics' => ['total_views_paired' => $totalViews, 'paired_episodes' => $counted]],
+                ['metrics' => $showMetrics],
             );
         }
     }

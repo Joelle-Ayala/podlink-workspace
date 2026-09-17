@@ -35,6 +35,16 @@
                         <p class="m-0 text-3xs text-foreground/50">{{ __('YouTube views') }}</p>
                     </div>
                 @endif
+                @if (($youtubeWatch ?? null) !== null)
+                    <div>
+                        <p class="m-0 text-2xs font-semibold text-heading-foreground">{{ number_format(intdiv($youtubeWatch['watch_minutes'], 60)) }}h {{ $youtubeWatch['watch_minutes'] % 60 }}m</p>
+                        <p class="m-0 text-3xs text-foreground/50">{{ __('watch time, 90 days') }}</p>
+                    </div>
+                    <div>
+                        <p class="m-0 text-2xs font-semibold text-heading-foreground">{{ gmdate($youtubeWatch['avg_view_duration_seconds'] >= 3600 ? 'G:i:s' : 'i:s', $youtubeWatch['avg_view_duration_seconds']) }}</p>
+                        <p class="m-0 text-3xs text-foreground/50">{{ __('avg view duration') }}</p>
+                    </div>
+                @endif
             </div>
             @if (filled($episode->description))
                 <p class="m-0 mt-4 text-2xs leading-relaxed text-foreground/60">{{ \Illuminate\Support\Str::limit($episode->description, 500) }}</p>
@@ -135,7 +145,19 @@
                     @if ($transcript->language) · {{ strtoupper($transcript->language) }} @endif
                     · {{ __('select the text to copy it anywhere — your host, your site, your show notes') }}
                 </p>
-                <div class="mt-4 max-h-[32rem] overflow-y-auto whitespace-pre-wrap rounded-lg border border-foreground/10 p-4 text-2xs leading-relaxed text-foreground/80">{{ $transcript->body }}</div>
+                @if (($segments ?? collect())->isNotEmpty())
+                    {{-- Sprint 2: timestamped view (segments exist for transcripts
+                         created after 2026-09-16; older ones fall back to plain text). --}}
+                    <div class="mt-4 max-h-[32rem] overflow-y-auto rounded-lg border border-foreground/10 p-4 text-2xs leading-relaxed text-foreground/80">
+                        @foreach ($segments as $segment)
+                            <p class="m-0 mb-1.5">
+                                <span class="mr-2 font-mono text-3xs tabular-nums text-foreground/40">{{ gmdate($segment->start_ms >= 3600000 ? 'G:i:s' : 'i:s', intdiv($segment->start_ms, 1000)) }}</span>{{ $segment->text }}
+                            </p>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="mt-4 max-h-[32rem] overflow-y-auto whitespace-pre-wrap rounded-lg border border-foreground/10 p-4 text-2xs leading-relaxed text-foreground/80">{{ $transcript->body }}</div>
+                @endif
             @elseif ($inFlight)
                 <p class="m-0 mt-2 text-2xs text-foreground/60">{{ __('Transcription is running — usually a few minutes. Refresh this page to check.') }}</p>
             @elseif ($status === \App\Models\EpisodeTranscript::STATUS_FAILED)

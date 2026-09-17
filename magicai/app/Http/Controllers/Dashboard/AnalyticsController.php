@@ -97,6 +97,7 @@ class AnalyticsController extends Controller
         $youtubeViews = [];
 
         $youtubeDemographics = null;
+        $youtubeWatchStats = null;
 
         if ($youtubeConfigured) {
             $youtubeConnection = YoutubeConnection::query()->where('user_id', $user->id)->first();
@@ -107,6 +108,9 @@ class AnalyticsController extends Controller
 
                 // ML2 expanded: channel audience demographics (age/gender/geo).
                 $youtubeDemographics = $youtubeAnalytics->demographics($youtubeConnection);
+
+                // Sprint 2: channel watch metrics (views/watch time/AVD/subs, 90d).
+                $youtubeWatchStats = $youtubeAnalytics->watchStats($youtubeConnection);
 
                 // Naive title pairing — writes episodes.youtube_video_id only
                 // where it is still null, and logs every match.
@@ -140,6 +144,7 @@ class AnalyticsController extends Controller
             'youtubeVideos'     => $youtubeVideos,
             'youtubeViews'      => $youtubeViews,
             'youtubeDemographics' => $youtubeDemographics,
+            'youtubeWatchStats'   => $youtubeWatchStats,
             // Biolink bridge (amendment 08-27b): page views + link clicks
             // for the user's own Podlink page, keyed by the SSO email.
             'biolinkStats' => $biolinkStats->configured()
@@ -173,6 +178,7 @@ class AnalyticsController extends Controller
         $youtubeViews = null;
         $youtubeVideos = [];
         $youtubeConnected = false;
+        $watchStats = null;
 
         if ($youtubeOauth->isConfigured()) {
             $connection = YoutubeConnection::query()->where('user_id', $user->id)->first();
@@ -184,14 +190,24 @@ class AnalyticsController extends Controller
 
                 if (filled($episode->youtube_video_id)) {
                     $youtubeViews = $youtubeAnalytics->viewsByVideoId($youtubeVideos)[$episode->youtube_video_id] ?? null;
+
+                    // Sprint 2: per-video watch metrics (90d, cached; null = omit).
+                    $watchStats = $youtubeAnalytics->episodeWatchStats($connection, (string) $episode->youtube_video_id);
                 }
             }
         }
 
+        // Sprint 2: timed transcript segments (empty for pre-09-16 transcripts).
+        $segments = $episode->transcript?->isCompleted()
+            ? $episode->transcript->segments()->limit(3000)->get()
+            : collect();
+
         return view('panel.user.analytics.episode', [
             'episode'          => $episode,
             'transcript'       => $episode->transcript,
+            'segments'         => $segments,
             'youtubeViews'     => $youtubeViews,
+            'youtubeWatch'     => $watchStats,
             'youtubeVideos'    => $youtubeVideos,
             'youtubeConnected' => $youtubeConnected,
         ]);

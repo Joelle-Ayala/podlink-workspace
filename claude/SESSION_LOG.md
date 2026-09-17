@@ -125,3 +125,7 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 - Commits 344dbe974 (app) + d15f37efb (site); Railway app+worker SUCCESS, 3 migrations DONE, Vercel READY; live checks green (/analyze, /founders, /partners/pr-agencies, proof band, Episode transcripts rename, /mcp 401, feed-inspect ok, /test + /debug gated).
 - Full detail: claude/LAUNCH-SPRINT-1-REPORT.md (10 sections incl. founder checklist + verdict).
 - RED FLAG found during verification: GitHub repo flipped PUBLIC (was private through Sept 12). Not changed from this side; contains licensed vendored code + strategy canon. Founder action #1: make private again.
+
+## 2026-09-17 - Sprint 2 solo items 1-2 (no founder input needed)
+- YouTube watch metrics: watchStats() (channel 90d views/watch time/AVD/net subs) + episodeWatchStats() (per paired video) on YouTubeAnalyticsService, same Analytics-v2 client + honest states + 6h cache; channel strip on the YouTube card, per-episode watch time + AVD on the episode page; watch metrics ride along in the daily youtube/show snapshot.
+- Transcript timestamps surfaced: episode page renders segment-timestamped transcript when transcript_segments exist (post-09-16 transcriptions); older transcripts fall back to plain text.

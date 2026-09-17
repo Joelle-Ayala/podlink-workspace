@@ -386,6 +386,89 @@ class YouTubeAnalyticsService
     }
 
     /**
+     * Channel watch metrics (sprint 2 item 2 — "True Audience" depth):
+     * views, watch time, average view duration and net subscriber change
+     * over the trailing 90 days. Same auth/scope as demographics(), same
+     * three honest shapes (ok / needs_reconnect / no_data), 6h cache.
+     *
+     * @return array<string, mixed>
+     */
+    public function watchStats(YoutubeConnection $connection): array
+    {
+        $cacheKey = 'youtube:watchstats:' . $connection->id;
+
+        $result = Cache::remember($cacheKey, 6 * 3600, function () use ($connection): array {
+            [$status, $json] = $this->getAnalytics($connection, [
+                'ids'       => 'channel==MINE',
+                'metrics'   => 'views,estimatedMinutesWatched,averageViewDuration,subscribersGained,subscribersLost',
+                'startDate' => now()->subDays(90)->toDateString(),
+                'endDate'   => now()->toDateString(),
+            ]);
+
+            if ($status === 401 || $status === 403) {
+                return ['status' => 'needs_reconnect'];
+            }
+
+            $row = $json['rows'][0] ?? null;
+
+            if (! is_array($row) || count($row) < 5) {
+                return ['status' => 'no_data'];
+            }
+
+            return [
+                'status'                   => 'ok',
+                'window_days'              => 90,
+                'views'                    => (int) $row[0],
+                'watch_minutes'            => (int) $row[1],
+                'avg_view_duration_seconds' => (int) $row[2],
+                'subscribers_net'          => (int) $row[3] - (int) $row[4],
+            ];
+        });
+
+        return is_array($result) ? $result : ['status' => 'no_data'];
+    }
+
+    /**
+     * Per-video watch metrics for one paired episode (90 days, 6h cache).
+     * Returns null when the report is empty or the scope is missing — the
+     * episode page simply omits the row rather than surfacing plumbing.
+     *
+     * @return array{views: int, watch_minutes: int, avg_view_duration_seconds: int}|null
+     */
+    public function episodeWatchStats(YoutubeConnection $connection, string $videoId): ?array
+    {
+        if (! preg_match('/^[A-Za-z0-9_-]{5,32}$/', $videoId)) {
+            return null;
+        }
+
+        $cacheKey = 'youtube:watchstats:video:' . $connection->id . ':' . $videoId;
+
+        $result = Cache::remember($cacheKey, 6 * 3600, function () use ($connection, $videoId): ?array {
+            [, $json] = $this->getAnalytics($connection, [
+                'ids'       => 'channel==MINE',
+                'metrics'   => 'views,estimatedMinutesWatched,averageViewDuration',
+                'filters'   => 'video==' . $videoId,
+                'startDate' => now()->subDays(90)->toDateString(),
+                'endDate'   => now()->toDateString(),
+            ]);
+
+            $row = $json['rows'][0] ?? null;
+
+            if (! is_array($row) || count($row) < 3) {
+                return null;
+            }
+
+            return [
+                'views'                     => (int) $row[0],
+                'watch_minutes'             => (int) $row[1],
+                'avg_view_duration_seconds' => (int) $row[2],
+            ];
+        });
+
+        return is_array($result) ? $result : null;
+    }
+
+    /**
      * GET against the YouTube ANALYTICS API v2 (different host from the Data
      * API), returning [statusCode, json] so callers can tell a scope problem
      * (401/403 → reconnect) from an empty report.
