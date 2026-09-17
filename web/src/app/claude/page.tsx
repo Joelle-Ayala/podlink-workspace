@@ -49,7 +49,7 @@ const steps = [
 const faqs = [
   {
     q: "What can Claude do once my podcast is connected?",
-    a: "Six read-only things: your show overview with download stats, downloads by listening app, your episode list, your podlink.fm page, full-text search across your own episode transcripts, and reading any transcript. It composes them on its own — ask a bigger question and it uses several tools.",
+    a: "Eight read-only things: your show overview with download stats, downloads by listening app, your episode list, your podlink.fm page, your page's views and link clicks, a recent-performance summary of your last five episodes, full-text search across your own episode transcripts, and reading any transcript. It composes them on its own — ask a bigger question and it uses several tools.",
   },
   {
     q: "Why are the numbers trustworthy?",

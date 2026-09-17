@@ -31,8 +31,10 @@ sales, guest booking, advertising, and growth.
 
 Podlink runs an MCP (Model Context Protocol) server, so podcasters can connect
 their show to Claude or other MCP clients and ask about their own analytics —
-downloads, top listening apps, recent episodes — read-only, over OAuth, scoped
-to their own account.
+eight read-only tools: show overview, downloads by listening app, episode list,
+Podlink page URL, page views and link clicks, a recent-performance summary,
+transcript search, and full transcripts — over OAuth, scoped to their own
+account.
 
 - [Podlink MCP](https://podlink.ai/features/mcp): what it does and how to
   connect

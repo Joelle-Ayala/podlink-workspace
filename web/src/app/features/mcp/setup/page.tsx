@@ -13,7 +13,8 @@ import { siteUrl } from "@/lib/site";
  *
  * Everything on this page is present-tense TRUE as of 2026-08-27: the MCP
  * server is deployed on app.podlink.ai and was verified end-to-end (OAuth
- * 2.1 + PKCE + DCR, all four v1 tools) against a real client. No directory
+ * 2.1 + PKCE + DCR; the tool surface has since grown to 8 read-only tools
+ * — routes/mcp.php is the source of truth) against a real client. No directory
  * claims here — this documents the custom-connector path, which works today.
  * Indexable: it describes a live capability (Cluster A, seo-gsc-plan.md).
  */
@@ -52,11 +53,11 @@ const steps = [
 const faqs = [
   {
     q: "What can Claude actually do once connected?",
-    a: "Four things, all read-only: get an overview of your show (title, feed, download stats), break downloads down by listening app over the last three months, list your recent episodes, and fetch your public Podlink page URL. It cannot edit, post, or delete anything.",
+    a: "Eight things, all read-only: get an overview of your show (title, feed, download stats), break downloads down by listening app over the last three months, list your recent episodes, fetch your public Podlink page URL, read your page's views and link clicks, get a recent-performance summary of your last five episodes, search across your own episode transcripts, and read any full transcript. It cannot edit, post, or delete anything.",
   },
   {
     q: "What are some prompts to try first?",
-    a: 'Try: "How did my podcast do this week?" — "Which apps do my listeners use, and what share is Apple Podcasts?" — "List my last 10 episodes with dates." — "What\'s my Podlink page URL?" Each maps to one tool; Claude combines them on its own for bigger questions.',
+    a: 'Try: "How did my podcast do this week?" — "Which apps do my listeners use, and what share is Apple Podcasts?" — "List my last 10 episodes with dates." — "When did I talk about pricing? Search my transcripts." — "Anything unusual in my last five episodes?" Each maps to one tool; Claude combines them on its own for bigger questions.',
   },
   {
     q: "Is this safe?",

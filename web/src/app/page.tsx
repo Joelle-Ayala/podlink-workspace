@@ -16,6 +16,12 @@ import Link from "next/link";
 import { FEATURE_GROUPS, FEATURES, getFeaturesByGroup } from "@/content/features";
 import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS, REPORT_BAND, TWO_DOORS } from "@/content/home";
 import {
+  placements,
+  placementClientCount,
+  placementShowCount,
+} from "@/content/placements";
+import { testimonialFor, visibleBrands, visibleShows } from "@/content/proof";
+import {
   faqLd,
   jsonLd,
   organizationLd,
@@ -184,6 +190,49 @@ export default function HomePage() {
             </div>
           ))}
         </Grid>
+      </Section>
+
+      {/* Services proof band — launch sprint F (external-context §22).
+          Cleared data only: computed counts from placements.ts,
+          clearance-gated show/brand names via the proof.ts selectors, and one
+          gated testimonial. tone="accent" keeps the band rhythm alternating
+          around the insertion point (alt → accent → light). */}
+      <Section tone="accent" size="tight" id="proof">
+        <div className="grid gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <Badge>Proof</Badge>
+            <Heading level={2} className="mt-4 text-2xl sm:text-3xl">
+              The done-for-you side has receipts
+            </Heading>
+            <Prose className="mt-3">
+              <p>
+                {placements.length} verified guest placements across{" "}
+                {placementShowCount} shows for {placementClientCount} clients —
+                every one links to the live episode. Shows we&rsquo;ve
+                produced, grown or monetized include{" "}
+                {visibleShows().slice(0, 5).join(", ")}; brand campaigns
+                bought or sold include {visibleBrands().slice(0, 4).join(", ")}.{" "}
+                <Link href="/work">See every placement</Link>
+              </p>
+            </Prose>
+          </div>
+          {(() => {
+            const quote = testimonialFor("get-booked-on-podcasts");
+            if (!quote) return null;
+            return (
+              <figure className="lg:col-span-5 lg:self-center">
+                <blockquote className="text-lg font-medium leading-relaxed">
+                  &ldquo;{quote.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-3 text-sm text-text-muted">
+                  {quote.name}
+                  {quote.title ? `, ${quote.title}` : ""}
+                  {quote.company ? ` · ${quote.company}` : ""}
+                </figcaption>
+              </figure>
+            );
+          })()}
+        </div>
       </Section>
 
       <Section tone="light" id="faq" containerWidth="narrow">

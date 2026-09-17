@@ -13,6 +13,14 @@ const FEATURE_LINKS = FEATURES.map((f) => ({
   href: `/features/${f.slug}`,
 }));
 
+/* Company column: the ICP launch-gate pages (sprint F, external-context §22)
+   plus the podlink.fm link the prop's fallback previously supplied. */
+const COMPANY_LINKS = [
+  { label: "For founders", href: "/founders" },
+  { label: "For PR agencies", href: "/partners/pr-agencies" },
+  { label: "podlink.fm pages", href: SITE.bio },
+];
+
 /* Poppins is the brand face (carried over from the MagicAI theme). Only the
    four weights actually used are loaded — see BRAND.md.
    Self-hosted rather than pulled from Google Fonts: one less third-party
@@ -66,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main" className="flex-1">
           {children}
         </main>
-        <SiteFooter featureLinks={FEATURE_LINKS} />
+        <SiteFooter featureLinks={FEATURE_LINKS} companyLinks={COMPANY_LINKS} />
         {/* GA4 — property "Podlink", stream podlink.ai (set up 2026-08-19).
             gtag.js loads afterInteractive so it never blocks first paint. */}
         <Script

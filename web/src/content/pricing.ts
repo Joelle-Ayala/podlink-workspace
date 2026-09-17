@@ -212,7 +212,7 @@ export const COMPARISON: ComparisonSection[] = [
     heading: "The Episode Content Kit",
     rows: [
       {
-        label: "Automatic transcripts",
+        label: "Episode transcripts",
         values: { free: false, pro: true, studio: true },
       },
       {

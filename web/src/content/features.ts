@@ -21,7 +21,7 @@
  * name reads oddly short next to its neighbours, that is the collision fix,
  * not an oversight:
  *   download-analytics → "Podcast analytics dashboard"  (vs /services/podcast-growth)
- *   transcripts        → "Automatic transcripts"        (vs /services/podcast-editing)
+ *   transcripts        → "Episode transcripts"          (vs /services/podcast-editing)
  *   show-notes         → "AI show notes generator"      (vs /services/podcast-editing)
  *   clips-and-social   → "AI podcast clip generator"    (vs /services/podcast-clips)
  *   newsletter         → "Podcast newsletter generator" (vs /services/podcast-growth)
@@ -152,7 +152,9 @@ export const FEATURES: Feature[] = [
 
   {
     slug: "transcripts",
-    name: "Automatic transcripts",
+    // Sprint G claims fix: the product is one-click/per-episode by design
+    // (auto-transcribe exists but ships OFF) — "Automatic" overclaimed.
+    name: "Episode transcripts",
     tagline: "Every episode, one click from text",
     group: "understand",
     icon: "transcript",

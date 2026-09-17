@@ -74,6 +74,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    // /analyze — the pre-signup podcast analyzer (sprint E free tool; a
+    // genuine PLG surface, so it earns tool-page priority).
+    {
+      url: absoluteUrl("/analyze"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
   ];
 
   // One entry per feature. These are the deepest genuinely useful pages on
@@ -111,6 +119,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
+    // /founders — ICP launch-gate page (external-context §22).
+    {
+      url: absoluteUrl("/founders"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    // /partners/pr-agencies — ICP launch-gate page (external-context §22).
+    {
+      url: absoluteUrl("/partners/pr-agencies"),
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     {
       url: absoluteUrl("/work"),
       lastModified,
