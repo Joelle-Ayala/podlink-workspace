@@ -115,3 +115,8 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 - TERMS OF SERVICE v1 DRAFTED + shipping (same pattern as privacy: plain, honest, accurate to the product; services carved to engagement agreements; credits never-automatic language; connector acceptable-use; as-is + 12-month liability cap; ONE open field = governing-law state, TODO(legal) marked). Closes the ChatGPT-directory terms-URL gate code-side; her B1 review now covers BOTH legal pages in one read.
 - ChatGPT test-case matrix drafted (5 positive + 3 negative) into listings-and-rehearsal.md 5 - the last ChatGPT checklist item that was ours.
 - Drip #2 (transcripts) package STAGED: claude/launch/drip-2-transcripts-package.md - changelog entry + founder post + brand post + optional 15s video + preconditions. Fires the first Tuesday after her 2-min click-verify.
+
+## 2026-09-16 - Ecosystem audit V3 + missed-deploy catch
+- Produced claude/PODLINK_ECOSYSTEM_AUDIT_CONTEXT_V3.md (~10.5k words, 43 sections) from read-only repo inspection (3 parallel passes: MagicAI v10.8.1 inventory - zero extensions installed; 66biolinks v68 - all 15 plugins absent; custom surface) + live checks. For upload to the external ChatGPT audit.
+- FOUND + FIXED: Vercel missed building 04bee89ef (Sept 12) - homepage REPORT_BAND was in-repo, not live. Docs push 0fb4be99b triggered the build; band verified live (cache-busted). Railway had deployed it fine (8 MCP tools live). New verification rule: confirm a Vercel deployment EXISTS for the pushed sha.
+- Filed claude/mcp-scoping-amendment-2026-09-12.md into git (was untracked).

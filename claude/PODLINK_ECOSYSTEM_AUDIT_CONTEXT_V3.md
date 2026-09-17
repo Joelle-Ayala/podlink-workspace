@@ -39,8 +39,8 @@ repo's positioning canon has already converged on a sharper wedge than the gener
 suite: **"the report is the product"** — the shareable, sponsor-checkable Show Report,
 with "talk to your podcast" (Claude/MCP over analytics + transcripts) as second act and
 AI content tools as the "oh, bonus" layer. This is validated externally in
-`claude/cross-channel-report-validation.md` and expressed on the homepage (REPORT_BAND,
-in repo; see deployment nuance in §36).
+`claude/cross-channel-report-validation.md` and expressed on the live homepage
+(REPORT_BAND, verified live 2026-09-16; see §36).
 
 **Live vs partial vs planned, at the highest level:**
 - ✅ Live: marketing site with claims-audited copy; OP3 dashboard; episode sync;
@@ -611,7 +611,7 @@ Show Report solves post-signup shareable value well.
 
 | Page | Purpose / CTA | Mismatch notes |
 |---|---|---|
-| `/` | dual-funnel: hero ("Record the episode. Podlink does the other four hours"), TWO_DOORS (software/services), REPORT_BAND (Show Report + Connect Claude) [in repo; see §36 deploy nuance], what-it-does groups, how-it-works, 8 FAQs, CTA band | none known post-audit |
+| `/` | dual-funnel: hero ("Record the episode. Podlink does the other four hours"), TWO_DOORS (software/services), REPORT_BAND (Show Report + Connect Claude, live), what-it-does groups, how-it-works, 8 FAQs, CTA band | none known post-audit |
 | `/features` + 8 feature pages | download-analytics, transcripts, show-notes, templates, multilingual, clips-and-social, newsletter, link-in-bio; trust strip, ink problem band, steps, host chips, Free-only price card | clips/newsletter copy deliberately honest re: what's DIY vs service |
 | `/features/mcp` (+ `/setup`) | Claude/ChatGPT connector marketing + setup docs | 🔵 noindex until index-flip checklist; /setup IS sitemapped |
 | `/claude` | Cluster-A SEO landing: talk-to-your-podcast, 3-step connect, why-OP3, 5 FAQs, HowTo+FAQPage schema | zero directory claims until listing day (deliberate) |
@@ -859,12 +859,14 @@ reference vars `${{biolink-public.*}}` — no literal creds anywhere),
 `SITE_URL` (biolink), Redis/queue standard vars.
 
 **Vercel** (team joelle-ayala-s-projects, project `podlink` →
-podlink.ai): deploys on push from the same monorepo. ⚠ **Finding (2026-09-16):
-Vercel never built commit `04bee89ef`** (pushed 2026-09-12) — latest production
-deployment is `abb443af4`; consequently the homepage REPORT_BAND and any web/ change
-in that commit are in-repo but NOT live. No failed build exists; the webhook event
-appears to have been missed. Remedy is a one-click redeploy of main (not performed
-during this read-only audit).
+podlink.ai): deploys on push from the same monorepo. ⚠ Finding (2026-09-16): Vercel
+never built commit `04bee89ef` (pushed 2026-09-12; no failed build — the webhook
+event was simply missed), so the homepage REPORT_BAND sat in-repo but not live for
+four days. **RESOLVED same day:** the docs commit `0fb4be99b` (this audit) triggered
+a fresh production build (READY) and the band is verified live on podlink.ai
+(cache-busted match on "used to take a day" + #show-report). Lesson recorded:
+always confirm a Vercel deployment EXISTS for the pushed sha, not just that the
+push succeeded.
 
 Known operational history: app deploys lag worker (verify per-service); 502s during
 container swap; SKIPPED = watch-path miss (normal); desktop scheduler tooling is
@@ -971,7 +973,7 @@ effort to expose (S/M/L). Imp = strategic importance (H/M/L).
 | AI Agents | AI | X | ❌ | — | — | ⚪ | purchase | ✅ | L | M | later |
 | CRM | crm | X | ❌ | — | — | ⚪ | v11 upgrade | ✅ v11 | L | M | adopt-later decision filed |
 | Newsletter send | marketing | X | ❌ | — | — | ⚪ | purchase/build | ✅ | M | M | later |
-| Marketing site 20 routes | web | C | ✅ | ✅ | ✅ | ✅ | Vercel redeploy of 04bee89ef | — | S | H | trigger redeploy |
+| Marketing site 20 routes | web | C | ✅ | ✅ | ✅ | ✅ | — | — | — | H | current (REPORT_BAND live 2026-09-16) |
 | /pricing | web | C | ✅ | ✅ | noindex | 🔵 | 5-condition flip | — | S | H | B5 then flip |
 | /features/mcp | web | C | ✅ | ✅ | noindex | 🔵 | index-flip list | — | S | H | flip near listing day |
 | Case studies/work | proof | C | ✅ | ✅ | ✅ | ✅ | tranche-2 templates | — | M | H | task #19 |
@@ -1064,9 +1066,8 @@ discovery contact cards; legal drafts; full staged launch-comms package.
 personal API keys, Biolink user API, voice clone, chatbot embed, Biolink billing.
 
 **Almost ready (🟡, days not weeks):** demographics real-data verify (one founder
-reconnect); Vercel redeploy of 04bee89ef (REPORT_BAND); pricing flip (B5 +
-Stripe products); discovery search (B6 keys); watch-time metrics (same API);
-transcript timestamps (persist segments).
+reconnect); pricing flip (B5 + Stripe products); discovery search (B6 keys);
+watch-time metrics (same API); transcript timestamps (persist segments).
 
 **Partial:** True-Audience pairing (naive), Podcast Memory (exists via MCP, no
 in-product UI), sponsor/media-kit (report is the proto).
@@ -1084,9 +1085,9 @@ founder session); demographics with a reconnected channel; transcript click-veri
 (re-run after any bridge change); /pricing flip checklist items.
 
 **Actual launch blockers (external-comms launch):** founder taps B1–B8 only.
-Everything ship-side is live or staged. Additional pre-GO fix now identified:
-trigger the missed Vercel build so the homepage hero band is live before comms
-point at it.
+Everything ship-side is live or staged. (The missed Vercel build of 04bee89ef was
+caught during this audit and resolved 2026-09-16 — homepage hero band verified
+live; see §36.)
 
 **Safe to save for later launches:** discovery search reveal (post-B6), demographics
 drip (post-verify), pricing index flip, Teams/Studio, any directory-scoped
