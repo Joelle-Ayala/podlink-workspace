@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { bookingUrl, contact, contactEmail } from "@/content/contact";
+import { services } from "@/content/services";
 import { CtaButton, Eyebrow, Section } from "@/components/services";
+import { QualifyingForm } from "@/components/contact/QualifyingForm";
 import { siteUrl } from "@/lib/site";
+
+/**
+ * /contact — the services funnel's conversion surface
+ * (claude/contact-page-template.md). Booking stays the primary CTA in the
+ * hero; the qualifying form below it has no backend on purpose — it
+ * composes a prefilled email to the real inbox ("never a dead form").
+ */
 
 export const metadata: Metadata = {
   title: contact.metaTitle,
@@ -51,6 +60,28 @@ export default function ContactPage() {
           </CtaButton>
         </div>
         <p className="mt-6 text-sm opacity-70">{contact.replyPromise}</p>
+      </Section>
+
+      {/* Qualifying form (template §2) — three answers, prefilled email.
+          Single column and labels-above-inputs per the mobile-first spec. */}
+      <Section className="border-b border-zinc-200 bg-zinc-50">
+        <div className="max-w-xl">
+          <Eyebrow>Prefer email?</Eyebrow>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight lg:text-4xl">
+            Three questions, then it&rsquo;s in your drafts.
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-zinc-700">
+            Answer these and we&rsquo;ll open a prefilled email to{" "}
+            {contactEmail} in your mail app. No form robot on the other end
+            &mdash; it lands in a real inbox.
+          </p>
+          <div className="mt-10">
+            <QualifyingForm
+              services={services.map((s) => ({ slug: s.slug, name: s.name }))}
+              email={contactEmail}
+            />
+          </div>
+        </div>
       </Section>
 
       <Section>

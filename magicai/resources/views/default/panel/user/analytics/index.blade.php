@@ -313,6 +313,30 @@
                         <p class="m-0 mt-1 text-2xl font-semibold text-heading-foreground">
                             {{ $downloads && $downloads['monthly_downloads'] !== null ? number_format($downloads['monthly_downloads']) : '—' }}
                         </p>
+                        {{-- Sprint 2: rolling-30d trend from the daily snapshots.
+                             Renders only once >=7 days of history exist — nothing
+                             to explain, nothing fake, it just appears. --}}
+                        @php $trend = collect($downloadTrend ?? []); @endphp
+                        @if ($trend->count() >= 7)
+                            @php
+                                $values = $trend->pluck('value');
+                                $min = max(0, (int) $values->min());
+                                $max = (int) $values->max();
+                                $span = max(1, $max - $min);
+                                $step = 100 / max(1, $trend->count() - 1);
+                                $points = $trend->values()->map(
+                                    fn ($point, $i) => round($i * $step, 2) . ',' . round(28 - (($point['value'] - $min) / $span) * 24, 2)
+                                )->implode(' ');
+                            @endphp
+                            <svg viewBox="0 0 100 32" preserveAspectRatio="none" class="mt-3 h-10 w-full" role="img"
+                                aria-label="{{ __(':days-day trend of rolling 30-day downloads', ['days' => $trend->count()]) }}">
+                                <polyline points="{{ $points }}" fill="none" stroke="currentColor"
+                                    class="text-primary" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <p class="m-0 mt-1 text-3xs text-foreground/40">
+                                {{ __('rolling 30-day total, captured daily since :date', ['date' => \Illuminate\Support\Carbon::parse($trend->first()['date'])->format('M j')]) }}
+                            </p>
+                        @endif
                     </x-card>
                     <x-card class:body="p-5">
                         <p class="m-0 text-3xs font-medium uppercase tracking-wide text-foreground/50">

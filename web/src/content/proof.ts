@@ -54,6 +54,13 @@ export interface CaseStudy {
    * `cleared` entries, and only from facts in the evidence brief.
    */
   story?: { challenge: string; approach: string; results: string };
+  /**
+   * Pull quote for /case-studies/[slug] — the id of a testimonials[] entry
+   * from THIS client only. Set only where the match is exact; the page omits
+   * the section otherwise. Lookup stays clearance-gated via
+   * getTestimonialById().
+   */
+  testimonialId?: string;
   clearance: Clearance;
   /** Internal only. Never rendered. */
   note?: string;
@@ -96,6 +103,7 @@ export const caseStudies: CaseStudy[] = [
       results:
         "Membership grew 32% on the back of the interview campaign. Season two audience engagement rose 325%, podcast page traffic doubled, qualified leads rose 68%, and cost per lead dropped by $70.",
     },
+    testimonialId: "lapidus",
     clearance: "cleared",
   },
   {
@@ -121,6 +129,9 @@ export const caseStudies: CaseStudy[] = [
       results:
         "Website traffic rose 150%, podcast subscribers grew 70%, and site conversion improved 50% as the show became the category's authority asset. The relationship is now more than five years old and still active — the longest-running engagement on our books.",
     },
+    /* chellew-2, not chellew — chellew still needs Karen's sign-off on the
+       Podlink attribution (see its note). */
+    testimonialId: "chellew-2",
     clearance: "cleared",
     note:
       "The $70K/90-day figure was confirmed accurate by Joelle 2026-08-19. The alternate '65% monthly revenue increase' line from the 2022 site copy stays retired.",
@@ -301,6 +312,7 @@ export const caseStudies: CaseStudy[] = [
       results:
         "The show hit Apple's New & Noteworthy within two days of launch, carried its pre-launch advertisers into the schedule, and became a million-dollar podcast in its first year.",
     },
+    testimonialId: "walsh",
     clearance: "cleared",
   },
   {
@@ -523,6 +535,9 @@ export const caseStudies: CaseStudy[] = [
       results:
         "The show crossed 31 million monthly views across platforms with 43,900 YouTube subscribers added in 90 days, and the sponsorship side closed packages from $2,500 to $8,000 per episode — including a $20,000 four-episode deal, a $5,000-a-month product partnership, and a launch sponsor who renewed for five more episodes.",
     },
+    /* Producer quote, not a guest quote — the 2026-08-19 founder decision
+       bans GUEST quotes for this show; Meadows is the show's producer. */
+    testimonialId: "meadows",
     clearance: "cleared",
     note:
       "ATTRIBUTION: clips and episode editing are produced in-house by the show's editor — NOT Podlink's work. Never claim the clip stats or edit craft as ours. FOUNDER DECISION 2026-08-19: never name the show's sponsors in our marketing, and no guest quotes (the Hit-Boy quote was removed) — dollar figures without names only.",
@@ -662,6 +677,14 @@ export function visibleCaseStudies(): CaseStudy[] {
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {
   return caseStudies.find((c) => c.slug === slug);
+}
+
+/**
+ * Pull-quote lookup for /case-studies/[slug] — resolves a CaseStudy's
+ * `testimonialId`, clearance-gated like every other selector.
+ */
+export function getTestimonialById(id: string): Testimonial | undefined {
+  return testimonials.find((t) => t.id === id && isVisible(t.clearance));
 }
 
 export function visibleShows(): string[] {

@@ -129,3 +129,8 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 ## 2026-09-17 - Sprint 2 solo items 1-2 (no founder input needed)
 - YouTube watch metrics: watchStats() (channel 90d views/watch time/AVD/net subs) + episodeWatchStats() (per paired video) on YouTubeAnalyticsService, same Analytics-v2 client + honest states + 6h cache; channel strip on the YouTube card, per-episode watch time + AVD on the episode page; watch metrics ride along in the daily youtube/show snapshot.
 - Transcript timestamps surfaced: episode page renders segment-timestamped transcript when transcript_segments exist (post-09-16 transcriptions); older transcripts fall back to plain text.
+
+## 2026-09-17b - Solo queue continued (her check-in expected tomorrow)
+- Tranche-2 case-study template pass: /case-studies/[slug] rebuilt to the 9-part canon stack (data-driven, one page; attribution-honest what-we-did from services[]; big-number results from existing metrics only; pull quotes on 4 exact-match cleared testimonials - chellew withheld pending Karen sign-off, Meadows used as producer-not-guest, worth a founder glance). Demotion candidates flagged, NOT demoted: united-recovery-project (no verified number), cvs-health (outcomes-only by direction), 3 borderline headline promotions needing founder approval (mudrex, shiftpixy, ritual).
+- /contact qualifying form shipped per template: show/service/budget -> structured mailto (no backend, never a dead form), booking CTA stays primary.
+- Downloads trend sparkline: analytics page renders a rolling-30d polyline from analytics_snapshots once >=7 daily points exist (self-appearing; nothing until ~Sep 24).

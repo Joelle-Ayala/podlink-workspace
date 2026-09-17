@@ -122,6 +122,27 @@ class AnalyticsController extends Controller
             }
         }
 
+        // Sprint 2: rolling-30d download trend from the daily snapshots.
+        // Empty until history accrues; the blade renders nothing below 7 points.
+        $downloadTrend = [];
+
+        if ($show !== null && filled($show->op3_show_uuid)) {
+            $downloadTrend = \App\Models\AnalyticsSnapshot::query()
+                ->where('podcast_show_id', $show->id)
+                ->where('source', 'op3')
+                ->where('scope', 'show')
+                ->orderBy('captured_on')
+                ->limit(60)
+                ->get(['captured_on', 'metrics'])
+                ->map(static fn ($snapshot): array => [
+                    'date'  => $snapshot->captured_on->toDateString(),
+                    'value' => (int) data_get($snapshot->metrics, 'monthly_downloads', 0),
+                ])
+                ->filter(static fn (array $point): bool => $point['value'] > 0)
+                ->values()
+                ->all();
+        }
+
         // Sprint E: one cheap EXISTS to drive the "Next steps" ladder card.
         $hasCompletedTranscript = $show !== null && EpisodeTranscript::query()
             ->where('status', EpisodeTranscript::STATUS_COMPLETED)
@@ -132,6 +153,7 @@ class AnalyticsController extends Controller
             'show'              => $show,
             'showTitle'         => $showTitle,
             'hasCompletedTranscript' => $hasCompletedTranscript,
+            'downloadTrend'     => $downloadTrend,
             'op3Configured'     => $op3->isConfigured(),
             'prefixDetected'    => (bool) ($feedInfo['prefix_detected'] ?? false),
             'downloads'         => $downloads,
