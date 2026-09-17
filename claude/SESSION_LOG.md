@@ -120,3 +120,8 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 - Produced claude/PODLINK_ECOSYSTEM_AUDIT_CONTEXT_V3.md (~10.5k words, 43 sections) from read-only repo inspection (3 parallel passes: MagicAI v10.8.1 inventory - zero extensions installed; 66biolinks v68 - all 15 plugins absent; custom surface) + live checks. For upload to the external ChatGPT audit.
 - FOUND + FIXED: Vercel missed building 04bee89ef (Sept 12) - homepage REPORT_BAND was in-repo, not live. Docs push 0fb4be99b triggered the build; band verified live (cache-busted). Railway had deployed it fine (8 MCP tools live). New verification rule: confirm a Vercel deployment EXISTS for the pushed sha.
 - Filed claude/mcp-scoping-amendment-2026-09-12.md into git (was untracked).
+
+## 2026-09-16/17 - LAUNCH SPRINT 1 (A-G) shipped + verified
+- Commits 344dbe974 (app) + d15f37efb (site); Railway app+worker SUCCESS, 3 migrations DONE, Vercel READY; live checks green (/analyze, /founders, /partners/pr-agencies, proof band, Episode transcripts rename, /mcp 401, feed-inspect ok, /test + /debug gated).
+- Full detail: claude/LAUNCH-SPRINT-1-REPORT.md (10 sections incl. founder checklist + verdict).
+- RED FLAG found during verification: GitHub repo flipped PUBLIC (was private through Sept 12). Not changed from this side; contains licensed vendored code + strategy canon. Founder action #1: make private again.
