@@ -5,9 +5,8 @@
  * is the shared contract for features and pricing, and a hero interface has no
  * business in it.
  *
- * No testimonials, no customer counts, no invented metrics. The stock ones came
- * out on purpose. Proof on this page is product fact: the analytics come from
- * OP3, which we do not run.
+ * No invented proof or customer counts. Product claims here must match what is
+ * actually shipped; service proof is rendered separately from cleared sources.
  */
 
 import { appUrl } from "@/lib/site";
@@ -52,34 +51,34 @@ export interface CtaBand {
 }
 
 export const HERO: Hero = {
-  eyebrow: "Grow your show. Not your workload.",
-  headline: "Record the episode. Podlink does the other four hours",
-  sub: "Show notes, social posts, a newsletter and download numbers a sponsor can check — written from what you actually said, on the podcast host you already use.",
-  primaryCta: { label: "Start free", href: appUrl("/register") },
-  secondaryCta: { label: "See what it does", href: "/features" },
-  note: "Connect your RSS feed in under a minute. No host migration, no card required.",
+  eyebrow: "Independent podcast analytics + AI",
+  headline: "Know what's growing your podcast. Then do more of it",
+  sub: "Connect your show to see independently measured downloads, YouTube performance, a live Show Report you can share, and transcripts you can query from Claude or ChatGPT.",
+  primaryCta: { label: "Analyze your podcast free", href: "/analyze" },
+  secondaryCta: { label: "See the Show Report", href: "#show-report" },
+  note: "Keep your podcast host. No card required. OP3 measures downloads independently.",
 };
 
 export const HOW_IT_WORKS: HowItWorks = {
   eyebrow: "How it works",
-  heading: "Three steps, and one of them is publishing an episode anyway",
+  heading: "Connect the show once. See what's working more clearly",
   intro:
-    "Podlink is not another podcast host, and switching hosts is not a growth strategy. It sits alongside the one you have and takes on the work that happens after the audio is done.",
+    "Podlink sits alongside the podcast host you already use. It connects the show, the audience data and the episode archive so you spend less time stitching together dashboards and more time deciding what to do next.",
   steps: [
     {
       number: "01",
-      heading: "Connect your RSS feed",
-      body: "Paste the feed URL you already publish to and your whole back catalogue imports — artwork, episodes, descriptions, all of it. Works with Buzzsprout, Transistor, Libsyn, Captivate, Acast and anything else that produces a standard feed. Add the OP3 prefix once while you are there and your downloads start being measured.",
+      heading: "Connect your podcast",
+      body: "Start with your RSS feed. Podlink recognizes the show and episode archive, checks your OP3 setup, and keeps your existing host and feed exactly where they are.",
     },
     {
       number: "02",
-      heading: "Bring in an episode",
-      body: "Paste the link or drop in the transcript, and get the kit: show notes, titles, description, newsletter and social drafts — in your format, because you set it once.",
+      heading: "Bring the audience together",
+      body: "Add independent download measurement through OP3, connect YouTube when you publish video, and transcribe the episodes you want searchable. The goal is one episode view instead of six disconnected tabs.",
     },
     {
       number: "03",
-      heading: "Publish and watch what lands",
-      body: "Review, adjust, copy it where it goes. Then see the downloads come in per episode, by app and by country, and find out which topics and titles carried — so the next episode is a decision, and the sponsor email writes itself.",
+      heading: "Share it — or just ask",
+      body: "Turn on a live Show Report for a team, client or sponsor. Or connect Podlink to Claude or ChatGPT and ask questions about your episodes, transcripts and recent performance from the tools you already use.",
     },
   ],
 };
@@ -119,9 +118,8 @@ export const HOME_FAQ: FaqItem[] = [
   },
 ];
 
-/** The two-door band — personas doc §4.1: two businesses, one center of
- *  gravity. Door 1 is the volume path (self-serve), door 2 the services
- *  funnel. Rendered directly under the hero. */
+/** The two-door band: software for self-serve users, services for buyers who
+ * want Podlink to operate the workflow for them. */
 export interface Door {
   heading: string;
   body: string;
@@ -130,40 +128,38 @@ export interface Door {
 
 export const TWO_DOORS: Door[] = [
   {
-    heading: "Software that handles post-publish",
-    body: "See your downloads free, then turn every episode into a week of marketing — in your voice.",
-    cta: { label: "Start free", href: appUrl("/register") },
+    heading: "Measure and understand your show",
+    body: "Start with free independent analytics, then connect your video, transcripts and AI assistant as the show grows.",
+    cta: { label: "Analyze your podcast", href: "/analyze" },
   },
   {
-    heading: "A team that does it for you",
-    body: "Production, clips, booking, sponsorship and growth — for people who'd rather run their business than their post-production.",
+    heading: "Or put a podcast team behind it",
+    body: "Production, clips, founder guesting, sponsorship and growth — built from the same workflows that became Podlink.",
     cta: { label: "Explore services", href: "/services" },
   },
 ];
 
 /**
- * Positioning-amendment band (gtm-plan 09-02: hero = the report, second act
- * = talk to your podcast, tools = the bonus). Added 09-12 now that BOTH
- * capabilities are SHIPPED — lockstep rule: the frontend expresses what the
- * backend does. Every claim here is live and screenshot-survivable.
+ * Show Report + assistant band. Both capabilities are shipped; claims here
+ * deliberately stay inside the live read-only analytics/transcript surface.
  */
 export const REPORT_BAND = {
-  eyebrow: "New",
-  headline: "The report that used to take a day, on a link",
-  body: "Turn on your Show Report and get a live, shareable page of your whole audience — downloads measured by OP3 (a source a sponsor can check), YouTube views and audience demographics, and your link-page clicks. And because it's all connected, you can just ask: connect Claude and say \"how did my show do this week?\" — your assistant answers from your real numbers and your own transcripts.",
+  eyebrow: "The shareable layer",
+  headline: "A podcast report people can actually open",
+  body: "Turn on your Show Report and send one live link instead of rebuilding a spreadsheet every time someone asks how the show is doing. It can bring together OP3-measured downloads, YouTube performance and audience data where available, and your Podlink page activity. Then connect Claude or ChatGPT and ask questions against your own analytics and transcripts.",
   bullets: [
-    "A live page, not a PDF — always current, off with one click",
-    "Numbers from OP3: open, independent, checkable by anyone you send it to",
-    "Talk to your podcast: analytics and transcripts from your own AI assistant",
+    "A live link instead of a stale PDF or recurring reporting spreadsheet",
+    "OP3 download numbers from an open, independent source",
+    "Claude or ChatGPT access to your podcast analytics and transcript archive",
   ],
-  primaryCta: { label: "Start free", href: appUrl("/register") },
+  primaryCta: { label: "Analyze your podcast", href: "/analyze" },
   secondaryCta: { label: "Connect Claude", href: "/claude" },
 };
 
 export const CTA_BAND: CtaBand = {
-  heading: "Your next episode deserves the full week of attention",
-  body: "Connect your feed, bring the episode, and the show notes, newsletter and social copy are done before your coffee is.",
-  primaryCta: { label: "Start free", href: appUrl("/register") },
-  secondaryCta: { label: "See pricing", href: "/pricing" },
-  note: "Keep your podcast host. No card required. Cancel any time.",
+  heading: "Start with the podcast you already have",
+  body: "Analyze the show, connect the data you want, and turn on the report when you're ready to share it. No host migration and no rebuild required.",
+  primaryCta: { label: "Analyze your podcast free", href: "/analyze" },
+  secondaryCta: { label: "Explore services", href: "/services" },
+  note: "Keep your podcast host. No card required.",
 };

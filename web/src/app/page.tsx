@@ -13,7 +13,7 @@ import {
   SectionHead,
 } from "@/components";
 import Link from "next/link";
-import { FEATURE_GROUPS, FEATURES, getFeaturesByGroup } from "@/content/features";
+import { FEATURE_GROUPS, getFeaturesByGroup } from "@/content/features";
 import { CTA_BAND, HERO, HOME_FAQ, HOW_IT_WORKS, REPORT_BAND, TWO_DOORS } from "@/content/home";
 import {
   placements,
@@ -31,9 +31,9 @@ import {
 } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Grow your show. Not your workload.",
+  title: "Podcast analytics, Show Reports & AI for podcasters",
   description:
-    "Show notes, social posts, a newsletter and download numbers a sponsor can check — written from what you actually said, on the podcast host you already use.",
+    "See independently measured podcast downloads, connect YouTube, share a live Show Report, and query your analytics and transcripts from Claude or ChatGPT.",
   path: "/",
 });
 
