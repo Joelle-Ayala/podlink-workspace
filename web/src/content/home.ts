@@ -53,7 +53,7 @@ export interface CtaBand {
 export const HERO: Hero = {
   eyebrow: "Independent podcast analytics + AI",
   headline: "Know what's growing your podcast. Then do more of it",
-  sub: "Connect your show to see independently measured downloads, YouTube performance, a live Show Report you can share, and transcripts you can query from Claude or ChatGPT.",
+  sub: "Connect your show to see independently measured downloads, YouTube performance, a live Show Report you can share, and transcripts you can query from Claude or any MCP-capable assistant.",
   primaryCta: { label: "Analyze your podcast free", href: "/analyze" },
   secondaryCta: { label: "See the Show Report", href: "#show-report" },
   note: "Keep your podcast host. No card required. OP3 measures downloads independently.",
@@ -78,7 +78,7 @@ export const HOW_IT_WORKS: HowItWorks = {
     {
       number: "03",
       heading: "Share it — or just ask",
-      body: "Turn on a live Show Report for a team, client or sponsor. Or connect Podlink to Claude or ChatGPT and ask questions about your episodes, transcripts and recent performance from the tools you already use.",
+      body: "Turn on a live Show Report for a team, client or sponsor. Or connect Podlink to Claude — or any MCP-capable assistant — and ask questions about your episodes, transcripts and recent performance from the tools you already use.",
     },
   ],
 };
@@ -146,11 +146,11 @@ export const TWO_DOORS: Door[] = [
 export const REPORT_BAND = {
   eyebrow: "The shareable layer",
   headline: "A podcast report people can actually open",
-  body: "Turn on your Show Report and send one live link instead of rebuilding a spreadsheet every time someone asks how the show is doing. It can bring together OP3-measured downloads, YouTube performance and audience data where available, and your Podlink page activity. Then connect Claude or ChatGPT and ask questions against your own analytics and transcripts.",
+  body: "Turn on your Show Report and send one live link instead of rebuilding a spreadsheet every time someone asks how the show is doing. It can bring together OP3-measured downloads, YouTube performance and audience data where available, and your Podlink page activity. Then connect Claude (or any MCP-capable assistant) and ask questions against your own analytics and transcripts.",
   bullets: [
     "A live link instead of a stale PDF or recurring reporting spreadsheet",
     "OP3 download numbers from an open, independent source",
-    "Claude or ChatGPT access to your podcast analytics and transcript archive",
+    "Ask Claude — or any MCP client — about your analytics and transcript archive",
   ],
   primaryCta: { label: "Analyze your podcast", href: "/analyze" },
   secondaryCta: { label: "Connect Claude", href: "/claude" },

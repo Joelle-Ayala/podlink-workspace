@@ -33,7 +33,7 @@ import {
 export const metadata = pageMetadata({
   title: "Podcast analytics, Show Reports & AI for podcasters",
   description:
-    "See independently measured podcast downloads, connect YouTube, share a live Show Report, and query your analytics and transcripts from Claude or ChatGPT.",
+    "See independently measured podcast downloads, connect YouTube, share a live Show Report, and query your analytics and transcripts from Claude or any MCP-capable assistant.",
   path: "/",
 });
 

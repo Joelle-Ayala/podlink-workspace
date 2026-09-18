@@ -64,11 +64,14 @@ chmod ug+rw app/Extensions/.env 2>/dev/null || true
 if [ -f storage/app/portal ] && [ ! -L storage/app/portal ] && [ ! -s app/Extensions/portal ]; then
   cp storage/app/portal app/Extensions/portal  # adopt any live file first
 fi
-if [ ! -s app/Extensions/portal ] && [ -n "${LIQUID_LICENSE_DOMAIN_KEY:-}" ]; then
+# MAGICAI_PURCHASE_CODE already exists on the Railway service (2026-09-18),
+# so accept it as the bootstrap key when LIQUID_LICENSE_DOMAIN_KEY is unset.
+LICENSE_BOOT_KEY="${LIQUID_LICENSE_DOMAIN_KEY:-${MAGICAI_PURCHASE_CODE:-}}"
+if [ ! -s app/Extensions/portal ] && [ -n "${LICENSE_BOOT_KEY}" ]; then
   PORTAL_TYPE="${LIQUID_LICENSE_TYPE:-Regular License}" \
-  PORTAL_KEY="${LIQUID_LICENSE_DOMAIN_KEY}" \
+  PORTAL_KEY="${LICENSE_BOOT_KEY}" \
   php -r 'file_put_contents("app/Extensions/portal", serialize(["liquid_license_type" => getenv("PORTAL_TYPE"), "liquid_license_domain_key" => getenv("PORTAL_KEY"), "installed" => true]));'
-  echo "[entrypoint] portal license file bootstrapped from LIQUID_LICENSE_DOMAIN_KEY"
+  echo "[entrypoint] portal license file bootstrapped from environment"
 fi
 rm -f storage/app/portal 2>/dev/null || true
 ln -sfn /var/www/html/app/Extensions/portal /var/www/html/storage/app/portal
