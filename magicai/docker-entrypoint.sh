@@ -49,6 +49,33 @@ ln -sfn /var/www/html/app/Extensions/.env /var/www/html/.env
 chown www-data:www-data app/Extensions/.env 2>/dev/null || true
 chmod ug+rw app/Extensions/.env 2>/dev/null || true
 
+# ---- License portal file must survive redeploys (2026-09-18 incident) -------
+# ApplicationStatus middleware (web group) gates EVERY web route on
+# storage/app/portal (serialized license state written by the /license
+# activation flow). That file lived on the ephemeral container FS, so a
+# container recreate sends the whole app - login included - to the
+# "Activate your license" screen. Fix: keep the real file on the
+# app/Extensions Railway volume (same pattern as the .env stub above) and
+# symlink it into place. Activating once at /license now sticks forever.
+# Optional self-heal: if LIQUID_LICENSE_DOMAIN_KEY is set in the environment
+# and no portal file exists yet, bootstrap one at boot (no activation click
+# needed). LIQUID_LICENSE_TYPE optionally overrides the license type;
+# default "Regular License".
+if [ -f storage/app/portal ] && [ ! -L storage/app/portal ] && [ ! -s app/Extensions/portal ]; then
+  cp storage/app/portal app/Extensions/portal  # adopt any live file first
+fi
+if [ ! -s app/Extensions/portal ] && [ -n "${LIQUID_LICENSE_DOMAIN_KEY:-}" ]; then
+  PORTAL_TYPE="${LIQUID_LICENSE_TYPE:-Regular License}" \
+  PORTAL_KEY="${LIQUID_LICENSE_DOMAIN_KEY}" \
+  php -r 'file_put_contents("app/Extensions/portal", serialize(["liquid_license_type" => getenv("PORTAL_TYPE"), "liquid_license_domain_key" => getenv("PORTAL_KEY"), "installed" => true]));'
+  echo "[entrypoint] portal license file bootstrapped from LIQUID_LICENSE_DOMAIN_KEY"
+fi
+rm -f storage/app/portal 2>/dev/null || true
+ln -sfn /var/www/html/app/Extensions/portal /var/www/html/storage/app/portal
+chown -h www-data:www-data storage/app/portal 2>/dev/null || true
+chown www-data:www-data app/Extensions/portal 2>/dev/null || true
+chmod ug+rw app/Extensions/portal 2>/dev/null || true
+
 # ---- public/storage symlink (idempotent) ------------------------------------
 php artisan storage:link >/dev/null 2>&1 || true
 
