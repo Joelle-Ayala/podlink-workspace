@@ -141,3 +141,10 @@ CLEARED: GSC podlink.ai already verified -> sitemap submitted (42 pages discover
 - Reopening the app needs Joelle: EITHER visit app.podlink.ai/license and activate with the MagicAI purchase code once, OR have CoS bot set LIQUID_LICENSE_DOMAIN_KEY (purchase code) on podlink-workspace + redeploy. Then re-verify Find Shows search + demographics + B5 admin ladder (all behind the same wall).
 - Dispatch items 2/3 blocked by same wall; item 4 drip dates refreshed for approval (Sep 22 transcripts, Oct 6 MCP, Oct 20 Find Shows - internal until GO); item 5 skipped per optional.
 - Shared context absorbed: joelle-shared-context repo (Claude 09-17 + ChatGPT 09-18) - no canon conflicts; ChatGPT's wanted "verified feature matrix" = our PODLINK_ECOSYSTEM_AUDIT_CONTEXT_V3.md. NOTE dispatch pricing Pro $29/Studio $99 differs from web pricing.ts - reconcile at B5, no changes made without her confirmation.
+
+## 2026-09-18b - FOLLOW-UP DISPATCH: wall DOWN + PR#1 merged + DESIGN.md
+- LICENSE WALL DOWN without founder action: MAGICAI_PURCHASE_CODE already existed on the service; entrypoint bootstrap now accepts it (29acac97e, deploy dfdf7733 SUCCESS). /login = 200 "Podlink | Sign in" verified. Wall survives redeploys (volume-backed).
+- Find Shows: gate open; env names verified; live search still needs an authenticated session (no stored session in the pane; credentials are founder-only). 30-second click for her: log in -> Find Shows -> search anything.
+- PR #1 MERGED to main (dfdc0b1cc) per dispatch + claim softening ("Claude or any MCP-capable assistant" x5); analytics-first homepage LIVE + verified (title, hero, softened claim, /analyze CTAs).
+- web/DESIGN.md v1 shipped (design OS complementing BRAND.md) + 09-18 visual QA pass logged: /, /pricing, /analyze desktop+mobile all clean; nits filed (footer PodLink casing, stale footer tagline, hero placeholder vs no-fake-dashboards - real screenshot post-B4).
+- NEW PR #2 appeared (design/podlink-operating-system, ChatGPT/Codex): design-OS + agent skill docs - NOT merged; reconcile-with-DESIGN.md note filed.

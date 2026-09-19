@@ -84,3 +84,14 @@ system. New need → extend a component with a prop, not a one-off div soup.
   feeds without itunes:image (renders fine, just plain).
 - Dark("ink")-band type ramp on mobile could tighten (audit when screenshots
   are reviewed); footer link groups now 3-wide on mobile — verify wrap.
+- From the 09-18 QA pass (desktop+mobile, /, /pricing, /analyze — all clean,
+  no overflow, tap targets fine): (a) footer wordmark renders "PodLink" while
+  the header is "Podlink" — unify casing; (b) SITE.description (footer
+  tagline) still reads AI-show-notes-first — align with analytics-first when
+  copy next touches site.ts; (c) hero ScreenshotFrame placeholder ("The
+  episode workspace", stylized bars) sits close to the no-fake-dashboards
+  line — replace with a REAL dashboard screenshot as soon as demo data (B4)
+  exists, or drop the visual.
+- PR #2 (`design/podlink-operating-system`, ChatGPT/Codex side) proposes a
+  fuller design-OS + agent skill — reconcile with this file before merging;
+  where they conflict, tokens/components (this file §1–3) win.
