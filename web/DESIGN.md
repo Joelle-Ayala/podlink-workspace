@@ -95,3 +95,6 @@ system. New need → extend a component with a prop, not a one-off div soup.
 - PR #2 (`design/podlink-operating-system`, ChatGPT/Codex side) proposes a
   fuller design-OS + agent skill — reconcile with this file before merging;
   where they conflict, tokens/components (this file §1–3) win.
+  → ADJUDICATED 09-20 by Head of Design: adopt-with-amendments via a
+  reconciliation commit (DESIGN.md v2), pending Joelle's L4 approval. Full
+  verdict + design-org audit: `web/docs/design/AUDIT-2026-09-design-org.md`.
