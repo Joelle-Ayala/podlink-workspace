@@ -3,8 +3,13 @@
 Format per entry: date · decision · context · alternatives · rationale · affected surfaces ·
 reversibility. Newest first.
 
-## D-002 · 2026-09-20 · PR #2 adjudication: adopt-with-amendments (PENDING L4 APPROVAL)
-- **Decision (recommended):** do not merge `design/podlink-operating-system` as-is; produce
+## D-002 · 2026-09-20 · PR #2 adjudication: adopt-with-amendments
+- **APPROVED by Joelle (L4) 09-21; EXECUTED 09-21:** DESIGN.md v2 written as the merge
+  resolution of `design/podlink-operating-system` into main (real git merge, so PR #2
+  closes as MERGED with the Codex commits credited in history); skill cherry-picked via the
+  same merge with amendments (precedence clause, claims/voice pointers, review ladder,
+  Vercel-sha rule) applied in the merge commit.
+- **Decision (as recommended):** do not merge `design/podlink-operating-system` as-is; produce
   DESIGN.md v2 = PR #2 spine + v1 operational layer; cherry-pick the design skill with
   amendments; close PR #2 as adopted-via-reconciliation, credited to the Codex side.
 - **Context:** PR #2 and main both created web/DESIGN.md on 09-18 (merge conflict); one real
