@@ -23,7 +23,7 @@
  *   download-analytics → "Podcast analytics dashboard"  (vs /services/podcast-growth)
  *   transcripts        → "Episode transcripts"          (vs /services/podcast-editing)
  *   show-notes         → "AI show notes generator"      (vs /services/podcast-editing)
- *   clips-and-social   → "AI podcast clip generator"    (vs /services/podcast-clips)
+ *   clips-and-social   → "AI podcast clip assistant"    (vs /services/podcast-clips)
  *   newsletter         → "Podcast newsletter generator" (vs /services/podcast-growth)
  *   link-in-bio        → "Podcast link in bio page"     (brand string dropped so the
  *                        marketing page stops competing with podlink.fm/{handle})
@@ -477,7 +477,10 @@ export const FEATURES: Feature[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "clips-and-social",
-    name: "AI podcast clip generator",
+    // Brief 1 (P-02) claims fix: "generator" promised clip generation that is
+    // not shipped. What IS live: per-platform post copy drafted from the
+    // transcript. Moment-ranking + timestamps + auto-cuts stay roadmap-tense.
+    name: "AI podcast clip assistant",
     tagline: "One episode, a week of things to post",
     group: "grow",
     icon: "clip",
@@ -489,30 +492,30 @@ export const FEATURES: Feature[] = [
         body: "Clip work starts from the transcript — the moments live in what was said.",
       },
       {
-        title: "Get the moments and the copy",
-        body: "Podlink surfaces the moments worth clipping, with timestamps, and writes the per-platform post copy for each.",
+        title: "Draft the platform copy",
+        body: "From the transcript, Podlink drafts the post copy that goes around a clip — per platform, in your brand voice.",
       },
       {
         title: "Cut, then post it yourself",
-        body: "Jump your editor to the timestamp, cut the clip, paste the caption. Nothing posts without you.",
+        body: "Pick your moment, cut it in the editor you already use, paste the caption. Nothing posts without you.",
       },
     ],
     summary:
-      "The reason most shows don't grow isn't the audio — it's that nobody had two spare hours to find clip moments and write posts. Podlink reads the transcript, surfaces the moments worth clipping with their timestamps, and writes the copy that goes around each one, per platform. Automatic vertical cuts with burned-in captions are on the roadmap; today, the finding and the writing are done for you.",
+      "The reason most shows don't grow isn't the audio — it's that nobody had two spare hours to find clip moments and write posts. Today Podlink handles the writing: per-platform post copy drafted from your transcript, in your voice. Ranked clip-moment suggestions with timestamps — and automatic vertical cuts with burned-in captions — are next on the roadmap, in that order.",
     bullets: [
-      "Clip suggestions ranked by how well the moment stands on its own",
-      "Timestamps for every suggestion, so your editor jumps straight to the cut",
       "Post copy written per platform, because LinkedIn and TikTok don't read alike",
-      "Enough material from one episode to cover the week",
+      "Drafted from what was actually said, not from the episode title",
+      "In your brand voice — a setting, not a rewrite",
+      "On the roadmap: ranked clip moments with timestamps, then automatic cuts",
     ],
     sections: [
       {
-        heading: "Podlink finds the moments, you pick the keepers",
-        body: "Finding a clip means listening back to an hour you have already heard. Podlink reads the transcript and surfaces the moments that work out of context — the sharp answer, the story with a beginning and an end, the line a guest will want to share. You listen to a handful of candidates instead of the whole episode.",
+        heading: "Finding the moments — where this is headed",
+        body: "Finding a clip means listening back to an hour you have already heard. The next release of this feature reads the transcript and surfaces the moments that work out of context — the sharp answer, the story with a beginning and an end, the line a guest will want to share — ranked, with timestamps. That part isn't live yet. Today, your searchable transcript gets you to the quote you remember, and the writing below is already done for you.",
         bullets: [
-          "Candidates ranked, so the best one is near the top",
-          "Suggested to start and end on a complete thought",
-          "Each with its timestamp, so the cut takes seconds in your editor",
+          "Today: full-text transcript search gets you to the moment fast",
+          "On the roadmap: candidates ranked, best one near the top",
+          "On the roadmap: suggestions that start and end on a complete thought",
         ],
       },
       {
@@ -526,30 +529,30 @@ export const FEATURES: Feature[] = [
       },
       {
         heading: "Publishing stays yours",
-        body: "Podlink finds and writes. You cut and post. That means no connected accounts to re-authorise every few weeks, no scheduler quietly failing at 6am, and no chance of something going out that you hadn't read. Automatic vertical cutting with burned-in captions is on the roadmap — the posting will stay yours even then.",
+        body: "Podlink writes. You cut and post. That means no connected accounts to re-authorise every few weeks, no scheduler quietly failing at 6am, and no chance of something going out that you hadn't read. Automatic vertical cutting with burned-in captions is on the roadmap — the posting will stay yours even then.",
         bullets: [
           "Nothing posts without you",
-          "Cut at the timestamp, copy the caption, publish",
+          "Cut the moment, copy the caption, publish",
           "No social account connections required to get value out of it",
         ],
       },
     ],
     faq: [
       {
-        q: "How does an AI podcast clip generator pick the moments?",
-        a: "From the transcript, not the waveform. A moment that works as a clip is one that stands on its own — a complete answer, a story with an ending, a line worth quoting — and that's a property of the words. Podlink reads what was said, ranks the candidates, and hands you each one with its timestamp.",
+        q: "How will an AI podcast clip generator pick the moments?",
+        a: "From the transcript, not the waveform. A moment that works as a clip is one that stands on its own — a complete answer, a story with an ending, a line worth quoting — and that's a property of the words. That's how the clip-moment feature on the roadmap will rank candidates. Until it ships, transcript search is the fast way to find the quote you remember.",
       },
       {
         q: "Does Podlink post to my social accounts for me?",
-        a: "No. It finds the moments and writes the posts; you cut and publish. Plenty of tools will schedule for you and most podcasters end up turning that off — the failure mode of an automated post is worse than the two minutes it saves.",
+        a: "No. Podlink writes the posts; you cut and publish. Plenty of tools will schedule for you and most podcasters end up turning that off — the failure mode of an automated post is worse than the two minutes it saves.",
       },
       {
         q: "Does Podlink cut the video file itself?",
-        a: "Not yet — that's on the roadmap. Today you get the moment, the exact timestamps, and the platform copy, and you make the cut in the editor you already use. The two hours the clip workflow used to take were mostly finding and writing, and those are the parts that are done for you.",
+        a: "Not yet — cutting is on the roadmap, behind clip-moment suggestions. Today you get the searchable transcript and the platform copy, and you make the cut in the editor you already use. Of the two hours the clip workflow used to take, the writing is the part that's done for you now.",
       },
       {
-        q: "How many clip suggestions come out of one episode?",
-        a: "Enough to post through the week from a normal-length episode. How many are worth posting is your call — that's why they come ranked rather than dumped in a folder.",
+        q: "How much can I post from one episode?",
+        a: "Enough to post through the week from a normal-length episode — point at a quote and the per-platform posts are written around it. When clip-moment suggestions ship, the candidates will come ranked rather than dumped in a folder.",
       },
       {
         q: "Can I change the copy before it goes out?",

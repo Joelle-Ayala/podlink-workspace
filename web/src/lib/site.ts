@@ -12,8 +12,9 @@ export const SITE = {
   domain: "podlink.ai",
   url: "https://podlink.ai",
   tagline: "Grow your show. Not your workload.",
+  // Brief 1 (P-05): analytics-first, matching the 09-18 homepage positioning.
   description:
-    "AI show notes, clips and newsletters. Real download analytics. Your own podlink.fm page.",
+    "Independent download analytics, a live Show Report you can share, and an episode content kit — on the podcast host you already use.",
   app: "https://app.podlink.ai",
   bio: "https://podlink.fm",
   author: "Podlink",
