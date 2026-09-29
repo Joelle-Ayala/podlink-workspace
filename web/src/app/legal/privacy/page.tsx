@@ -2,7 +2,7 @@ import { Hero, Prose, Section } from "@/components";
 import { pageMetadata } from "@/lib/seo";
 
 /**
- * Privacy policy v1 (drafted 2026-08-27, pending founder sign-off — see
+ * Privacy policy v1 (drafted 2026-08-27; founder-APPROVED 2026-09-28, B1 done — see
  * claude/SESSION_LOG.md). Written from what the product actually does today;
  * anything unshipped is stated conditionally. Still noindex: legal pages
  * don't need to rank, they need to resolve. The URL is what the connector
