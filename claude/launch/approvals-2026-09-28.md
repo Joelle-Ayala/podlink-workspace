@@ -19,14 +19,19 @@ they conflict. Merge these into the three docs when unlocked, then retire this.
    (Supersedes drip-cadence-v2 §3's Sep 8 / Sep 22 / Oct 6 proposal.)
 3. **Desktop sitting + repo→private: accepted as her to-dos**
    (`claude/execution-window-2026-09.md` is the staged runbook).
-4. **B2 Claude Team org: ON HOLD.** Cost relayed ($50/mo = 2×$25 standard
-   seats, or $480/yr). Not purchased; no payment without her per-purchase
-   amount confirmation.
+4. **B2 Claude Team org: COMMITTED — pending her purchase (update, later
+   09-28).** She's in at $50/mo and is making the purchase HERSELF
+   (claude.ai → Settings → Billing → Upgrade to Team → 2 standard seats).
+   No agent payment action needed or authorized. The moment the Team org
+   appears: walk the actual Claude directory submission portal immediately,
+   ground-truth the field list assembled in listings-and-rehearsal §2 against
+   the real form, and flag anything unexpected before B8.
 
 ## B-list deltas vs the locked README table
 
 - B1: ✅ DONE 09-28 (this doc).
-- B2: ⏸ ON HOLD (see sequencing variant below).
+- B2: 🟢 COMMITTED — pending her self-serve purchase (see item 4 above);
+  portal walk + field ground-truthing fires the moment the org appears.
 - B5: staged + execution DELEGATED (decision hers, long-made) — runs in the
   lent session per execution-window-2026-09.md.
 - B6: ✅ SATISFIED 09-18 — CoS bot set PODCASTINDEX_KEY/SECRET on the right
@@ -35,10 +40,18 @@ they conflict. Merge these into the three docs when unlocked, then retire this.
 - Open: B3 (support@ mailbox check), B4 (demo OP3 data), B7 (HubSpot link),
   B8 (GO).
 
-## SEQUENCING VARIANT — Claude-directory-deferred (now the working plan)
+## SEQUENCING (updated later 09-28): ORIGINAL PLAN RESTORED AS PRIMARY
 
-The only thing B2 gates is the **Claude directory submission itself**.
-Everything else proceeds without it, in this order once B8 GO lands:
+With B2 committed, the primary sequence is the original launch README plan:
+**Claude directory submission same-day once Team lands + B3 + B4 + B8 GO.**
+Gate math of record: **B2 (her purchase) + B3 support alias + B4 demo data +
+B8 GO → submit.** (B1 done; B5 rides the sitting; B6 satisfied.)
+
+## FALLBACK — Claude-directory-deferred variant (documented, not primary)
+
+Kept in case the Team purchase slips. The only thing B2 gates is the
+**Claude directory submission itself**. Everything else proceeds without it,
+in this order once B8 GO lands:
 
 1. **Wave 1 (no Team org needed):** aggregator listings from the
    listings-and-rehearsal metadata pack (PulseMCP first per the research;
