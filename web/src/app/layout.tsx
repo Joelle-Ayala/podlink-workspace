@@ -18,6 +18,7 @@ const FEATURE_LINKS = FEATURES.map((f) => ({
 const COMPANY_LINKS = [
   { label: "For founders", href: "/founders" },
   { label: "For PR agencies", href: "/partners/pr-agencies" },
+  { label: "Changelog", href: "/changelog" },
   { label: "podlink.fm pages", href: SITE.bio },
 ];
 

@@ -38,7 +38,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Pricing",
   description:
-    "Download analytics and your podlink.fm page are free. Pro is $19 a month for the episode content kit, with two months free when billed annually.",
+    "Download analytics and your podlink.fm page are free. Pro is $29 a month for the episode content kit, with four months free when billed annually.",
   path: "/pricing",
   noIndex: true,
 });
