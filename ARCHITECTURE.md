@@ -111,7 +111,28 @@ Biolink: `DATABASE_*`, `SITE_URL`, `HOMEPAGE_REDIRECT_*`, `BLOG_REDIRECT_*`.
 - Vendor upgrade gates: MagicAI v11 and 66biolinks updates require
   re-verifying every custom touchpoint (see V3 audit §38 debt register).
 
-## 8. Where the deeper docs live
+## 8. Measurement (2026-10-07)
+
+**One GA4 property** (`G-6BJQCTFXZZ`, property "Podlink") across all three
+surfaces: podlink.ai (web layout.tsx), app.podlink.ai (magicai
+`panel/layout/partials/head.blade.php` — covers auth + dashboard — and the
+frontend `layout/app.blade.php`), podlink.fm public pages
+(`biolink_wrapper.php`, preview-gated). **app.podlink.ai is a subdomain**: the
+`.podlink.ai` `_ga` cookie spans it, so it carries the tag only — no
+cross-domain config. **podlink.fm is a separate domain**: its tag and the
+podlink.ai tag both set `linker: { domains: ['podlink.ai','podlink.fm'] }` so
+.fm→.ai journeys stay one session and don't double-count as referrals.
+(Optional belt-and-braces: mirror the domain list in GA4 Admin → data stream →
+Configure tag settings → Configure your domains — founder console.)
+**HubSpot tracking** (`js.hs-scripts.com/20159837.js`, portal "minting
+house") runs on podlink.ai only — associates visits with CRM contacts once a
+form identifies them; not on the app dashboard or creators' .fm pages.
+**Search Console stays two domain properties by design** (podlink.ai — which
+already covers app.* — and podlink.fm); the weekly Monday ops pull reads BOTH
+and reports them side-by-side so the founder gets one combined view at the
+reporting layer.
+
+## 8b. Where the deeper docs live
 
 `claude/WORK-CANON.md` (rules) · `claude/PODLINK_ECOSYSTEM_AUDIT_CONTEXT_V3.md`
 (full 43-section audit) · `claude/LAUNCH-SPRINT-1-REPORT.md` + `claude/launch/`

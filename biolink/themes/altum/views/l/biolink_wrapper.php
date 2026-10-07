@@ -100,6 +100,22 @@
         <?php if((!$this->is_preview || !$this->biolink_theme) && $this->link->biolink_theme_id && !empty($this->link->additional->custom_css)): ?>
             <style><?= $this->link->additional->custom_css ?></style>
         <?php endif ?>
+
+        <?php /* PODLINK (2026-10-07): GA4 — one property across podlink.ai /
+                 app.podlink.ai / podlink.fm (founder directive). podlink.fm
+                 is a SEPARATE domain, so the cross-domain linker lists both
+                 roots to keep .fm→.ai journeys one session and stop referral
+                 double-counting. Skipped in editor previews. See
+                 ARCHITECTURE.md §Measurement in the main repo. */ ?>
+        <?php if(!$this->is_preview && !isset($_GET['preview_template']) && !isset($_GET['preview'])): ?>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-6BJQCTFXZZ"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-6BJQCTFXZZ', { linker: { domains: ['podlink.ai', 'podlink.fm'] } });
+            </script>
+        <?php endif ?>
     </head>
 
     <?php if(!isset($_GET['preview_template']) && !isset($_GET['preview'])): ?>

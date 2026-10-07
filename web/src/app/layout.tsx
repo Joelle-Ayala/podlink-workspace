@@ -86,8 +86,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-6BJQCTFXZZ');`}
+            /* One GA4 property across all three surfaces (2026-10-07).
+               app.podlink.ai is a SUBDOMAIN — the _ga cookie on .podlink.ai
+               already covers it (tag only, no linker needed). podlink.fm is a
+               separate domain, so it IS linker-listed here and in its own tag
+               to keep .fm→.ai journeys one session. */
+            gtag('config', 'G-6BJQCTFXZZ', { linker: { domains: ['podlink.ai', 'podlink.fm'] } });`}
         </Script>
+        {/* HubSpot tracking (portal 20159837, "minting house") — installed
+            2026-10-07 per founder directive so visits associate with CRM
+            contacts once a form identifies them. The privacy-page line
+            covering HubSpot is DRAFTED, awaiting her green light. */}
+        <Script
+          id="hs-script-loader"
+          src="https://js.hs-scripts.com/20159837.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

@@ -138,6 +138,19 @@
 
     @livewireStyles
 
+    {{-- PODLINK (2026-10-07): GA4 — same single property as podlink.ai
+         (G-6BJQCTFXZZ). app.podlink.ai is a subdomain, so the .podlink.ai
+         _ga cookie already spans both hosts: tag only, NO cross-domain
+         linker here. Makes the marketing→register→activation funnel
+         measurable end-to-end. See ARCHITECTURE.md §Measurement. --}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6BJQCTFXZZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6BJQCTFXZZ');
+    </script>
+
     @stack('before-head-close')
 
     @includeIf('live-customizer::particles.lqd-customizer-style-head')

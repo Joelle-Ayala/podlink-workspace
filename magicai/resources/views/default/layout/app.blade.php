@@ -147,6 +147,17 @@
     @endif
 
     @livewireStyles
+
+    {{-- PODLINK (2026-10-07): GA4 — same single property as podlink.ai
+         (G-6BJQCTFXZZ); subdomain cookie covers this host, tag only.
+         See ARCHITECTURE.md §Measurement. --}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6BJQCTFXZZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6BJQCTFXZZ');
+    </script>
 </head>
 
 <body class="group/body bg-background font-body text-foreground">
