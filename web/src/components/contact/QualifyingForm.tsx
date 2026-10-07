@@ -52,9 +52,21 @@ export function QualifyingForm({
   const [show, setShow] = useState("");
   const [service, setService] = useState(NOT_SURE_SERVICE);
   const [budget, setBudget] = useState(NOT_SURE_BUDGET);
+  const [heardFrom, setHeardFrom] = useState("");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    /* Attribution (2026-10-07, after the first form lead arrived with no
+       discoverable source): document.referrer survives client-side nav in
+       the app router, so it still holds the EXTERNAL referrer from the
+       visitor's first page load. Included as a visible line — the sender
+       sees it in their draft and can delete it; nothing is collected
+       silently. */
+    const referrer =
+      typeof document !== "undefined" && document.referrer
+        ? document.referrer
+        : "direct / none";
 
     const subject = `Podcast inquiry — ${show.trim() || "my show"}`;
     const body = [
@@ -63,6 +75,8 @@ export function QualifyingForm({
       `Show name / URL: ${show.trim()}`,
       `Service interest: ${service}`,
       `Budget / stage: ${budget}`,
+      ...(heardFrom ? [`How I found Podlink: ${heardFrom}`] : []),
+      `Came to the site via: ${referrer}`,
       "",
       "A bit more about the show:",
       "",
@@ -139,6 +153,32 @@ export function QualifyingForm({
               {option}
             </option>
           ))}
+        </select>
+      </div>
+
+      <div>
+        <label
+          htmlFor="qualifying-heard"
+          className="block text-sm font-semibold text-zinc-800"
+        >
+          How did you hear about us? <span className="font-normal text-zinc-500">(optional)</span>
+        </label>
+        <select
+          id="qualifying-heard"
+          value={heardFrom}
+          onChange={(e) => setHeardFrom(e.target.value)}
+          className={FIELD_CLASSES}
+          style={{ outlineColor: ORANGE_600 }}
+        >
+          <option value="">Prefer not to say</option>
+          <option value="Google / search">Google / search</option>
+          <option value="An AI assistant (Claude, ChatGPT, etc.)">
+            An AI assistant (Claude, ChatGPT, etc.)
+          </option>
+          <option value="LinkedIn or social media">LinkedIn or social media</option>
+          <option value="A podcast or YouTube">A podcast or YouTube</option>
+          <option value="Someone recommended you">Someone recommended you</option>
+          <option value="Other">Other</option>
         </select>
       </div>
 
